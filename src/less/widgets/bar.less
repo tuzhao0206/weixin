@@ -1,0 +1,80 @@
+@import '../base/fn';
+.bar {
+  .setFlex(center, text);
+  width: 100%;
+  position: relative;
+  transform: translate3d(0, 0, 0);
+  min-height: @barHeight;
+  background-color: @barBgColor;
+  .hairline(1px, 0);
+  > .grow {
+    flex: 1;
+  }
+  > .text {
+    flex: 1;
+    padding: 0 @listItemGapH;
+    + .button-group {
+      width: auto;
+    }
+  }
+  > .title {
+    display: block;
+    flex: 1;
+    font-size: @barFontSize;
+    font-weight: normal;
+    text-align: center;
+    height: 100%;
+    b {
+      position: absolute;
+      top: 0;
+      left: 70px;
+      right: 70px;
+      bottom: 0;
+      font-weight: normal;
+      line-height: @barHeight;
+      .ellipsis();
+    }
+  }
+  > .menu {
+    .setFlex();
+    width: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    z-index: 10;
+    cursor: pointer;
+    line-height: @barHeight;
+    & > .icon {
+      min-width: 1em;
+      & + .label {
+        margin-left: 3px;
+      }
+    }
+    & > .label + .icon {
+      margin-left: 3px;
+    }
+    & + .menu > .label {
+      margin-left: -10px;
+    }
+    &:active {
+      opacity: 0.5;
+    }
+  }
+  > .cell {
+    position: relative;
+    padding: 0 20px;
+    font-size: 12px;
+    text-align: center;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    &:active {
+      opacity: 0.7;
+    }
+    & + .cell {
+      .hairline(0, 0, 0, 1px);
+    }
+  }
+}

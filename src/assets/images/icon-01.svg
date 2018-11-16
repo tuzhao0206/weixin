@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.1 (57501) - http://www.bohemiancoding.com/sketch -->
+    <title>icon/dark/ok_1</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="24" height="24"></rect>
+    </defs>
+    <g id="img-res" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-Copy-39">
+            <g id="icon/dark/ok_1">
+                <g>
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Rectangle" opacity="0" fill-rule="nonzero"></g>
+                    <polygon id="Combined-Shape-Copy" fill="#34C413" mask="url(#mask-2)" points="9.2 15.25 17.6 7 19 8.375 9.2 18 5 13.875 6.4 12.5"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,37 @@
+@import '../base/fn';
+.tabbar {
+  .setFlex(top, item);
+  width: 100%;
+  bottom: 0;
+  text-align: center;
+  transform: translate3d(0, 0, 0);
+  height: @tabbarHeight;
+  background-color: @tabbarBgColor;
+  .hairline(1px, 0, 0, 0);
+  > .item {
+    cursor: pointer;
+    text-align: center;
+    line-height: 1;
+    // padding: 6px 0 0;
+    .setFlex();
+    color: @tabTextColor;
+    &.active {
+      color: @blue;
+      .label {
+        font-weight: 400;
+      }
+    }
+    .icon {
+      display: block;
+      margin: auto;
+      font-size: @tabIconSize;
+      width: @tabIconSize;
+      height: @tabIconSize;
+    }
+    .label {
+      display: block;
+      font-weight: 300;
+      font-size: @tabFontSize;
+    }
+  }
+}

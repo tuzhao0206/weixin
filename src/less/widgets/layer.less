@@ -1,0 +1,34 @@
+// widget父层 不同组件切换时的遮罩
+.ex-widget-layer {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  // 解决浮层添加translate导致高度超过预期的问题
+  max-height: 100vh;
+  transition-property: background-color;
+  transition-duration: 300ms;
+  display: flex;
+  align-items: center;
+  &:not(.transparent) {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+// animate
+.ex-widget-layer:not(.transparent) {
+  &.ex-widget-enter {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  &.ex-widget-enter-active {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+  &.ex-widget-leave {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+  &.ex-widget-leave-active {
+    background-color: rgba(0, 0, 0, 0);
+  }
+}

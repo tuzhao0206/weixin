@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
+    <title>icon/light/address</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="img-res" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-Copy-66" fill="#000000">
+            <g id="icon/light/address">
+                <g id="Combined-Shape">
+                    <path d="M12,21.5555556 C6.66666667,16.7973705 4,12.9455187 4,10 C4,5.581722 7.581722,2 12,2 C16.418278,2 20,5.581722 20,10 C20,12.9455187 17.3333333,16.7973705 12,21.5555556 Z M12,12.6666667 C13.4727593,12.6666667 14.6666667,11.4727593 14.6666667,10 C14.6666667,8.52724067 13.4727593,7.33333333 12,7.33333333 C10.5272407,7.33333333 9.33333333,8.52724067 9.33333333,10 C9.33333333,11.4727593 10.5272407,12.6666667 12,12.6666667 Z" fill-rule="nonzero"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

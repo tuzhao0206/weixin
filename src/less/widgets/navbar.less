@@ -1,0 +1,88 @@
+@import '../base/fn';
+.navbar {
+  .setFlex(center, item);
+  width: 100%;
+  font-size: 15px;
+  position: relative;
+  text-align: center;
+  transform: translate3d(0, 0, 0);
+  min-height: @navbarHeight;
+  background-color: @navbarBgColor;
+  .hairline(1px, 0);
+  > .item {
+    position: relative;
+    color: inherit;
+    cursor: pointer;
+    line-height: @navbarHeight;
+    &.active,
+    &:active {
+      background-color: @tapColor;
+    }
+    & + .item {
+      .hairline(0, 0, 0, 1px);
+    }
+  }
+  &.underline {
+    > .item {
+      &:after {
+        content: none;
+      }
+      &.active {
+        background-color: transparent;
+        &:before {
+          content: ' ';
+          position: absolute;
+          z-index: 10;
+          width: 100%;
+          left: 0;
+          bottom: 0;
+          border-bottom-width: 2px;
+          border-bottom-style: solid;
+        }
+      }
+    }
+    &.driving > .item.active {
+      color: @orange;
+      &:before {
+        border-color: @orange;
+      }
+    }
+    &.primary > .item.active {
+      color: @blue;
+      &:before {
+        border-color: @blue;
+      }
+    }
+    &.success > .item.active {
+      color: @green;
+      &:before {
+        border-color: @green;
+      }
+    }
+  }
+  &.outline {
+    padding: 10px 15px;
+    .hairline(0, 0, 0, 0);
+    & > .item {
+      line-height: @navbarHeight - 10px;
+      border-radius: 4px;
+      .hairline(1px, 1px, 1px, 1px, 4px);
+      &.active {
+        color: #fff;
+        background: @blue;
+        &:after {
+          border-color: @blue;
+        }
+      }
+      & + .item {
+        margin-left: 15px;
+      }
+    }
+  }
+  &[ui-mode='scroll'] {
+    overflow-x: scroll;
+    & > .item {
+      flex: 0 0 22%;
+    }
+  }
+}

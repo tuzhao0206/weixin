@@ -1,0 +1,384 @@
+@import '../base/fn';
+.list > .item[ui-mode~='input'] {
+  padding: 0;
+  align-items: stretch;
+  > .icon:first-child,
+  > .avatar:first-child {
+    margin: 0;
+    display: block;
+    padding: 0 @listWidgetGap 0 @listItemGapH;
+    line-height: @listItemHeight;
+  }
+  > .icon:last-child,
+  > .avatar:last-child {
+    margin: 0;
+    display: block;
+    padding: 0 @listItemGapH 0 @listWidgetGap;
+    line-height: @listItemHeight;
+  }
+  > .avatar {
+    display: flex;
+    align-items: center;
+    img {
+      display: initial;
+    }
+  }
+  // 文本框
+  input.input {
+    flex: 1;
+    width: 100%;
+    border: none;
+    outline: none;
+    appearance: none;
+    font-size: inherit;
+    color: inherit;
+    background-color: transparent;
+    line-height: @listLineHeight;
+    &:first-child {
+      padding-left: @listItemGapH;
+    }
+    &:last-child {
+      padding-right: @listItemGapH;
+    }
+    // hides the spin-button
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+    & + [ui-mode~='close'] {
+      display: none;
+      margin-left: @listWidgetGap;
+    }
+    &:valid + .icon {
+      display: block;
+    }
+  }
+  // 表单标签
+  > .label {
+    display: block;
+    min-width: 32px;
+    line-height: @listItemHeight;
+    margin-right: @listWidgetGap;
+    &:first-child {
+      margin-left: @listItemGapH;
+    }
+
+    &.required {
+      &:before {
+        content: '*';
+        color: #f00;
+        padding-right: 5px;
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+  }
+  > .label[ui-mode='48px'] {
+    min-width: 48px;
+  }
+  > .label[ui-mode='64px'] {
+    min-width: 64px;
+  }
+  > .label[ui-mode='80px'] {
+    min-width: 80px;
+  }
+  > .label[ui-mode='96px'] {
+    min-width: 96px;
+  }
+  > .label[ui-mode='112px'] {
+    min-width: 112px;
+  }
+  // 下拉选择
+  select.select {
+    flex: 1;
+    width: 100%;
+    border: none;
+    outline: none;
+    appearance: none;
+    background-color: transparent;
+    font-size: inherit;
+    color: inherit;
+    position: relative;
+    z-index: 10;
+    padding-right: 43px;
+    &:first-child {
+      padding-left: @listItemGapH;
+    }
+    & + [ui-mode~='arrow'] {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 43px;
+      height: 100%;
+      padding: 0 @listWidgetGap 0 @listItemGapH;
+      line-height: @listItemHeight;
+    }
+  }
+  // 嵌套组件
+  .select-widget {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    min-width: 96px;
+    margin-right: @listWidgetGap;
+    .hairline(0, 1px, 0, 0);
+  }
+  &:not([ui-mode$='0px']) > .text > .select {
+    height: 44px;
+    margin-top: -@listItemGapV;
+    margin-bottom: -@listItemGapV;
+  }
+  &[ui-mode$='0px'] > .label {
+    margin-left: @listItemGapH;
+  }
+  textarea.textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    padding: @listItemGapV @listItemGapH;
+  }
+  .textarea-counter {
+    position: absolute;
+    bottom: @listItemGapV;
+    right: @listItemGapH;
+    text-align: right;
+    color: @gray;
+  }
+  // 交互区 如验证码
+  > .interact {
+    position: relative;
+    text-align: center;
+    width: 112px;
+    .hairline(0, 0, 0, 1px);
+    &[ui-mode~='narrow']:before {
+      top: @listItemGapV;
+      bottom: @listItemGapV;
+    }
+    .button {
+      display: block;
+      width: 100%;
+      font-size: inherit;
+      border-radius: 0;
+      padding-left: 0;
+      padding-right: 0;
+      line-height: @listItemHeight;
+      &:after {
+        content: none;
+      }
+      &:active {
+        background-color: @tapColor;
+      }
+    }
+    .captcha {
+      display: block;
+      width: 100%;
+      height: @listItemHeight;
+    }
+  }
+}
+
+// 单选框
+input.radio {
+  position: relative;
+  border: none;
+  outline: none;
+  appearance: none;
+  background-color: transparent;
+  font-size: inherit;
+  color: inherit;
+  border-radius: 50%;
+  overflow: hidden;
+  vertical-align: middle;
+  margin-right: @listWidgetGap;
+  width: @inputChoiceSize;
+  height: @inputChoiceSize;
+  &:before {
+    content: ' ';
+    display: table;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: @inputChoiceBg;
+    border: 1px solid @inputChoiceDefaultColor;
+  }
+  &:after {
+    content: ' ';
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    width: @radioPointSize;
+    height: @radioPointSize;
+    margin-top: -@radioPointSize / 2;
+    margin-left: -@radioPointSize / 2;
+    background-color: @inputChoiceDefaultColor;
+  }
+  &.primary:before {
+    border: 1px solid @inputChoicePrimaryColor;
+  }
+  &.primary:after {
+    background-color: @inputChoicePrimaryColor;
+  }
+  &.success:before {
+    border: 1px solid @inputChoiceSuccessColor;
+  }
+  &.success:after {
+    background-color: @inputChoiceSuccessColor;
+  }
+  &:checked:after {
+    opacity: 1;
+  }
+  &[disabled] {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  &[disabled]:before {
+    border-color: @inputChoiceDisabledColor;
+  }
+  &[disabled]:checked:after {
+    background-color: @inputChoiceDisabledColor;
+  }
+}
+
+// 复选框
+input.checkbox {
+  position: relative;
+  border: none;
+  outline: none;
+  appearance: none;
+  background-color: transparent;
+  font-size: inherit;
+  color: inherit;
+  border-radius: 50%;
+  overflow: hidden;
+  vertical-align: middle;
+  margin-right: @listWidgetGap;
+  width: @inputChoiceSize;
+  height: @inputChoiceSize;
+  &:before {
+    content: ' ';
+    display: table;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: @inputChoiceBg;
+    border: 1px solid @inputChoiceDefaultColor;
+  }
+  &:after {
+    content: ' ';
+    opacity: 0;
+    position: absolute;
+    border-style: solid;
+    transform: rotate(-45deg);
+    border-width: 0 0 @checkboxPointBorderWidth @checkboxPointBorderWidth;
+    width: @checkboxPointWidth;
+    height: @checkboxPointHeight;
+    top: percentage(round((@inputChoiceSize - @checkboxPointHeight) / 2 / @inputChoiceSize - 0.04, 2));
+    left: percentage(round((@inputChoiceSize - @checkboxPointWidth) / 2 / @inputChoiceSize, 2));
+    border-color: @checkboxPointColor;
+  }
+  &:checked:before {
+    background-color: @inputChoiceDefaultColor;
+  }
+  &:checked:after {
+    opacity: 1;
+  }
+  &.primary:before {
+    border-color: @inputChoicePrimaryColor;
+  }
+  &.primary:checked:before {
+    background-color: @inputChoicePrimaryColor;
+  }
+  &.success:before {
+    border-color: @inputChoiceSuccessColor;
+  }
+  &.success:checked:before {
+    background-color: @inputChoiceSuccessColor;
+  }
+  &[disabled] {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  &[disabled]:before {
+    border-color: @inputChoiceDisabledColor;
+  }
+  &[disabled]:checked:before {
+    background-color: @inputChoiceDisabledColor;
+  }
+}
+
+.list > .item {
+  // 调整后置间距
+  > input.radio:last-child,
+  > input.checkbox:last-child {
+    margin-right: 0;
+    margin-left: @listWidgetGap;
+  }
+}
+
+// switch
+.switch {
+  position: relative;
+  display: table;
+  outline: none;
+  appearance: none;
+  width: @switchWidth;
+  height: @switchHeight;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid #dfdfdf;
+  background-color: #dfdfdf;
+  transform: translate3d(0, 0, 0);
+  transition: background-color 0.1s, border 0.1s;
+  &:before {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: @switchWidth - 2;
+    height: @switchHeight - 2;
+    border-radius: (@switchHeight - 2) / 2;
+    background-color: #fdfdfd;
+    transition: transform 0.35s cubic-bezier(0.45, 1, 0.4, 1);
+  }
+  &:after {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: @switchHeight - 2;
+    height: @switchHeight - 2;
+    border-radius: (@switchHeight - 2) / 2;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    transition: transform 0.35s cubic-bezier(0.4, 0.4, 0.25, 1.35);
+  }
+  &:checked {
+    border-color: @orange;
+    background-color: @orange;
+    &.primary {
+      border-color: @blue;
+      background-color: @blue;
+    }
+    &.warning {
+      border-color: @red;
+      background-color: @red;
+    }
+    &.success {
+      border-color: @green;
+      background-color: @green;
+    }
+    &:before {
+      transform: scale(0);
+    }
+    &:after {
+      transform: translateX(@switchWidth - @switchHeight);
+    }
+  }
+}

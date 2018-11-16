@@ -1,0 +1,51 @@
+@import '../base/fn';
+
+// 取消折叠: margin collapse
+section.content {
+  &:before,
+  &:after {
+    content: ' ';
+    display: table;
+  }
+}
+
+// 取消折叠: margin collapse
+.collapse {
+  &:before,
+  &:after {
+    content: ' ';
+    display: table;
+  }
+}
+
+//fade动画
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+// 面包屑导航
+.breadcrumb {
+  padding: 20px 0;
+  list-style: none;
+  font-size: 14px;
+  li {
+    display: inline-block;
+    a {
+      color: #888888;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    & + li:before {
+      padding: 0 5px;
+      color: #ccc;
+      content: '/\00a0';
+    }
+  }
+}

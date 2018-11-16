@@ -1,0 +1,165 @@
+@import '../base/fn';
+// 接受协议 对其Radio和Checkbox
+.agree {
+  display: block;
+  margin: @listItemGapH;
+  > label {
+    display: flex;
+    align-items: center;
+  }
+  > label.center {
+    justify-content: center;
+  }
+}
+
+// 文字并列 竖线分割
+.text-group {
+  display: table;
+  width: 100%;
+  margin: 0 auto;
+  > .item {
+    position: relative;
+    margin: 0 8px;
+    &:first-child {
+      margin-left: 0;
+    }
+    &:not(:first-child):before {
+      .borderLeft();
+      left: -8px;
+      top: 15%;
+      bottom: 15%;
+    }
+  }
+}
+
+// 文字对齐
+.text-justify {
+  .setFlex(stretch, value);
+  .label {
+    margin-right: @listItemGapH;
+    min-width: 4em;
+    text-align: justify;
+    text-align-last: justify;
+  }
+  .value {
+    .ellipsis();
+  }
+  + .text-justify {
+    margin-top: 6px;
+  }
+}
+
+// 悬挂顶部
+.top-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  &:before {
+    content: none;
+  }
+}
+
+// 悬挂底部
+.btm-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  &:after {
+    content: none;
+  }
+}
+
+// 左浮动
+.pull-left {
+  float: left;
+}
+
+// 右浮动
+.pull-right {
+  float: right;
+}
+
+// 清除浮动
+.clearfix:after {
+  content: '\0200';
+  visibility: hidden;
+  clear: both;
+  display: block;
+  font-size: 0;
+  height: 0;
+}
+
+// 居中
+.center-block {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+}
+
+// 图片占位
+.autofix {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  & > img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+// 取消折叠: margin collapse
+section.content {
+  &:before,
+  &:after {
+    content: ' ';
+    display: table;
+  }
+}
+
+// 取消折叠: margin collapse
+.collapse {
+  &:before,
+  &:after {
+    content: ' ';
+    display: table;
+  }
+}
+
+//fade动画
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+// 面包屑导航
+.breadcrumb {
+  padding: 20px 0;
+  list-style: none;
+  font-size: 14px;
+  li {
+    display: inline-block;
+    a {
+      color: #888888;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    & + li:before {
+      padding: 0 5px;
+      color: #ccc;
+      content: '/\00a0';
+    }
+  }
+}

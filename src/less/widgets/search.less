@@ -1,0 +1,67 @@
+// 关闭搜索输入框的默认样式
+input[type='search']::-webkit-search-decoration,
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-results-button,
+input[type='search']::-webkit-search-results-decoration {
+  display: none;
+}
+
+.list > .item {
+  .search {
+    flex: 1;
+    position: relative;
+    background-color: @searchBg;
+    padding: @searchGap;
+    .trigger {
+      .setFlex();
+      justify-content: center;
+      position: relative;
+      background-color: #fff;
+      border-radius: @searchBorderRadius;
+      & > .icon:first-child {
+        margin: 0 @searchGap;
+      }
+      & > input[type='search'] {
+        border: none;
+        outline: none;
+        appearance: none;
+        font-size: inherit;
+        transform: translate3d(0, 0, 0);
+        transition-property: width;
+        transition-duration: 300ms;
+        width: 3em;
+        height: @searchHeight;
+        &:focus,
+        &:valid {
+          width: 100%;
+        }
+        & + .icon {
+          display: none;
+          margin: 0 @searchControlGap;
+          line-height: @searchHeight;
+        }
+        &:valid + .icon {
+          display: block;
+        }
+        & ~ .cancel {
+          width: auto;
+          border-radius: 0;
+          display: none;
+          font-size: inherit;
+          white-space: nowrap;
+          word-break: keep-all;
+          margin-right: -@searchGap;
+          color: @green;
+          background-color: @searchBg;
+          padding-right: @searchControlGap;
+          padding-left: @searchControlGap + @searchBorderRadius;
+          line-height: @searchHeight;
+        }
+        &:focus ~ .cancel,
+        &:valid ~ .cancel {
+          display: inline;
+        }
+      }
+    }
+  }
+}
