@@ -1,126 +1,112 @@
 <template>
-  <div :class="$style.style">
-    <button class="minus" @click="minus" :disabled="valueImpl === min" />
-    <input type="number" pattern="[0-9]*" @input="input" :value="valueImpl" />
-    <button class="plus" @click="plus" :disabled="valueImpl === max" />
+  <div class="stepper">
+    <button
+      :disabled="currentValue === min || disabled"
+      @click="decrease()">
+      <i class="icon">&#xe62d;</i>
+    </button>
+
+    <input
+      :disabled="disabled"
+      type="number"
+      @input="onInput"
+      :value="currentValue" />
+
+    <button
+      :disabled="currentValue === max || disabled"
+      @click="increase()">
+      <i class="icon">&#xe62c;</i>
+    </button>
   </div>
 </template>
 <script>
 export default {
   props: {
     value: { type: Number, default: 1 },
-    step: { type: Number, default: 1 },
     min: { type: Number, default: 1 },
     max: { type: Number, default: Infinity },
+    step: { type: Number, default: 1 },
+    disabled: { type: Boolean, default: false },
   },
   data() {
-    const val = this.correct(this.value);
-    if (val !== this.value) {
-      this.$emit('input', val);
-    }
     return {
-      valueImpl: val,
+      currentValue: this.value,
     };
   },
   watch: {
-    value(newVal) {
-      const val = this.correct(newVal);
-      if (val !== this.valueImpl) {
-        this.valueImpl = val;
-        this.$emit('input', val);
-      }
+    value: function(val) {
+      this.currentValue = val;
     },
   },
+
   methods: {
-    correct(val) {
-      return val === '' || isNaN(val) ? this.min : Math.min(Math.max(val, this.min), this.max);
+    decrease() {
+      this.currentValue = Number(this.currentValue) - this.step;
+      if (this.currentValue < this.min) {
+        this.currentValue = this.min;
+      }
+      this.$emit('input', this.currentValue);
+      this.$emit('change', this.currentValue);
     },
-    minus() {
-      this.valueImpl = this.correct(this.valueImpl - this.step);
-      this.$emit('input', this.valueImpl);
+    increase() {
+      this.currentValue = Number(this.currentValue) + this.step;
+      if (this.currentValue > this.max) {
+        this.currentValue = this.max;
+      }
+      this.$emit('input', this.currentValue);
+      this.$emit('change', this.currentValue);
     },
-    input(e) {
-      this.valueImpl = this.correct(e.target.value);
-      e.target.value = this.valueImpl;
-      this.$emit('input', this.valueImpl);
-    },
-    plus() {
-      this.valueImpl = this.correct(this.valueImpl + this.step);
-      this.$emit('input', this.valueImpl);
+    onInput(e) {
+      this.currentValue = Number(e.target.value);
+      if (this.currentValue > this.max) {
+        this.currentValue = this.max;
+      } else if (this.currentValue < this.min) {
+        this.currentValue = this.min;
+      }
+      this.$emit('input', this.currentValue);
+      this.$emit('change', this.currentValue);
     },
   },
 };
 </script>
-
-<style lang="less" module>
-:local(.style) {
+<style lang="less" scoped>
+.stepper {
   display: inline-block;
   font-size: 0;
-  button {
-    position: relative;
-    width: 40px;
-    height: 30px;
-    padding: 5px;
-    background-color: #fff;
-    border: 1px solid #eee;
-    vertical-align: middle;
-    &:focus {
-      outline: 0;
-    }
-    &:active {
-      background-color: #f9f9f9;
-    }
-    &[disabled] {
-      background: #f9f9f9;
-    }
-    &:before,
-    &:after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #777;
-      margin: auto;
-    }
-  }
   input {
-    width: 40px;
+    outline: none;
+    width: 34px;
     height: 30px;
-    padding: 0 3px;
+    text-align: center;
     border: 1px solid #eee;
-    border-left: none;
-    border-right: none;
+    border-width: 1px 0;
     color: #666;
     font-size: 14px;
     vertical-align: middle;
-    text-align: center;
     -webkit-appearance: none;
-    &:focus {
-      outline: 0;
+    &:disabled {
+      background-color: #f1f1f1;
+      border-color: #e5e5e5;
     }
   }
-  .minus {
-    border-radius: 2px 0 0 2px;
-    &:before {
-      width: 13px;
-      height: 1px;
-    }
-    &:after {
-      content: none;
-    }
-  }
-  .plus {
-    border-radius: 0 2px 2px 0;
-    &:before {
-      width: 13px;
-      height: 1px;
-    }
-    &:after {
-      width: 1px;
-      height: 13px;
+  button {
+    outline: none;
+    cursor: pointer;
+    color: #666666;
+    width: 34px;
+    height: 30px;
+    vertical-align: middle;
+    border: 1px solid #eee;
+    background-color: #fff;
+    font-size: 18px;
+    &:disabled {
+      background-color: #f1f1f1;
+      border-color: #e5e5e5;
     }
   }
+}
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0;
 }
 </style>

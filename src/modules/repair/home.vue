@@ -1,6 +1,8 @@
 <template>
   <ex-view>
-    <ex-header title="选择工单类型"><ex-title /></ex-header>
+    <ex-header title="选择工单类型">
+      <ex-title />
+    </ex-header>
     <ex-content>
       <ex-space space="20px 12px">
         <p class="text-sm">请选择维修服务类型</p>
@@ -8,7 +10,7 @@
 
       <ex-space space="12px">
         <div class="list compact round">
-          <router-link class="item" to="/">
+          <router-link class="item" :to="$prelang('repair/choose')">
             <div class="avatar">
               <img width="30" src="../../assets/images/image-01.png" />
             </div>
@@ -22,7 +24,7 @@
 
       <ex-space space="12px">
         <div class="list compact round">
-          <router-link class="item" to="/">
+          <router-link class="item" :to="$prelang('repair/choose')">
             <div class="avatar">
               <img width="30" src="../../assets/images/image-02.png" />
             </div>
@@ -36,7 +38,7 @@
 
       <ex-space space="12px">
         <div class="list compact round">
-          <router-link class="item" to="/">
+          <router-link class="item" :to="$prelang('repair/choose')">
             <div class="avatar">
               <img width="30" src="../../assets/images/image-03.png" />
             </div>
