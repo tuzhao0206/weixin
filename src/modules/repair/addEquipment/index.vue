@@ -39,6 +39,7 @@
 import axios from 'axios';
 import HOSTS from '../../../env.config';
 // @TODO 接口参传
+// @TODO 如果子类active都为false，次级父类自动折叠
 export default {
   data() {
     return {
@@ -159,8 +160,10 @@ export default {
             ],
           },
         ];
+        console.log('请求接口');
       } else {
         this.productData = this.$store.state.repair.home.productData;
+        console.log('读取缓存');
       }
 
       this.loading = true;
@@ -179,6 +182,7 @@ export default {
       } else {
         this.$set(this.productData[this.activeProductType].content[i], `active`, false);
       }
+      //      this.$store.commit('repair/home/changeProductData', { productData: this.productData });
     },
     chooseProduct(i, j) {
       if (!this.productData[this.activeProductType].content[i].productArray[j].active) {
