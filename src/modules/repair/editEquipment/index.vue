@@ -50,10 +50,12 @@
   </ex-view>
 </template>
 <script>
+// @TODO 为什么number需要set而active不用，set之后还要继续set么
 export default {
   data() {
     return {
       productData: this.$store.state.repair.home.productData,
+      submitData: [],
     };
   },
   methods: {
@@ -66,6 +68,7 @@ export default {
       // ..
       if (confirm('delete?')) {
         this.productData[i].content[j].productArray[m].active = false;
+        //this.$set(this.productData[i].content[j].productArray[m], `number`, 0); // @TODO 无效？
 
         this.$store.commit('repair/home/changeProductData', { productData: this.productData });
       }
@@ -75,7 +78,22 @@ export default {
 
       this.$store.commit('repair/home/changeProductData', { productData: this.productData });
     },
-    nextStep() {},
+    nextStep() {
+      for (let i = 0; i < this.productData.length; i++) {
+        for (let j = 0; j < this.productData[i].content.length; j++) {
+          for (let m = 0; m < this.productData[i].content[j].productArray.length; m++) {
+            if (this.productData[i].content[j].productArray[m].active == true) {
+              if (!this.productData[i].content[j].productArray[m].number) {
+                this.productData[i].content[j].productArray[m].number = 1;
+              }
+              this.submitData.push(this.productData[i].content[j].productArray[m]);
+            }
+          }
+        }
+      }
+
+      console.log(this.submitData);
+    },
   },
 };
 </script>
