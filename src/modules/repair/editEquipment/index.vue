@@ -4,6 +4,7 @@
       <ex-menu class="text-gray" @click="$router.back();"> <i class="icon">&#xe60e;</i> </ex-menu>
       <ex-title />
     </ex-header>
+
     <ex-content>
       <div class="list">
         <div class="item"><div class="text text-sm">Step1：请选择您需要维修的机器型号和数量</div></div>
@@ -26,6 +27,7 @@
         </div>
       </div>
     </ex-content>
+
     <ex-footer class="btm-fixed"> <button class="button primary square">下一步</button> </ex-footer>
   </ex-view>
 </template>
