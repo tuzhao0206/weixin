@@ -21,13 +21,21 @@
       </div>
       <div class="list">
         <div class="item"><div class="text text-sm">设备名称：</div></div>
-        <div class="item" v-for="(item, index) in [1, 2]" :key="index">
-          <div class="text text-sm">蚂蚁矿机S7-1G模组（N）5</div>
-          <div class="extra"><ex-stepper :min="1" /></div>
-        </div>
+        <template v-for="item in this.$store.state.repair.home.productData">
+          <template v-for="productObj in item.content">
+            <div v-for="product in productObj.productArray" v-if="product.active" class="item">
+              <div class="tag" :class="{ peijian: item.name == '配件', wuliao: item.name == '物料' }">
+                {{ item.name }}
+              </div>
+              <div class="text text-sm not-break">{{ product.name }}</div>
+              <div class="extra"><ex-stepper :min="1" :max="500" /></div>
+            </div>
+          </template>
+        </template>
       </div>
     </ex-content>
 
+    <!-- @TODO 点击下一步的时候进行多余数据的过滤 -->
     <ex-footer class="btm-fixed"> <button class="button primary square">下一步</button> </ex-footer>
   </ex-view>
 </template>
@@ -43,4 +51,33 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+@import '../../../less/base/variable/color.less';
+div.item {
+  div.tag {
+    height: 16px;
+    padding: 0 5px;
+    margin-right: 5px;
+    border-radius: 2px;
+    font-size: 12px;
+    line-height: 16px;
+
+    background-color: @blue;
+    color: white;
+
+    &.peijian {
+      background-color: @green;
+    }
+    &.wuliao {
+      background-color: @orange;
+    }
+  }
+  div.not-break {
+    display: inline-block;
+    margin-right: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+</style>

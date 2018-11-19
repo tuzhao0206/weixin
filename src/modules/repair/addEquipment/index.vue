@@ -5,18 +5,18 @@
       <ex-title />
     </ex-header>
 
-    <ex-content>
+    <ex-content v-if="loading">
       <div class="list productType">
         <div class="item productType">
           <div>
-            <p @click="activeProductType = 1;" :class="{ active: activeProductType == 1 }">整机列表</p>
-            <p @click="activeProductType = 2;" :class="{ active: activeProductType == 2 }">配件列表</p>
-            <p @click="activeProductType = 3;" :class="{ active: activeProductType == 3 }">物料列表</p>
+            <p @click="activeProductType = 0;" :class="{ active: activeProductType == 0 }">整机列表</p>
+            <p @click="activeProductType = 1;" :class="{ active: activeProductType == 1 }">配件列表</p>
+            <p @click="activeProductType = 2;" :class="{ active: activeProductType == 2 }">物料列表</p>
           </div>
         </div>
       </div>
 
-      <div class="productsChoose list" v-for="(productObj, i) in productData" :key="i">
+      <div class="productsChoose list" v-for="(productObj, i) in productData[activeProductType].content" :key="i">
         <div class="item title" :class="{ active: productObj.active }" @click="chooseSection(i);">
           <span>{{ productObj.name }}</span> <i class="icon">&#xe60b;</i>
         </div>
@@ -38,48 +38,132 @@
 <script>
 import axios from 'axios';
 import HOSTS from '../../../env.config';
+// @TODO 接口参传
 export default {
   data() {
     return {
-      activeProductType: 1,
+      activeProductType: 0, // 默认选中第一个（整机）
       productSubtype: 0,
 
-      productData: [
-        {
-          name: 'S9',
-          productArray: [
-            {
-              id: 3584,
-              name: '蚂蚁矿机S7-1C模组（N）4.455T',
-              priceOneCredit: 10.89,
-              productId: '00020180426221415240a4s8d6020628',
-            },
-            {
-              id: 141,
-              name: 'BB Board(for L3/L3+/L3++/D3/A3/X3)',
-              priceOneCredit: 100,
-              productId: '00020180206123029356l0P4OfW30651',
-            },
-          ],
-        },
-        {
-          name: 'T9',
-          productArray: [
-            {
-              id: 3584,
-              name: '蚂蚁矿机T9',
-              priceOneCredit: 10.89,
-              productId: '00020180426221415240a4s8d6020627',
-            },
-          ],
-        },
-      ],
+      productData: [],
+
+      loading: false,
     };
   },
-  mounted() {},
+  mounted() {
+    this.init();
+  },
   methods: {
-    returnToChoosePage() {
-      this.$router.push({ path: this.$prelang('repair/choose') });
+    init() {
+      if (this.$store.state.repair.home.productData.length == 0) {
+        // 请求接口
+        // ...
+        this.productData = [
+          {
+            name: '整机',
+            content: [
+              {
+                name: 'S9',
+                productArray: [
+                  {
+                    id: 3584,
+                    name: '蚂蚁矿机S7-1C模组（N）4.455T',
+                    priceOneCredit: 10.89,
+                    productId: '00020180426221415240a4s8d6020628',
+                  },
+                  {
+                    id: 141,
+                    name: 'BB Board(for L3/L3+/L3++/D3/A3/X3)',
+                    priceOneCredit: 100,
+                    productId: '00020180206123029356l0P4OfW30651',
+                  },
+                ],
+              },
+              {
+                name: 'T9',
+                productArray: [
+                  {
+                    id: 3583,
+                    name: '蚂蚁矿机T9',
+                    priceOneCredit: 10.89,
+                    productId: '00020180426221415240a4s8d6020627',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: '配件',
+            content: [
+              {
+                name: 'S9配件',
+                productArray: [
+                  {
+                    id: 6,
+                    name: '蚂蚁矿机配件1',
+                    priceOneCredit: 10.89,
+                    productId: '00020180426221415240a4s8d60206281',
+                  },
+                  {
+                    id: 5,
+                    name: '蚂蚁矿机配件2',
+                    priceOneCredit: 100,
+                    productId: '00020180206123029356l0P4OfW306512',
+                  },
+                ],
+              },
+              {
+                name: 'T9配件',
+                productArray: [
+                  {
+                    id: 4,
+                    name: '蚂蚁矿机T9配件1',
+                    priceOneCredit: 10.89,
+                    productId: '00020180426221415240a4s8d60206273',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: '物料',
+            content: [
+              {
+                name: 'S9物料',
+                productArray: [
+                  {
+                    id: 3,
+                    name: '芯片1',
+                    priceOneCredit: 11,
+                    productId: '00020180426221415240a4s8d60206284',
+                  },
+                  {
+                    id: 2,
+                    name: '接线板',
+                    priceOneCredit: 100,
+                    productId: '00020180206123029356l0P4OfW306515',
+                  },
+                ],
+              },
+              {
+                name: 'T9',
+                productArray: [
+                  {
+                    id: 1,
+                    name: 'T9电源',
+                    priceOneCredit: 133,
+                    productId: '00020180426221415240a4s8d60206279',
+                  },
+                ],
+              },
+            ],
+          },
+        ];
+      } else {
+        this.productData = this.$store.state.repair.home.productData;
+      }
+
+      this.loading = true;
     },
     getProductList(deviceType, uncollectFlag) {
       const url = `${
@@ -90,19 +174,22 @@ export default {
       });
     },
     chooseSection(i) {
-      if (!this.productData[i].active) {
-        this.$set(this.productData[i], `active`, true);
+      if (!this.productData[this.activeProductType].content[i].active) {
+        this.$set(this.productData[this.activeProductType].content[i], `active`, true);
       } else {
-        this.$set(this.productData[i], `active`, false);
+        this.$set(this.productData[this.activeProductType].content[i], `active`, false);
       }
     },
     chooseProduct(i, j) {
-      if (!this.productData[i].productArray[j].active) {
-        this.$set(this.productData[i].productArray[j], `active`, true);
+      if (!this.productData[this.activeProductType].content[i].productArray[j].active) {
+        this.$set(this.productData[this.activeProductType].content[i].productArray[j], `active`, true);
       } else {
-        this.$set(this.productData[i].productArray[j], `active`, false);
+        this.$set(this.productData[this.activeProductType].content[i].productArray[j], `active`, false);
       }
       this.$store.commit('repair/home/changeProductData', { productData: this.productData });
+    },
+    returnToChoosePage() {
+      this.$router.push({ path: this.$prelang('repair/choose') });
     },
   },
 };
