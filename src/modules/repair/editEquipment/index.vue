@@ -49,7 +49,7 @@
     </ex-footer>
 
     <ex-modal :show="confirmDeleteModal" class="confirmDelete">
-      <div class="content"><p>设备数量小于1将被删除，确认是否删除</p></div>
+      <div class="content"><p>设备数量小于 1 将被删除，请确认是否删除？</p></div>
       <footer class="footer">
         <div class="button cancel" @click="confirmDeleteModal = false;">取消</div>
         <div class="button delete" @click="deleteProduct();">删除</div>
@@ -150,6 +150,7 @@ div.confirmDelete {
   div.content {
     height: 80px;
     padding: 20px 30px 0 30px;
+    text-align: left;
   }
   footer.footer {
     display: flex;
