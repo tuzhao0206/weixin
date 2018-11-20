@@ -11,7 +11,9 @@
         <div class="item">
           <div class="text">
             <ex-space space="10px">
-              <button class="button plain-primary" @click="addEquipment();"><span>手动添加维修设备</span></button>
+              <router-link class="button plain-primary" tag="button" :to="$prelang('repair/addEquipment')"
+                ><span>手动添加维修设备</span></router-link
+              >
             </ex-space>
             <ex-space space="10px">
               <button class="button primary"><i class="icon">&#xe614;</i> <span>扫码添加</span></button>
@@ -58,7 +60,7 @@
   </ex-view>
 </template>
 <script>
-// @TODO 为什么number需要set而active不用，set之后还要继续set么
+// @DONE 为什么number需要set而active不用，set之后还要继续set么 => set之后就完成了数据的监听
 export default {
   data() {
     return {
@@ -80,14 +82,13 @@ export default {
     },
     deleteProduct() {
       // active为false
-      // number为1
+      // number为0和1都可
 
       let i = this.index[0];
       let j = this.index[1];
       let m = this.index[2];
 
       this.productData[i].content[j].productArray[m].active = false;
-      //this.$set(this.productData[i].content[j].productArray[m], `number`, 0); // @TODO 无效？
 
       this.$store.commit('repair/equipment/changeProductData', { productData: this.productData });
 
