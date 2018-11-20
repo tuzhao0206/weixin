@@ -6,7 +6,7 @@
     </ex-header>
 
     <ex-content v-if="loading">
-      <div class="list productList">
+      <div class="list productList" :class="{ hide: type == 1 }">
         <div class="item productItem">
           <div>
             <p
@@ -15,11 +15,14 @@
                 filterData();
               "
               :class="{ active: activeProductType == 0 }"
+              v-if="type == 0 || type == 2"
             >
               整机列表
             </p>
             <p @click="getPeijian();" :class="{ active: activeProductType == 1 }">配件列表</p>
-            <p @click="getWuliao();" :class="{ active: activeProductType == 2 }">物料列表</p>
+            <p @click="getWuliao();" :class="{ active: activeProductType == 2 }" v-if="type == 0 || type == 2">
+              物料列表
+            </p>
           </div>
         </div>
       </div>
@@ -27,7 +30,7 @@
       <div
         class="productsChoose list"
         v-for="(productObj, i) in filteredData"
-        :key="activeProductType.toString() + i.toString()"
+        :key="activeProductType.toString() + '/' + i.toString()"
       >
         <div
           class="item title"
@@ -41,7 +44,7 @@
         <template v-for="(product, j) in productObj.productArray">
           <div
             class="item content"
-            :key="activeProductType.toString() + i.toString() + j.toString()"
+            :key="activeProductType.toString() + '/' + i.toString() + '/' + j.toString()"
             :class="{ active: productObj.active || productObj.name == 'all' }"
             @click="chooseProduct(i, j);"
           >
@@ -86,56 +89,92 @@ export default {
       if (this.$store.state.repair.equipment.productData.length == 0) {
         // 请求接口
         // ...
-        this.productData = [
-          {
-            name: '整机',
-            content: [
-              {
-                name: 'S9',
-                productArray: [
-                  {
-                    id: 3584,
-                    name: '蚂蚁矿机S7-1C模组（N）4.455T',
-                    priceOneCredit: 10.89,
-                    productId: '00020180426221415240a4s8d6020628',
-                  },
-                  {
-                    id: 141,
-                    name: 'BB Board(for L3/L3+/L3++/D3/A3/X3)',
-                    priceOneCredit: 100,
-                    productId: '00020180206123029356l0P4OfW30651',
-                  },
-                ],
-              },
-              {
-                name: 'T9',
-                productArray: [
-                  {
-                    id: 3583,
-                    name: '蚂蚁矿机T9',
-                    priceOneCredit: 10.89,
-                    productId: '00020180426221415240a4s8d6020627',
-                  },
-                ],
-              },
-            ],
-          },
-        ];
         console.log('请求接口');
 
-        let mainProductArray = [];
-        let mainProductObject = {};
         if (this.type === '0') {
           // 普通工单
           // 获取整机
+          this.productData = [
+            {
+              name: '整机',
+              content: [
+                {
+                  name: 'S9',
+                  productArray: [
+                    {
+                      id: 3584,
+                      name: '蚂蚁矿机S7-1C模组（N）4.455T',
+                      priceOneCredit: 10.89,
+                      productId: '00020180426221415240a4s8d6020628',
+                    },
+                    {
+                      id: 141,
+                      name: 'BB Board(for L3/L3+/L3++/D3/A3/X3)',
+                      priceOneCredit: 100,
+                      productId: '00020180206123029356l0P4OfW30651',
+                    },
+                  ],
+                },
+                {
+                  name: 'T9',
+                  productArray: [
+                    {
+                      id: 3583,
+                      name: '蚂蚁矿机T9',
+                      priceOneCredit: 10.89,
+                      productId: '00020180426221415240a4s8d6020627',
+                    },
+                  ],
+                },
+              ],
+            },
+          ];
+
           // 获取配件
           // ..
           // 获取物料
           // ..
         } else if (this.type === '1') {
           // 配件工单
+          this.getPeijian(1);
         } else if (this.type === '2') {
           // 对发工单
+          // 获取整机
+          this.productData = [
+            {
+              name: '整机',
+              content: [
+                {
+                  name: 'S9',
+                  productArray: [
+                    {
+                      id: 3584,
+                      name: '蚂蚁矿机S7-1C模组（N）4.455T',
+                      priceOneCredit: 10.89,
+                      productId: '00020180426221415240a4s8d6020628',
+                    },
+                    {
+                      id: 141,
+                      name: 'BB Board(for L3/L3+/L3++/D3/A3/X3)',
+                      priceOneCredit: 100,
+                      productId: '00020180206123029356l0P4OfW30651',
+                    },
+                  ],
+                },
+                {
+                  name: 'T9',
+                  productArray: [
+                    {
+                      id: 3583,
+                      name: '蚂蚁矿机T9',
+                      priceOneCredit: 10.89,
+                      productId: '00020180426221415240a4s8d6020627',
+                    },
+                  ],
+                },
+              ],
+            },
+          ];
         }
       } else {
         this.productData = this.$store.state.repair.equipment.productData;
@@ -184,14 +223,16 @@ export default {
 
       return false;
     },
-    async getPeijian() {
+    async getPeijian(uncollectFlag) {
+      let tag = uncollectFlag || 0;
+
       this.activeProductType = 1;
 
       if (!this.filterData()) {
         let mainProductArray = [];
         let mainProductObject = {};
 
-        mainProductArray = await this.getProductList(1, 0);
+        mainProductArray = await this.getProductList(1, tag);
 
         mainProductObject = {
           name: '配件',
@@ -250,7 +291,7 @@ export default {
       this.$store.commit('repair/equipment/changeProductData', { productData: this.productData });
     },
     returnToChoosePage() {
-      this.$router.push({ path: this.$prelang('repair/choose') });
+      this.$router.push({ path: this.$prelang('repair/choose'), query: { type: this.type } });
     },
   },
 };
@@ -259,6 +300,9 @@ export default {
 @import '../../../less/base/variable/color.less';
 div.list.productList {
   margin: 0;
+  &.hide {
+    display: none;
+  }
   div.item.productItem {
     padding: 0;
     > div {
