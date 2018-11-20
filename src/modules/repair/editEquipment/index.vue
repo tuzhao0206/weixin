@@ -6,6 +6,17 @@
     </ex-header>
 
     <ex-content>
+      <div class="list duifa" v-if="type == 2">
+        <div class="item">
+          <p>
+            <span>可用对发额度</span><span class="blue">¥{{ duifaAmount }}</span>
+          </p>
+          <p>
+            <span>本工单扣除额度</span><span class="blue">¥{{ duifaAmount - usedAmount }}</span>
+          </p>
+        </div>
+      </div>
+
       <div class="list">
         <div class="item"><div class="text text-sm">Step1：请选择您需要维修的机器型号和数量</div></div>
         <div class="item">
@@ -59,6 +70,8 @@
 </template>
 <script>
 // @DONE 为什么number需要set而active不用，set之后还要继续set么 => set之后就完成了数据的监听
+import axios from 'axios';
+import HOSTS from '../../../env.config';
 export default {
   data() {
     return {
@@ -67,12 +80,26 @@ export default {
 
       confirmDeleteModal: false,
       index: [],
+
+      type: this.$route.query.type,
+
+      duifaAmount: 0,
+      usedAmount: 0,
     };
+  },
+  mounted() {
+    //获取授信信息
+    if (this.type === '2') {
+      const url = `${HOSTS.REPAIR}/api/repairCredit/getCredit`;
+      let that = this;
+      axios.get(url).then(({ data }) => {
+        that.duifaAmount = data[0].ablAmount + data[0].ablPledge;
+      });
+    }
   },
   methods: {
     addEquipment() {
-      let type = this.$route.query.type;
-      this.$router.push({ path: this.$prelang('repair/addEquipment'), query: { type: type } });
+      this.$router.push({ path: this.$prelang('repair/addEquipment'), query: { type: this.type } });
     },
     showDeleteProductModal(i, j, m) {
       this.confirmDeleteModal = true;
@@ -119,6 +146,24 @@ export default {
 </script>
 <style lang="less" scoped>
 @import '../../../less/base/variable/color.less';
+div.list.duifa {
+  div.item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    p {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+
+      font-size: 14px;
+      color: @lightBlack;
+      span.blue {
+        color: @blue;
+      }
+    }
+  }
+}
 div.item {
   div.tag {
     height: 16px;
