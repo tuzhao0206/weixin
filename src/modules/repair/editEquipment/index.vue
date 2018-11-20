@@ -11,9 +11,7 @@
         <div class="item">
           <div class="text">
             <ex-space space="10px">
-              <router-link class="button plain-primary" tag="button" :to="$prelang('repair/addEquipment')"
-                ><span>手动添加维修设备</span></router-link
-              >
+              <button class="button plain-primary" @click="addEquipment"><span>手动添加维修设备</span></button>
             </ex-space>
             <ex-space space="10px">
               <button class="button primary"><i class="icon">&#xe614;</i> <span>扫码添加</span></button>
@@ -73,7 +71,8 @@ export default {
   },
   methods: {
     addEquipment() {
-      this.$router.push({ path: this.$prelang('repair/addEquipment') });
+      let type = this.$route.query.type;
+      this.$router.push({ path: this.$prelang('repair/addEquipment'), query: { type: type } });
     },
     showDeleteProductModal(i, j, m) {
       this.confirmDeleteModal = true;

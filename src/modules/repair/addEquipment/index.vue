@@ -9,24 +9,58 @@
       <div class="list productList">
         <div class="item productItem">
           <div>
-            <p @click="activeProductType = 0;" :class="{ active: activeProductType == 0 }">整机列表</p>
-            <p @click="activeProductType = 1;" :class="{ active: activeProductType == 1 }">配件列表</p>
-            <p @click="activeProductType = 2;" :class="{ active: activeProductType == 2 }">物料列表</p>
+            <p
+              @click="
+                activeProductType = 0;
+                filterData();
+              "
+              :class="{ active: activeProductType == 0 }"
+            >
+              整机列表
+            </p>
+            <p
+              @click="
+                activeProductType = 1;
+                filterData();
+              "
+              :class="{ active: activeProductType == 1 }"
+            >
+              配件列表
+            </p>
+            <p
+              @click="
+                activeProductType = 2;
+                filterData();
+              "
+              :class="{ active: activeProductType == 2 }"
+            >
+              物料列表
+            </p>
           </div>
         </div>
       </div>
 
       <div
         class="productsChoose list"
-        v-for="(productObj, i) in productData[activeProductType].content"
+        v-for="(productObj, i) in filteredData"
         :key="activeProductType.toString() + i.toString()"
       >
-        <div class="item title" :class="{ active: productObj.active }" @click="chooseSection(i);">
-          <span>{{ productObj.name }}</span> <i class="icon">&#xe60b;</i>
+        <div
+          class="item title"
+          :class="{ active: productObj.active, hide: productObj.name == 'all' }"
+          @click="chooseSection(i);"
+        >
+          <span>{{ productObj.name }}</span
+          ><i class="icon">&#xe60b;</i>
         </div>
 
         <template v-for="(product, j) in productObj.productArray">
-          <div class="item content" :key="j" :class="{ active: productObj.active }" @click="chooseProduct(i, j);">
+          <div
+            class="item content"
+            :key="j"
+            :class="{ active: productObj.active || productObj.name == 'all' }"
+            @click="chooseProduct(i, j);"
+          >
             <input type="checkbox" />
             <p :class="{ active: product.active }">{{ product.name }}</p>
           </div>
@@ -43,24 +77,28 @@
 import axios from 'axios';
 import HOSTS from '../../../env.config';
 // @TODO 接口参传
-// @TODO 如果子类active都为false，次级父类自动折叠
+// @TODO 整机列表下，如果子类active都为false，次级父类自动折叠
 // @DONE 用户不选择后自动置数量为1
 export default {
   data() {
     return {
       activeProductType: 0, // 默认选中第一个（整机）
-      productSubtype: 0,
 
       productData: [],
 
       loading: false,
+
+      type: this.$route.query.type,
+
+      filteredData: [],
     };
   },
   mounted() {
     this.init();
+    this.filterData();
   },
   methods: {
-    init() {
+    async init() {
       if (this.$store.state.repair.equipment.productData.length == 0) {
         // 请求接口
         // ...
@@ -98,74 +136,50 @@ export default {
               },
             ],
           },
-          {
+        ];
+        console.log('请求接口');
+
+        let mainProductArray = [];
+        let mainProductObject = {};
+        if (this.type === '0') {
+          // 普通工单
+
+          // 获取整机
+
+          // 获取配件
+          mainProductArray = await this.getProductList(1, 0);
+
+          mainProductObject = {
             name: '配件',
             content: [
               {
-                name: 'S9配件',
-                productArray: [
-                  {
-                    id: 6,
-                    name: '蚂蚁矿机配件1',
-                    priceOneCredit: 10.89,
-                    productId: '00020180426221415240a4s8d60206281',
-                  },
-                  {
-                    id: 5,
-                    name: '蚂蚁矿机配件2',
-                    priceOneCredit: 100,
-                    productId: '00020180206123029356l0P4OfW306512',
-                  },
-                ],
-              },
-              {
-                name: 'T9配件',
-                productArray: [
-                  {
-                    id: 4,
-                    name: '蚂蚁矿机T9配件1',
-                    priceOneCredit: 10.89,
-                    productId: '00020180426221415240a4s8d60206273',
-                  },
-                ],
+                name: 'all',
+                productArray: mainProductArray,
               },
             ],
-          },
-          {
+          };
+
+          this.productData.push(mainProductObject);
+
+          // 获取物料
+          mainProductArray = await this.getProductList(2, 0);
+
+          mainProductObject = {
             name: '物料',
             content: [
               {
-                name: 'S9物料',
-                productArray: [
-                  {
-                    id: 3,
-                    name: '芯片1',
-                    priceOneCredit: 11,
-                    productId: '00020180426221415240a4s8d60206284',
-                  },
-                  {
-                    id: 2,
-                    name: '接线板',
-                    priceOneCredit: 100,
-                    productId: '00020180206123029356l0P4OfW306515',
-                  },
-                ],
-              },
-              {
-                name: 'T9',
-                productArray: [
-                  {
-                    id: 1,
-                    name: 'T9电源',
-                    priceOneCredit: 133,
-                    productId: '00020180426221415240a4s8d60206279',
-                  },
-                ],
+                name: 'all',
+                productArray: mainProductArray,
               },
             ],
-          },
-        ];
-        console.log('请求接口');
+          };
+
+          this.productData.push(mainProductObject);
+        } else if (this.type === '1') {
+          // 配件工单
+        } else if (this.type === '2') {
+          // 对发工单
+        }
       } else {
         this.productData = this.$store.state.repair.equipment.productData;
         console.log('读取缓存');
@@ -173,13 +187,39 @@ export default {
 
       this.loading = true;
     },
-    getProductList(deviceType, uncollectFlag) {
+    async getProductList(deviceType, uncollectFlag) {
       const url = `${
         HOSTS.REPAIR
       }/api/productRepair/getByDeviceType?deviceType=${deviceType}&uncollectFlag=${uncollectFlag}`;
-      axios.get(url).then(({ data }) => {
-        this.productData = data.data;
-      });
+      let res = await axios.get(url);
+      return res.data;
+    },
+    filterData() {
+      for (let i = 0; i < this.productData.length; i++) {
+        if (this.activeProductType == 0) {
+          if (this.productData[i].name == '整机') {
+            this.filteredData = this.productData[i].content;
+
+            return false;
+          }
+        }
+
+        if (this.activeProductType == 1) {
+          if (this.productData[i].name == '配件') {
+            this.filteredData = this.productData[i].content;
+
+            return false;
+          }
+        }
+
+        if (this.activeProductType == 2) {
+          if (this.productData[i].name == '物料') {
+            this.filteredData = this.productData[i].content;
+
+            return false;
+          }
+        }
+      }
     },
     chooseSection(i) {
       if (!this.productData[this.activeProductType].content[i].active) {
@@ -240,6 +280,9 @@ div.list.productsChoose {
       i {
         transform: rotate(180deg);
       }
+    }
+    &.hide {
+      display: none;
     }
   }
   div.item.content {

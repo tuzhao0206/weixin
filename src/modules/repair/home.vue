@@ -6,7 +6,7 @@
 
       <ex-space space="12px">
         <div class="list compact round">
-          <router-link class="item" :to="$prelang('repair/choose?type=1')">
+          <router-link class="item" :to="$prelang('repair/choose?type=0')">
             <div class="avatar"><img width="30" src="../../assets/images/image-01.png" /></div>
             <div class="text"><ex-space space="15px 0">普通工单</ex-space></div>
             <i class="icon text-gray">&#xe61a;</i>
@@ -16,7 +16,7 @@
 
       <ex-space space="12px">
         <div class="list compact round">
-          <router-link class="item" :to="$prelang('repair/choose?type=2')">
+          <router-link class="item" :to="$prelang('repair/choose?type=1')">
             <div class="avatar"><img width="30" src="../../assets/images/image-02.png" /></div>
             <div class="text"><ex-space space="15px 0">配件工单</ex-space></div>
             <i class="icon text-gray">&#xe61a;</i>
@@ -26,7 +26,7 @@
 
       <ex-space space="12px">
         <div class="list compact round">
-          <router-link class="item" :to="$prelang('repair/choose?type=3')">
+          <router-link class="item" :to="$prelang('repair/choose?type=2')">
             <div class="avatar"><img width="30" src="../../assets/images/image-03.png" /></div>
             <div class="text"><ex-space space="15px 0">对发工单</ex-space></div>
             <i class="icon text-gray">&#xe61a;</i>
