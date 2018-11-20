@@ -18,24 +18,8 @@
             >
               整机列表
             </p>
-            <p
-              @click="
-                activeProductType = 1;
-                filterData();
-              "
-              :class="{ active: activeProductType == 1 }"
-            >
-              配件列表
-            </p>
-            <p
-              @click="
-                activeProductType = 2;
-                filterData();
-              "
-              :class="{ active: activeProductType == 2 }"
-            >
-              物料列表
-            </p>
+            <p @click="getPeijian();" :class="{ active: activeProductType == 1 }">配件列表</p>
+            <p @click="getWuliao();" :class="{ active: activeProductType == 2 }">物料列表</p>
           </div>
         </div>
       </div>
@@ -57,7 +41,7 @@
         <template v-for="(product, j) in productObj.productArray">
           <div
             class="item content"
-            :key="j"
+            :key="activeProductType.toString() + i.toString() + j.toString()"
             :class="{ active: productObj.active || productObj.name == 'all' }"
             @click="chooseProduct(i, j);"
           >
@@ -143,38 +127,11 @@ export default {
         let mainProductObject = {};
         if (this.type === '0') {
           // 普通工单
-
           // 获取整机
-
           // 获取配件
-          mainProductArray = await this.getProductList(1, 0);
-
-          mainProductObject = {
-            name: '配件',
-            content: [
-              {
-                name: 'all',
-                productArray: mainProductArray,
-              },
-            ],
-          };
-
-          this.productData.push(mainProductObject);
-
+          // ..
           // 获取物料
-          mainProductArray = await this.getProductList(2, 0);
-
-          mainProductObject = {
-            name: '物料',
-            content: [
-              {
-                name: 'all',
-                productArray: mainProductArray,
-              },
-            ],
-          };
-
-          this.productData.push(mainProductObject);
+          // ..
         } else if (this.type === '1') {
           // 配件工单
         } else if (this.type === '2') {
@@ -194,13 +151,17 @@ export default {
       let res = await axios.get(url);
       return res.data;
     },
+    /*
+     * 返回false代表没有找到需要的数据
+     *
+     */
     filterData() {
       for (let i = 0; i < this.productData.length; i++) {
         if (this.activeProductType == 0) {
           if (this.productData[i].name == '整机') {
             this.filteredData = this.productData[i].content;
 
-            return false;
+            return true;
           }
         }
 
@@ -208,7 +169,7 @@ export default {
           if (this.productData[i].name == '配件') {
             this.filteredData = this.productData[i].content;
 
-            return false;
+            return true;
           }
         }
 
@@ -216,10 +177,60 @@ export default {
           if (this.productData[i].name == '物料') {
             this.filteredData = this.productData[i].content;
 
-            return false;
+            return true;
           }
         }
       }
+
+      return false;
+    },
+    async getPeijian() {
+      this.activeProductType = 1;
+
+      if (!this.filterData()) {
+        let mainProductArray = [];
+        let mainProductObject = {};
+
+        mainProductArray = await this.getProductList(1, 0);
+
+        mainProductObject = {
+          name: '配件',
+          content: [
+            {
+              name: 'all',
+              productArray: mainProductArray,
+            },
+          ],
+        };
+
+        this.productData.push(mainProductObject);
+      }
+
+      this.filterData();
+    },
+    async getWuliao() {
+      this.activeProductType = 2;
+
+      if (!this.filterData()) {
+        let mainProductArray = [];
+        let mainProductObject = {};
+
+        mainProductArray = await this.getProductList(2, 0);
+
+        mainProductObject = {
+          name: '物料',
+          content: [
+            {
+              name: 'all',
+              productArray: mainProductArray,
+            },
+          ],
+        };
+
+        this.productData.push(mainProductObject);
+      }
+
+      this.filterData();
     },
     chooseSection(i) {
       if (!this.productData[this.activeProductType].content[i].active) {
