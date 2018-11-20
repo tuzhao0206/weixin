@@ -6,8 +6,8 @@
     </ex-header>
 
     <ex-content v-if="loading">
-      <div class="list productType">
-        <div class="item productType">
+      <div class="list productList">
+        <div class="item productItem">
           <div>
             <p @click="activeProductType = 0;" :class="{ active: activeProductType == 0 }">整机列表</p>
             <p @click="activeProductType = 1;" :class="{ active: activeProductType == 1 }">配件列表</p>
@@ -16,7 +16,11 @@
         </div>
       </div>
 
-      <div class="productsChoose list" v-for="(productObj, i) in productData[activeProductType].content" :key="i">
+      <div
+        class="productsChoose list"
+        v-for="(productObj, i) in productData[activeProductType].content"
+        :key="activeProductType.toString() + i.toString()"
+      >
         <div class="item title" :class="{ active: productObj.active }" @click="chooseSection(i);">
           <span>{{ productObj.name }}</span> <i class="icon">&#xe60b;</i>
         </div>
@@ -57,7 +61,7 @@ export default {
   },
   methods: {
     init() {
-      if (this.$store.state.repair.home.productData.length == 0) {
+      if (this.$store.state.repair.equipment.productData.length == 0) {
         // 请求接口
         // ...
         this.productData = [
@@ -163,7 +167,7 @@ export default {
         ];
         console.log('请求接口');
       } else {
-        this.productData = this.$store.state.repair.home.productData;
+        this.productData = this.$store.state.repair.equipment.productData;
         console.log('读取缓存');
       }
 
@@ -183,7 +187,7 @@ export default {
       } else {
         this.$set(this.productData[this.activeProductType].content[i], `active`, false);
       }
-      //      this.$store.commit('repair/home/changeProductData', { productData: this.productData });
+      //      this.$store.commit('repair/equipment/changeProductData', { productData: this.productData });
     },
     chooseProduct(i, j) {
       if (!this.productData[this.activeProductType].content[i].productArray[j].active) {
@@ -192,7 +196,7 @@ export default {
         this.$set(this.productData[this.activeProductType].content[i].productArray[j], `active`, false);
         this.$set(this.productData[this.activeProductType].content[i].productArray[j], `number`, 1);
       }
-      this.$store.commit('repair/home/changeProductData', { productData: this.productData });
+      this.$store.commit('repair/equipment/changeProductData', { productData: this.productData });
     },
     returnToChoosePage() {
       this.$router.push({ path: this.$prelang('repair/choose') });
@@ -202,9 +206,9 @@ export default {
 </script>
 <style lang="less" scoped>
 @import '../../../less/base/variable/color.less';
-div.list.productType {
+div.list.productList {
   margin: 0;
-  div.item.productType {
+  div.item.productItem {
     padding: 0;
     > div {
       margin: 0 auto;

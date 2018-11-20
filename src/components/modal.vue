@@ -1,39 +1,42 @@
 <template>
-  <transition name="ex-widget" @enter="enter">
-    <ex-mask v-if="show" @click="dismiss($event);">
-      <div class="modal" :class="clazz">
-        <h3 class="title" v-if="title">{{ title }}</h3>
-        <div class="content" v-html="message"></div>
-        <footer class="footer">
-          <div class="compact nesting" :class="{ 'button-group': clazz !== 'android' }">
-            <button
-              class="button"
-              v-for="(item, idx) in buttons"
-              :key="idx"
-              :class="[item.class || 'text-primary']"
-              @click="item.onClick"
-            >
+  <transition name="ex-widgets">
+    <ex-mask v-if="show" @click="dismiss">
+      <div class="modal">
+        <slot>
+          <h3 class="title" v-if="title" v-html="title" />
+          <div class="content" v-html="message" />
+          <footer class="bt-footer" v-if="buttons.length > 0">
+            <button v-for="(item, idx) in buttons" :key="idx" v-bind="buttonConfig(item)" @click="item.onClick(item);">
               {{ item.text }}
             </button>
-          </div>
-        </footer>
+          </footer>
+        </slot>
+        <i class="bt-icon close" @click="close" v-if="close">&#xe61f;</i>
       </div>
     </ex-mask>
   </transition>
 </template>
-
 <script>
 export default {
   props: {
     show: { type: Boolean, default: false },
     title: { type: String },
-    clazz: { type: String },
     message: { type: String },
+    close: { type: Function },
     dismiss: { type: Function, default: n => n },
     buttons: { type: Array, default: () => [] },
   },
   methods: {
-    enter: (el, done) => done(),
+    // 过滤button的属性
+    buttonConfig(config) {
+      const options = {};
+      Object.keys(config).forEach(key => {
+        if (key !== 'onClick' && key !== 'text') {
+          options[key] = config[key];
+        }
+      });
+      return options;
+    },
   },
 };
 </script>

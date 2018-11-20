@@ -30,7 +30,7 @@
               <div class="text text-sm not-break">{{ product.name }}</div>
               <div class="extra">
                 <ex-stepper
-                  @data-should-be-deleted="deleteProduct(i, j, m);"
+                  @data-should-be-deleted="showDeleteProductModal(i, j, m);"
                   @change="changeProductNumber(i, j, m, $event);"
                   :value="product.number || 1"
                   :min="1"
@@ -43,10 +43,18 @@
       </div>
     </ex-content>
 
-    <!-- @TODO 点击下一步的时候进行多余数据的过滤 -->
+    <!-- @DONE 点击下一步的时候进行多余数据的过滤 -->
     <ex-footer class="btm-fixed">
       <button class="button primary square" @click="nextStep();">下一步</button>
     </ex-footer>
+
+    <ex-modal :show="confirmDeleteModal" class="confirmDelete">
+      <div class="content"><p>设备数量小于1将被删除，确认是否删除</p></div>
+      <footer class="footer">
+        <div class="button cancel" @click="confirmDeleteModal = false;">取消</div>
+        <div class="button delete" @click="deleteProduct();">删除</div>
+      </footer>
+    </ex-modal>
   </ex-view>
 </template>
 <script>
@@ -54,29 +62,41 @@
 export default {
   data() {
     return {
-      productData: this.$store.state.repair.home.productData,
+      productData: this.$store.state.repair.equipment.productData,
       submitData: [],
+
+      confirmDeleteModal: false,
+      index: [],
     };
   },
   methods: {
     addEquipment() {
       this.$router.push({ path: this.$prelang('repair/addEquipment') });
     },
-    deleteProduct(i, j, m) {
+    showDeleteProductModal(i, j, m) {
+      this.confirmDeleteModal = true;
+
+      this.index = [i, j, m];
+    },
+    deleteProduct() {
       // active为false
       // number为1
-      // ..
-      if (confirm('delete?')) {
-        this.productData[i].content[j].productArray[m].active = false;
-        //this.$set(this.productData[i].content[j].productArray[m], `number`, 0); // @TODO 无效？
 
-        this.$store.commit('repair/home/changeProductData', { productData: this.productData });
-      }
+      let i = this.index[0];
+      let j = this.index[1];
+      let m = this.index[2];
+
+      this.productData[i].content[j].productArray[m].active = false;
+      //this.$set(this.productData[i].content[j].productArray[m], `number`, 0); // @TODO 无效？
+
+      this.$store.commit('repair/equipment/changeProductData', { productData: this.productData });
+
+      this.confirmDeleteModal = false;
     },
     changeProductNumber(i, j, m, number) {
       this.$set(this.productData[i].content[j].productArray[m], `number`, number);
 
-      this.$store.commit('repair/home/changeProductData', { productData: this.productData });
+      this.$store.commit('repair/equipment/changeProductData', { productData: this.productData });
     },
     nextStep() {
       for (let i = 0; i < this.productData.length; i++) {
@@ -124,6 +144,30 @@ div.item {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+  }
+}
+div.confirmDelete {
+  div.content {
+    height: 80px;
+    padding: 20px 30px 0 30px;
+  }
+  footer.footer {
+    display: flex;
+    height: 50px;
+    div.button {
+      width: 50%;
+      line-height: 50px;
+      padding: 0;
+      margin: 0 !important;
+      &.cancel {
+        background-color: white;
+        border-right: 1px solid @borderColor;
+        color: @cancelgray;
+      }
+      &.delete {
+        color: @blue;
+      }
+    }
   }
 }
 </style>
