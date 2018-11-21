@@ -63,8 +63,9 @@
 <script>
 import axios from 'axios';
 import HOSTS from '../../../env.config';
-// @TODO 接口参传：普通工单、配件工单、对发工单
+// @DONE 接口参传：普通工单、配件工单、对发工单
 // @TODO 整机列表下，如果子类active都为false，次级父类自动折叠
+// @TODO 修改getPeijian()和getWuliao()等接口，降低逻辑重复
 // @DONE 用户不选择后自动置数量为1
 export default {
   data() {
@@ -85,101 +86,21 @@ export default {
     this.filterData();
   },
   methods: {
-    async init() {
+    init() {
       if (this.$store.state.repair.equipment.productData.length == 0) {
         // 请求接口
         // ...
         console.log('请求接口');
 
         if (this.type === '0') {
-          // 普通工单
-          // 获取整机
-          this.productData = [
-            {
-              name: '整机',
-              content: [
-                {
-                  name: 'S9',
-                  productArray: [
-                    {
-                      id: 3584,
-                      name: '蚂蚁矿机S7-1C模组（N）4.455T',
-                      priceOneCredit: 10.89,
-                      productId: '00020180426221415240a4s8d6020628',
-                    },
-                    {
-                      id: 141,
-                      name: 'BB Board(for L3/L3+/L3++/D3/A3/X3)',
-                      priceOneCredit: 100,
-                      productId: '00020180206123029356l0P4OfW30651',
-                    },
-                  ],
-                },
-                {
-                  name: 'T9',
-                  productArray: [
-                    {
-                      id: 3583,
-                      name: '蚂蚁矿机T9',
-                      priceOneCredit: 10.89,
-                      productId: '00020180426221415240a4s8d6020627',
-                    },
-                  ],
-                },
-              ],
-            },
-          ];
-
-          // 获取配件
-          // ..
-          // 获取物料
-          // ..
+          // 整机类型
+          this.getZhengjiType();
         } else if (this.type === '1') {
           // 配件工单
           this.getPeijian(1);
         } else if (this.type === '2') {
-          // 对发工单
-          // 获取整机
-          this.productData = [
-            {
-              name: '整机',
-              content: [
-                {
-                  name: 'S9',
-                  productArray: [
-                    {
-                      id: 3584,
-                      name: '蚂蚁矿机S7-1C模组（N）4.455T',
-                      priceOneCredit: 10.89,
-                      productId: '00020180426221415240a4s8d6020628',
-                    },
-                    {
-                      id: 141,
-                      name: 'BB Board(for L3/L3+/L3++/D3/A3/X3)',
-                      priceOneCredit: 100,
-                      productId: '00020180206123029356l0P4OfW30651',
-                    },
-                  ],
-                },
-                {
-                  name: 'T9',
-                  productArray: [
-                    {
-                      id: 3583,
-                      name: '蚂蚁矿机T9',
-                      priceOneCredit: 10.89,
-                      productId: '00020180426221415240a4s8d6020627',
-                    },
-                  ],
-                },
-              ],
-            },
-          ];
-
-          // 获取配件
-          // ..
-          // 获取物料
-          // ..
+          // 整机类型
+          this.getZhengjiType();
         }
       } else {
         this.productData = this.$store.state.repair.equipment.productData;
@@ -193,9 +114,12 @@ export default {
         HOSTS.REPAIR
       }/api/productRepair/getByDeviceType?deviceType=${deviceType}&uncollectFlag=${uncollectFlag}`;
       let res = await axios.get(url);
+
       return res.data;
     },
     /*
+     * 这个函数是为了可以让用户随意点：整机，物料，配件
+     *
      * 返回false代表没有找到需要的数据
      *
      */
@@ -227,6 +151,40 @@ export default {
       }
 
       return false;
+    },
+    async getZhengjiType() {
+      const url = `${HOSTS.REPAIR}/api/productRepair/getByDeviceType?deviceType=0&categoryFlag=1`;
+      let that = this;
+      axios.get(url).then(({ data }) => {
+        let mainProductObject = {
+          name: '整机',
+          content: [],
+        };
+
+        for (let i = 0; i < data.length; i++) {
+          mainProductObject.content.push({
+            name: data[i].productCategory,
+            productArray: [],
+          });
+        }
+
+        that.productData.push(mainProductObject);
+
+        that.filterData();
+      });
+    },
+    // 防止用户点得频繁
+    async getZhengji(i) {
+      let name = this.productData[this.activeProductType].content[i].name;
+
+      if (this.productData[this.activeProductType].content[i].productArray.length == 0) {
+        const url = `${HOSTS.REPAIR}/api/productRepair/getByCategory?deviceType=0&productCategory=${name}`;
+        let res = await axios.get(url);
+
+        this.productData[this.activeProductType].content[i].productArray = res.data;
+
+        this.filterData();
+      }
     },
     async getPeijian(uncollectFlag) {
       let tag = uncollectFlag || 0;
@@ -285,6 +243,8 @@ export default {
         this.$set(this.productData[this.activeProductType].content[i], `active`, false);
       }
       //      this.$store.commit('repair/equipment/changeProductData', { productData: this.productData });
+
+      this.getZhengji(i);
     },
     chooseProduct(i, j) {
       if (!this.productData[this.activeProductType].content[i].productArray[j].active) {
