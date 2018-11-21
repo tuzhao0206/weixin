@@ -12,7 +12,7 @@
             <span>可用对发额度</span><span class="blue">¥{{ duifaAmount }}</span>
           </p>
           <p>
-            <span>本工单扣除额度</span><span class="blue">¥{{ duifaAmount - usedAmount }}</span>
+            <span>本工单扣除额度</span><span class="blue">¥{{ usedAmount }}</span>
           </p>
         </div>
       </div>
@@ -38,7 +38,7 @@
               <div class="tag" :class="{ peijian: item.name == '配件', wuliao: item.name == '物料' }">
                 {{ item.name }}
               </div>
-              <div class="text text-sm not-break">{{ product.name }}</div>
+              <div class="text text-sm not-break">{{ product.priceOneCredit }}</div>
               <div class="extra">
                 <ex-stepper
                   @data-should-be-deleted="showDeleteProductModal(i, j, m);"
@@ -72,10 +72,11 @@
 // @DONE 为什么number需要set而active不用，set之后还要继续set么 => set之后就完成了数据的监听
 import axios from 'axios';
 import HOSTS from '../../../env.config';
+import { mapState } from 'vuex';
 export default {
   data() {
     return {
-      productData: this.$store.state.repair.equipment.productData,
+      // productData: this.$store.state.repair.equipment.productData,
       submitData: [],
 
       confirmDeleteModal: false,
@@ -97,6 +98,18 @@ export default {
       });
     }
   },
+  computed: {
+    ...mapState('repair/equipment', ['productData']),
+  },
+  watch: {
+    productData: {
+      handler: function(val, oldVal) {
+        console.log(val);
+      },
+      // 深度观察
+      deep: true,
+    },
+  },
   methods: {
     addEquipment() {
       this.$router.push({ path: this.$prelang('repair/addEquipment'), query: { type: this.type } });
@@ -108,13 +121,14 @@ export default {
     },
     deleteProduct() {
       // active为false
-      // number为0和1都可
+      // number为0和1都可(目前为1)
 
       let i = this.index[0];
       let j = this.index[1];
       let m = this.index[2];
 
       this.productData[i].content[j].productArray[m].active = false;
+      //this.productData[i].content[j].productArray[m].number = 0;
 
       this.$store.commit('repair/equipment/changeProductData', { productData: this.productData });
 
