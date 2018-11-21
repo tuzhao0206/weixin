@@ -63,7 +63,7 @@
 <script>
 import axios from 'axios';
 import HOSTS from '../../../env.config';
-// @TODO 接口参传
+// @TODO 接口参传：普通工单、配件工单、对发工单
 // @TODO 整机列表下，如果子类active都为false，次级父类自动折叠
 // @DONE 用户不选择后自动置数量为1
 export default {
@@ -175,6 +175,11 @@ export default {
               ],
             },
           ];
+
+          // 获取配件
+          // ..
+          // 获取物料
+          // ..
         }
       } else {
         this.productData = this.$store.state.repair.equipment.productData;

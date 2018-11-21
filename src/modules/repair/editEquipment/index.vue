@@ -73,6 +73,7 @@
 import axios from 'axios';
 import HOSTS from '../../../env.config';
 import { mapState } from 'vuex';
+import NP from 'number-precision';
 export default {
   data() {
     return {
@@ -95,22 +96,36 @@ export default {
       let that = this;
       axios.get(url).then(({ data }) => {
         that.duifaAmount = data[0].ablAmount + data[0].ablPledge;
+
+        this.usedAmount = this.getUsedAmount(this.productData);
       });
     }
   },
   computed: {
     ...mapState('repair/equipment', ['productData']),
   },
-  watch: {
-    productData: {
-      handler: function(val, oldVal) {
-        console.log(val);
-      },
-      // 深度观察
-      deep: true,
-    },
-  },
   methods: {
+    getUsedAmount(val) {
+      let total = 0;
+      if (this.type == 2) {
+        for (let i = 0; i < val.length; i++) {
+          for (let j = 0; j < val[i].content.length; j++) {
+            for (let m = 0; m < val[i].content[j].productArray.length; m++) {
+              if (val[i].content[j].productArray[m].active == true) {
+                if (!val[i].content[j].productArray[m].number) {
+                  val[i].content[j].productArray[m].number = 1;
+                }
+                total = NP.plus(
+                  total,
+                  NP.times(val[i].content[j].productArray[m].number, val[i].content[j].productArray[m].priceOneCredit)
+                );
+              }
+            }
+          }
+        }
+      }
+      return total;
+    },
     addEquipment() {
       this.$router.push({ path: this.$prelang('repair/addEquipment'), query: { type: this.type } });
     },
@@ -129,6 +144,7 @@ export default {
 
       this.productData[i].content[j].productArray[m].active = false;
       //this.productData[i].content[j].productArray[m].number = 0;
+      this.usedAmount = this.getUsedAmount(this.productData);
 
       this.$store.commit('repair/equipment/changeProductData', { productData: this.productData });
 
@@ -136,10 +152,12 @@ export default {
     },
     changeProductNumber(i, j, m, number) {
       this.$set(this.productData[i].content[j].productArray[m], `number`, number);
+      this.usedAmount = this.getUsedAmount(this.productData);
 
       this.$store.commit('repair/equipment/changeProductData', { productData: this.productData });
     },
     nextStep() {
+      // 计算
       for (let i = 0; i < this.productData.length; i++) {
         for (let j = 0; j < this.productData[i].content.length; j++) {
           for (let m = 0; m < this.productData[i].content[j].productArray.length; m++) {
@@ -153,6 +171,9 @@ export default {
         }
       }
 
+      // 赋值
+
+      // 跳转
       console.log(this.submitData);
     },
   },
