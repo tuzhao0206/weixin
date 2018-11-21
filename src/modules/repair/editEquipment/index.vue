@@ -38,7 +38,7 @@
               <div class="tag" :class="{ peijian: item.name == '配件', wuliao: item.name == '物料' }">
                 {{ item.name }}
               </div>
-              <div class="text text-sm not-break">{{ product.priceOneCredit }}</div>
+              <div class="text text-sm not-break">{{ product.name }}</div>
               <div class="extra">
                 <ex-stepper
                   @data-should-be-deleted="showDeleteProductModal(i, j, m);"
@@ -63,8 +63,13 @@
       <div class="content"><p>设备数量小于 1 将被删除，请确认是否删除？</p></div>
       <footer class="footer">
         <div class="button cancel" @click="confirmDeleteModal = false;">取消</div>
-        <div class="button delete" @click="deleteProduct();">删除</div>
+        <div class="button confirm" @click="deleteProduct();">删除</div>
       </footer>
+    </ex-modal>
+
+    <ex-modal :show="errorMessageModal" class="errorMessage">
+      <div class="content"><p>对发可用余额不足，请调整您的设备。</p></div>
+      <footer class="footer"><div class="button confirm" @click="errorMessageModal = false;">确认</div></footer>
     </ex-modal>
   </ex-view>
 </template>
@@ -81,6 +86,8 @@ export default {
       submitData: [],
 
       confirmDeleteModal: false,
+      errorMessageModal: false,
+
       index: [],
 
       type: this.$route.query.type,
@@ -157,6 +164,15 @@ export default {
       this.$store.commit('repair/equipment/changeProductData', { productData: this.productData });
     },
     nextStep() {
+      // 校验余额是否大于本次需用
+      if (this.type == 2) {
+        if (this.duifaAmount < this.usedAmount) {
+          this.errorMessageModal = true;
+
+          return false;
+        }
+      }
+
       // 计算
       for (let i = 0; i < this.productData.length; i++) {
         for (let j = 0; j < this.productData[i].content.length; j++) {
@@ -172,9 +188,11 @@ export default {
       }
 
       // 赋值
+      this.$store.commit('repair/equipment/changeSubmitData', { submitData: this.submitData });
+      this.$store.commit('repair/equipment/changeType', { type: this.type });
 
       // 跳转
-      console.log(this.submitData);
+      this.$router.push({ path: this.$prelang('repair/addLocation') });
     },
   },
 };
@@ -226,7 +244,8 @@ div.item {
     text-overflow: ellipsis;
   }
 }
-div.confirmDelete {
+div.confirmDelete,
+div.errorMessage {
   div.content {
     height: 80px;
     padding: 20px 30px 0 30px;
@@ -236,7 +255,7 @@ div.confirmDelete {
     display: flex;
     height: 50px;
     div.button {
-      width: 50%;
+      min-width: 50%;
       line-height: 50px;
       padding: 0;
       margin: 0 !important;
@@ -245,7 +264,7 @@ div.confirmDelete {
         border-right: 1px solid @borderColor;
         color: @cancelgray;
       }
-      &.delete {
+      &.confirm {
         color: @blue;
       }
     }

@@ -296,7 +296,7 @@ export default {
       this.$store.commit('repair/equipment/changeProductData', { productData: this.productData });
     },
     returnToChoosePage() {
-      this.$router.push({ path: this.$prelang('repair/choose'), query: { type: this.type } });
+      this.$router.push({ path: this.$prelang('repair/editEquipment'), query: { type: this.type } });
     },
   },
 };
