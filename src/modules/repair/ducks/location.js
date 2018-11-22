@@ -3,7 +3,7 @@ import dispatch from '../../../utils/dispatch';
 export default {
   namespaced: true,
   state: {
-    location: '',
+    location: {},
   },
   mutations: {
     changeLocation(state, payload) {

@@ -2,8 +2,9 @@
 // https://github.com/erikras/ducks-modular-redux
 import home from './home';
 import equipment from './equipment';
+import location from './location';
 
 export default {
   namespaced: true,
-  modules: { home, equipment },
+  modules: { home, equipment, location },
 };
