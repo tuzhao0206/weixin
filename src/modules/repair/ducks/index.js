@@ -3,8 +3,9 @@
 import home from './home';
 import equipment from './equipment';
 import location from './location';
+import express from './express';
 
 export default {
   namespaced: true,
-  modules: { home, equipment, location },
+  modules: { home, equipment, location, express },
 };

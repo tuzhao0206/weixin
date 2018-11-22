@@ -1,4 +1,3 @@
-<!-- @TODO 样式同一化 -->
 <template>
   <ex-view>
     <ex-header title="选择维修点">
@@ -33,32 +32,13 @@
           </div>
         </div>
       </div>
-
-      <!-- @TODO 研究自己怎么写picker组件 -->
-      <!-- <transition name="fade"> -->
-      <!-- <div class="location-add" v-show="showAddModal"> -->
-      <!-- <div class="black" @click="showAddModal = false;"></div> -->
-      <!-- <div class="location-add-modal"> -->
-      <!-- <div class="title"> -->
-      <!-- <span @click="showAddModal = false;">取消</span> -->
-      <!-- <p>请选择维修网点</p> -->
-      <!-- <span>确认</span> -->
-      <!-- </div> -->
-
-      <!-- <div class="content"> -->
-      <!-- <ul> -->
-      <!-- <li v-for="(location, index) in locationList" :key="index">{{ location.name }}</li> -->
-      <!-- </ul> -->
-      <!-- </div> -->
-      <!-- </div> -->
-      <!-- </div> -->
-      <!-- </transition> -->
     </ex-content>
 
     <ex-footer class="btm-fixed">
       <button class="button primary square" @click="nextStep();">下一步</button>
     </ex-footer>
 
+    <!-- @TODO 研究自己怎么写picker组件 -->
     <ex-picker
       :onCancel="onCancel"
       :onConfirm="onConfirm"
@@ -107,7 +87,6 @@ export default {
       that.loading = false;
     });
   },
-  computed: {},
   methods: {
     onCancel() {
       this.showAddModal = false;
