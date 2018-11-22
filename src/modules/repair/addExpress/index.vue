@@ -26,7 +26,7 @@
           <div class="text text-sm" id="yundan">
             <div><i class="attention">*</i> <span>发货运单号</span></div>
             <div class="content" :class="{ haveContent: this.expressName !== '' }">
-              <input v-text="code" placeholder="发货运单号" /><i class="icon">&#xe614;</i>
+              <input v-model="code" placeholder="发货运单号" /><i class="icon">&#xe614;</i>
             </div>
           </div>
         </div>
@@ -128,9 +128,16 @@ export default {
 
         return false;
       }
+      if (this.code.length < 8 || this.code.length > 30) {
+        this.errorMessage = '运单号8～30位。';
+        this.errorMessageModal = true;
+
+        return false;
+      }
 
       // 赋值
       this.$store.commit('repair/express/changeExpressObj', { expressObj: this.expressList[this.checked] });
+      this.$store.commit('repair/express/changeCode', { code: this.code });
 
       // 跳转
       alert('cool');
