@@ -1,3 +1,4 @@
+import { Nested } from '../../components';
 const Home = () => import(/* webpackChunkName: 'repair' */ './home');
 const EditEquipment = () => import(/* webpackChunkName: 'repair' */ './editEquipment');
 const AddEquipment = () => import(/* webpackChunkName: 'repair' */ './addEquipment');
@@ -9,14 +10,20 @@ const EquipmentFeedback = () => import(/* webpackChunkName: 'repair' */ './equip
 
 const routes = [
   { path: '', redirect: 'repair' },
-  { path: 'repair', component: Home },
-  { path: 'repair/editEquipment', component: EditEquipment },
-  { path: 'repair/addEquipment', component: AddEquipment },
-  { path: 'repair/addLocation', component: AddLocation },
-  { path: 'repair/addExpress', component: AddExpress },
-  { path: 'repair/ticketList', component: TicketList },
-  { path: 'repair/ticketDetail/:ticketId', component: TicketDetail },
-  { path: 'repair/equipmentFeedback/:ticketId', component: EquipmentFeedback },
+  {
+    path: 'repair',
+    component: Nested,
+    children: [
+      { path: '', component: Home },
+      { path: 'editEquipment', component: EditEquipment },
+      { path: 'addEquipment', component: AddEquipment },
+      { path: 'addLocation', component: AddLocation },
+      { path: 'addExpress', component: AddExpress },
+      { path: 'ticketList', component: TicketList },
+      { path: 'ticketDetail/:ticketId', component: TicketDetail },
+      { path: 'equipmentFeedback/:ticketId', component: EquipmentFeedback },
+    ],
+  },
 ];
 
 export default routes;

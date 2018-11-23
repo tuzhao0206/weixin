@@ -51,7 +51,7 @@ const router = new VueRouter({
   routes: [
     {
       path: `/(${site})?`,
-      component: components.Panel,
+      component: components.Nested,
       children: routes,
     },
     // ...routes,

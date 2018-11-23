@@ -1,6 +1,6 @@
 import App from './app';
 import NoMatch from './nomatch';
-import Panel from './panel';
+import Nested from './nested';
 import View from './view';
 import Title from './title';
 import Header from './header';
@@ -31,7 +31,7 @@ import { GeerLoading as Loading, GridLoading } from './loading';
 export {
   App,
   NoMatch,
-  Panel,
+  Nested,
   View,
   Title,
   Header,
