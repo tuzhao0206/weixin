@@ -18,8 +18,9 @@
       </div>
 
       <div class="list">
-        <div class="item"><div class="text text-sm">Step1：请选择您需要维修的机器型号和数量</div></div>
-        <div class="item">
+        <div class="item title"><div class="text text-sm">Step1：请选择您需要维修的机器型号和数量</div></div>
+
+        <div class="item addProduct specialBorder">
           <div class="text">
             <ex-space space="10px">
               <button class="button plain-primary" @click="addEquipment"><span>手动添加维修设备</span></button>
@@ -29,12 +30,22 @@
             </ex-space>
           </div>
         </div>
-      </div>
-      <div class="list">
-        <div class="item"><div class="text text-sm">设备名称：</div></div>
-        <div v-for="(item, i) in productData" :key="i">
-          <div v-for="(productObj, j) in item.content" :key="j">
-            <div v-for="(product, m) in productObj.productArray" :key="m" v-if="product.active" class="item">
+
+        <div class="item title specialBorder-dotted" id="equipmentName">
+          <div class="text text-sm">
+            <p class="subTitle">设备名称：</p>
+            <div class="message" v-if="productData.length == 0"><p>- 您还没有添加任何设备 -</p></div>
+          </div>
+        </div>
+
+        <template v-if="productData.length !== 0" v-for="(item, i) in productData">
+          <template v-for="(productObj, j) in item.content">
+            <div
+              v-for="(product, m) in productObj.productArray"
+              :key="i + '/' + j + '/' + m"
+              v-if="product.active"
+              class="item equipment"
+            >
               <div class="tag" :class="{ peijian: item.name == '配件', wuliao: item.name == '物料' }">
                 {{ item.name }}
               </div>
@@ -49,12 +60,11 @@
                 ></ex-stepper>
               </div>
             </div>
-          </div>
-        </div>
+          </template>
+        </template>
       </div>
     </ex-content>
 
-    <!-- @DONE 点击下一步的时候进行多余数据的过滤 -->
     <ex-footer class="btm-fixed">
       <button class="button primary square" @click="nextStep();">下一步</button>
     </ex-footer>
@@ -74,7 +84,6 @@
   </ex-view>
 </template>
 <script>
-// @DONE 为什么number需要set而active不用，set之后还要继续set么 => set之后就完成了数据的监听
 import axios from 'axios';
 import HOSTS from '../../../env.config';
 import { mapState } from 'vuex';
@@ -82,7 +91,6 @@ import NP from 'number-precision';
 export default {
   data() {
     return {
-      // productData: this.$store.state.repair.equipment.productData,
       submitData: [],
 
       confirmDeleteModal: false,
@@ -96,6 +104,9 @@ export default {
       usedAmount: 0,
     };
   },
+  computed: {
+    ...mapState('repair/equipment', ['productData']),
+  },
   mounted() {
     //获取授信信息
     if (this.type === '2') {
@@ -107,9 +118,6 @@ export default {
         this.usedAmount = this.getUsedAmount(this.productData);
       });
     }
-  },
-  computed: {
-    ...mapState('repair/equipment', ['productData']),
   },
   methods: {
     getUsedAmount(val) {
@@ -217,6 +225,9 @@ div.list.duifa {
     }
   }
 }
+div.addProduct {
+  background-color: white;
+}
 div.item {
   div.tag {
     height: 16px;
@@ -242,6 +253,20 @@ div.item {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+  }
+  p.subTitle {
+    color: @lightBlack;
+  }
+  div.message {
+    height: 150px;
+    color: @lighterBlack;
+    padding-top: 50px;
+    p {
+      text-align: center;
+      font-size: 12px;
+
+      opacity: 0.4;
+    }
   }
 }
 div.confirmDelete,
@@ -269,5 +294,18 @@ div.errorMessage {
       }
     }
   }
+}
+div.equipment {
+  &:before {
+    border-top-width: 0;
+    border-bottom: 1px solid #e5e5e5;
+    top: 52px;
+  }
+}
+div.equipment:nth-last-of-type(1) {
+  border-bottom-width: 0;
+}
+div#equipmentName {
+  padding-bottom: 0;
 }
 </style>

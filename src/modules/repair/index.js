@@ -13,6 +13,7 @@ const routes = [
   {
     path: 'repair',
     component: Nested,
+    meta: { loginRequired: true },
     children: [
       { path: '', component: Home },
       { path: 'editEquipment', component: EditEquipment },

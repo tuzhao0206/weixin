@@ -36,7 +36,11 @@
         <div class="item">
           <div class="text">
             <p class="subTitle">请将维修机器寄往以下地址：</p>
-            <div class="locationDetail" v-html="this.$store.state.repair.location.location.note"></div>
+            <div
+              class="locationDetail"
+              ref="specialContent"
+              v-html="this.$store.state.repair.location.location.note"
+            ></div>
           </div>
         </div>
       </div>
@@ -98,6 +102,13 @@ export default {
       that.loading = false;
     });
   },
+  updated() {
+    if (this.$refs.specialContent) {
+      this.$refs.specialContent.childNodes.forEach(n => {
+        n.setAttribute('style', 'line-height: 17px; padding: 5px 0; color: #666666');
+      });
+    }
+  },
   methods: {
     onCancel() {
       this.showAddModal = false;
@@ -147,7 +158,7 @@ div.title {
 
 div.attention {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
 
   color: #e6a23b;
   background-color: #fdf6ec;
@@ -205,10 +216,7 @@ div.locationDetail {
   border: 1px solid @borderColor;
   border-radius: 4px;
   margin-top: 10px;
-  padding: 5px 10px;
-  p {
-    line-height: 17px; //@TODO-RC 无效？
-  }
+  padding: 15px 10px;
 }
 div.errorMessage {
   div.content {

@@ -24,11 +24,11 @@
         </div>
       </div>
 
-      <div class="list">
+      <div class="list" v-if="this.checked !== -1">
         <div class="item">
           <div class="text">
             <p class="subTitle">请将维修机器寄往以下地址：</p>
-            <div class="locationDetail" v-if="this.checked !== -1" v-html="locationList[this.checked].note"></div>
+            <div class="locationDetail" ref="specialContent" v-html="locationList[this.checked].note"></div>
           </div>
         </div>
       </div>
@@ -84,8 +84,16 @@ export default {
     let that = this;
     axios.get(url).then(({ data }) => {
       that.locationList = data;
+
       that.loading = false;
     });
+  },
+  updated() {
+    if (this.$refs.specialContent) {
+      this.$refs.specialContent.childNodes.forEach(n => {
+        n.setAttribute('style', 'line-height: 17px; padding: 5px 0; color: #666666');
+      });
+    }
   },
   methods: {
     onCancel() {
@@ -94,6 +102,7 @@ export default {
     onConfirm(value) {
       this.checked = value.checked[0];
       this.listName = value.list[0].name;
+
       this.showAddModal = false;
     },
     nextStep() {
@@ -122,7 +131,7 @@ div.title {
 
 div.attention {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
 
   color: #e6a23b;
   background-color: #fdf6ec;
@@ -170,7 +179,7 @@ div.locationDetail {
   border: 1px solid @borderColor;
   border-radius: 4px;
   margin-top: 10px;
-  padding: 5px 10px;
+  padding: 15px 10px;
   p {
     line-height: 17px;
   }

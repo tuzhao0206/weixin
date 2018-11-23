@@ -186,8 +186,6 @@ export default {
 
       this.activeProductType = 1;
 
-      console.log('kkkk');
-
       if (!this.filterData()) {
         let mainProductArray = [];
         let mainProductObject = {};

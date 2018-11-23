@@ -26,6 +26,21 @@
     min-height: @listItemHeight;
     padding: @listItemGapV @listItemGapH;
     .borderTop(@listBorderColor, @listItemGapH);
+
+    // special
+    &.title {
+      min-height: @listItemTitleHeight;
+    }
+    &.specialBorder:before {
+      border-top: 1px solid @listBorderColor;
+      left: 0;
+    }
+    &.specialBorder-dotted:before {
+      border-top: 1px dashed @listBorderColor;
+      left: 13px;
+      right: 13px;
+    }
+
     &:first-child:before,
     &.thread:before,
     &.thread + .item:before {
