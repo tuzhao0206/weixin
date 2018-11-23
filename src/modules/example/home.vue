@@ -128,6 +128,7 @@ export default {
           buttons: [
             {
               text: '取消',
+              class: 'text-darkgray',
               onClick: () => {
                 // eslint-disable-next-line
                 console.log('你点击了取消');
@@ -136,6 +137,7 @@ export default {
             },
             {
               text: '确定',
+              class: 'text-primary',
               onClick: () => {
                 // eslint-disable-next-line
                 console.log('你点击了确定');

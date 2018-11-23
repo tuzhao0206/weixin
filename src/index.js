@@ -188,11 +188,10 @@ Vue.prototype.$alert = function(options, callback) {
     type: 'showModal',
     modal: {
       message: options.message,
-      clazz: 'android',
       buttons: [
         {
           text: options.confirm || (this.$i18n.locale === 'zh' ? '确定' : 'Confirm'),
-          class: 'primary',
+          class: 'text-primary',
           onClick: () => {
             this.$store.dispatch('hideModal');
             callback && callback();
@@ -215,21 +214,20 @@ Vue.prototype.$confirm = function(options, callback) {
     type: 'showModal',
     modal: {
       message: options.message,
-      clazz: 'android',
       buttons: [
         {
-          text: options.confirm || this.$i18n.locale === 'zh' ? '确定' : 'Confirm',
-          class: 'primary',
+          text: options.cancel || this.$i18n.locale === 'zh' ? '取消' : 'Cancel',
+          class: 'text-darkgray',
           onClick: () => {
             this.$store.dispatch('hideModal');
-            callback && callback();
           },
         },
         {
-          text: options.cancel || this.$i18n.locale === 'zh' ? '取消' : 'Cancel',
-          class: 'default',
+          text: options.confirm || this.$i18n.locale === 'zh' ? '确定' : 'Confirm',
+          class: 'text-primary',
           onClick: () => {
             this.$store.dispatch('hideModal');
+            callback && callback();
           },
         },
       ],

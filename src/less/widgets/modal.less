@@ -13,41 +13,25 @@
   .content {
     -webkit-overflow-scrolling: touch;
   }
-  &:not(.android) {
-    text-align: center;
-    border-radius: 5px;
+  text-align: center;
+  border-radius: 5px;
 
-    > .title {
-      padding: 20px 0 0;
-      font-size: 17px;
-      line-height: 1;
-      font-weight: 400;
-      -webkit-text-stroke: 0.2px;
-      + .content {
-        padding: 10px 15px 16px;
-      }
-    }
-    > .content {
-      padding: 30px 15px 30px;
-    }
-    > .footer {
-      position: relative;
-      .hairline(1px, 0, 0, 0);
+  > .title {
+    padding: 20px 0 0;
+    font-size: 17px;
+    line-height: 1;
+    font-weight: 400;
+    -webkit-text-stroke: 0.2px;
+    + .content {
+      padding: 10px 15px 16px;
     }
   }
-  &.android {
-    padding: 15px 20px;
-    border-radius: 3px;
-    & > .title {
-      font-size: 16px;
-      line-height: 1;
-      font-weight: 400;
-      -webkit-text-stroke: 0.2px;
-      padding-bottom: 20px;
-    }
-    .content + .footer {
-      margin-top: 20px;
-    }
+  > .content {
+    padding: 30px 15px 30px;
+  }
+  > .footer {
+    position: relative;
+    .hairline(1px, 0, 0, 0);
   }
 }
 
