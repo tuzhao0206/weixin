@@ -41,6 +41,12 @@ export default {
   data() {
     return {};
   },
+  methods: {},
+  beforeRouteLeave(to, from, next) {
+    this.$store.commit('repair/equipment/changeProductData', { productData: [] });
+
+    next();
+  },
 };
 </script>
 <style lang="less" scoped>

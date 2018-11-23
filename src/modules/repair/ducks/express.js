@@ -4,18 +4,18 @@ export default {
   namespaced: true,
   state: {
     expressObj: {},
-    code: '',
+    expressCode: '',
   },
   mutations: {
     changeExpressObj(state, payload) {
       state.expressObj = payload.expressObj;
     },
-    changeCode(state, payload) {
-      state.code = payload.code;
+    changeExpressCode(state, payload) {
+      state.expressCode = payload.expressCode;
     },
   },
   actions: {
     changeExpressObj: dispatch('changeExpressObj'),
-    changeCode: dispatch('changeCode'),
+    changeExpressCode: dispatch('changeExpressCode'),
   },
 };

@@ -38,7 +38,7 @@
       <button class="button primary square" @click="nextStep();">下一步</button>
     </ex-footer>
 
-    <!-- @TODO 研究自己怎么写picker组件 -->
+    <!-- @TODO-RC 研究自己怎么写picker组件 -->
     <ex-picker
       :onCancel="onCancel"
       :onConfirm="onConfirm"
@@ -172,7 +172,7 @@ div.locationDetail {
   margin-top: 10px;
   padding: 5px 10px;
   p {
-    line-height: 17px; //@TODO 无效？
+    line-height: 17px;
   }
 }
 

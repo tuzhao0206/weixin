@@ -15,12 +15,12 @@
                 filterData();
               "
               :class="{ active: activeProductType == 0 }"
-              v-if="type == 0 || type == 2"
+              v-show="type == 0 || type == 2"
             >
               整机列表
             </p>
             <p @click="getPeijian();" :class="{ active: activeProductType == 1 }">配件列表</p>
-            <p @click="getWuliao();" :class="{ active: activeProductType == 2 }" v-if="type == 0 || type == 2">
+            <p @click="getWuliao();" :class="{ active: activeProductType == 2 }" v-show="type == 0 || type == 2">
               物料列表
             </p>
           </div>
@@ -64,13 +64,13 @@
 import axios from 'axios';
 import HOSTS from '../../../env.config';
 // @DONE 接口参传：普通工单、配件工单、对发工单
-// @TODO 整机列表下，如果子类active都为false，次级父类自动折叠
-// @TODO 修改getPeijian()和getWuliao()等接口，降低逻辑重复
+// @TODO-RC 整机列表下，如果子类active都为false，次级父类自动折叠
+// @TODO-RC 修改getPeijian()和getWuliao()等接口，降低逻辑重复; filterData()多次调用了
 // @DONE 用户不选择后自动置数量为1
 export default {
   data() {
     return {
-      activeProductType: 0, // 默认选中第一个（整机）
+      activeProductType: this.$route.query.type == 1 ? 1 : 0,
 
       productData: [],
 
@@ -88,10 +88,6 @@ export default {
   methods: {
     init() {
       if (this.$store.state.repair.equipment.productData.length == 0) {
-        // 请求接口
-        // ...
-        console.log('请求接口');
-
         if (this.type === '0') {
           // 整机类型
           this.getZhengjiType();
@@ -104,7 +100,6 @@ export default {
         }
       } else {
         this.productData = this.$store.state.repair.equipment.productData;
-        console.log('读取缓存');
       }
 
       this.loading = true;
@@ -191,6 +186,8 @@ export default {
 
       this.activeProductType = 1;
 
+      console.log('kkkk');
+
       if (!this.filterData()) {
         let mainProductArray = [];
         let mainProductObject = {};
@@ -247,11 +244,15 @@ export default {
       this.getZhengji(i);
     },
     chooseProduct(i, j) {
-      if (!this.productData[this.activeProductType].content[i].productArray[j].active) {
-        this.$set(this.productData[this.activeProductType].content[i].productArray[j], `active`, true);
+      let specialType = this.activeProductType;
+      if (this.type === '1') {
+        specialType = 0;
+      }
+      if (!this.productData[specialType].content[i].productArray[j].active) {
+        this.$set(this.productData[specialType].content[i].productArray[j], `active`, true);
       } else {
-        this.$set(this.productData[this.activeProductType].content[i].productArray[j], `active`, false);
-        this.$set(this.productData[this.activeProductType].content[i].productArray[j], `number`, 1);
+        this.$set(this.productData[specialType].content[i].productArray[j], `active`, false);
+        this.$set(this.productData[specialType].content[i].productArray[j], `number`, 1);
       }
       this.$store.commit('repair/equipment/changeProductData', { productData: this.productData });
     },

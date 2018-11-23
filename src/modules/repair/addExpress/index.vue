@@ -26,7 +26,7 @@
           <div class="text text-sm" id="yundan">
             <div><i class="attention">*</i> <span>发货运单号</span></div>
             <div class="content" :class="{ haveContent: this.expressName !== '' }">
-              <input v-model="code" placeholder="发货运单号" /><i class="icon">&#xe614;</i>
+              <input v-model="expressCode" placeholder="发货运单号" /><i class="icon">&#xe614;</i>
             </div>
           </div>
         </div>
@@ -78,20 +78,13 @@ export default {
 
       checked: -1,
       expressName: '',
-      code: '',
+      expressCode: '',
     };
   },
   filters: {
     noContent: function(val) {
       if (val == '') {
         return '发货物流商';
-      } else {
-        return val;
-      }
-    },
-    noContentCode: function(val) {
-      if (val == '') {
-        return '发货运单号';
       } else {
         return val;
       }
@@ -122,13 +115,13 @@ export default {
 
         return false;
       }
-      if (!new RegExp('^[A-Za-z0-9-]+$').test(this.code)) {
+      if (!new RegExp('^[A-Za-z0-9-]+$').test(this.expressCode)) {
         this.errorMessage = '请输入正确的运单号。';
         this.errorMessageModal = true;
 
         return false;
       }
-      if (this.code.length < 8 || this.code.length > 30) {
+      if (this.expressCode.length < 8 || this.expressCode.length > 30) {
         this.errorMessage = '运单号8～30位。';
         this.errorMessageModal = true;
 
@@ -137,11 +130,10 @@ export default {
 
       // 赋值
       this.$store.commit('repair/express/changeExpressObj', { expressObj: this.expressList[this.checked] });
-      this.$store.commit('repair/express/changeCode', { code: this.code });
+      this.$store.commit('repair/express/changeExpressCode', { expressCode: this.expressCode });
 
       // 跳转
-      alert('cool');
-      this.$router.push({ path: this.$prelang('repair/addExpress') });
+      // ..
     },
   },
 };
@@ -215,7 +207,7 @@ div.locationDetail {
   margin-top: 10px;
   padding: 5px 10px;
   p {
-    line-height: 17px; //@TODO 无效？
+    line-height: 17px; //@TODO-RC 无效？
   }
 }
 div.errorMessage {
