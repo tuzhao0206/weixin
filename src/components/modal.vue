@@ -1,14 +1,16 @@
 <template>
-  <transition name="ex-widgets">
+  <transition name="ex-widget" @enter="enter">
     <ex-mask v-if="show" @click="dismiss">
       <div class="modal">
         <slot>
           <h3 class="title" v-if="title" v-html="title" />
           <div class="content" v-html="message" />
-          <footer class="bt-footer" v-if="buttons.length > 0">
-            <button v-for="(item, idx) in buttons" :key="idx" v-bind="buttonConfig(item)" @click="item.onClick(item);">
-              {{ item.text }}
-            </button>
+          <footer class="footer" v-if="buttons.length > 0">
+            <div class="button-group compact nesting">
+              <button class="button" v-for="(item, idx) in buttons" :key="idx" v-bind="buttonConfig(item)" @click="item.onClick(item);">
+                {{ item.text }}
+              </button>
+            </div>
           </footer>
         </slot>
         <i class="bt-icon close" @click="close" v-if="close">&#xe61f;</i>
@@ -37,6 +39,7 @@ export default {
       });
       return options;
     },
+    enter: (el, done) => done(),
   },
 };
 </script>
