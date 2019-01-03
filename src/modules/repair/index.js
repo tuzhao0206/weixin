@@ -1,10 +1,10 @@
 import { Nested } from '../../components';
 const Home = () => import(/* webpackChunkName: 'repair' */ './home');
-const EditEquipment = () => import(/* webpackChunkName: 'repair' */ './editEquipment');
-const AddEquipment = () => import(/* webpackChunkName: 'repair' */ './addEquipment');
-const AddLocation = () => import(/* webpackChunkName: 'repair' */ './addLocation');
-const AddExpress = () => import(/* webpackChunkName: 'repair' */ './addExpress');
-const TicketList = () => import(/* webpackChunkName: 'repair' */ './ticketList');
+const Issue = () => import(/* webpackChunkName: 'repair' */ './issue');
+const Choose = () => import(/* webpackChunkName: 'repair' */ './choose');
+const Station = () => import(/* webpackChunkName: 'repair' */ './station');
+const Express = () => import(/* webpackChunkName: 'repair' */ './express');
+const Orders = () => import(/* webpackChunkName: 'repair' */ './orders');
 const TicketDetail = () => import(/* webpackChunkName: 'repair' */ './ticketDetail');
 const EquipmentFeedback = () => import(/* webpackChunkName: 'repair' */ './equipmentFeedback');
 
@@ -16,11 +16,11 @@ const routes = [
     meta: { loginRequired: true },
     children: [
       { path: '', component: Home },
-      { path: 'editEquipment', component: EditEquipment },
-      { path: 'addEquipment', component: AddEquipment },
-      { path: 'addLocation', component: AddLocation },
-      { path: 'addExpress', component: AddExpress },
-      { path: 'ticketList', component: TicketList },
+      { path: 'issue', component: Issue },
+      { path: 'choose', component: Choose },
+      { path: 'station', component: Station },
+      { path: 'express', component: Express },
+      { path: 'orders', component: Orders },
       { path: 'ticketDetail/:ticketId', component: TicketDetail },
       { path: 'equipmentFeedback/:ticketId', component: EquipmentFeedback },
     ],

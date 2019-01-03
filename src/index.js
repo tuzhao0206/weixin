@@ -80,7 +80,6 @@ router.beforeEach((to, from, next) => {
 // 登录拦截
 router.beforeEach((to, from, next) => {
   if (to.matched.some(item => item.meta.loginRequired)) {
-    console.log('需要登录！');
     if (!store.state.user) {
       // APP登录
       if (Env.is('app')) {

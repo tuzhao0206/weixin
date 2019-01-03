@@ -3,10 +3,12 @@
     <button :class="{ disabled: currentValue === min || disabled }" @click="decrease();">
       <i class="icon">&#xe62d;</i>
     </button>
-
-    <input :disabled="disabled" type="number" @input="onInput" :value="currentValue" />
-
-    <button :disabled="currentValue === max || disabled" @click="increase();"><i class="icon">&#xe62c;</i></button>
+    
+    <input :disabled="disabled" type="number" @input="onInput" :value="currentValue">
+    
+    <button :disabled="currentValue === max || disabled" @click="increase();">
+      <i class="icon">&#xe62c;</i>
+    </button>
   </div>
 </template>
 <script>
@@ -33,7 +35,7 @@ export default {
     decrease() {
       this.currentValue = Number(this.currentValue) - this.step;
       if (this.currentValue <= 0) {
-        this.$emit('data-should-be-deleted');
+        this.$emit('prompt', this.currentValue);
       }
       if (this.currentValue < this.min) {
         this.currentValue = this.min;
@@ -92,11 +94,11 @@ export default {
     border: 1px solid #eee;
     background-color: #fff;
     font-size: 18px;
-    &:disabled,
-    &.disabled {
-      background-color: #f1f1f1;
-      border-color: #e5e5e5;
-    }
+    // &:disabled,
+    // &.disabled {
+    //   background-color: #f1f1f1;
+    //   border-color: #e5e5e5;
+    // }
   }
 }
 input[type='number']::-webkit-inner-spin-button {

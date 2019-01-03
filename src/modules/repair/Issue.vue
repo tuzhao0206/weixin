@@ -1,0 +1,177 @@
+<template>
+  <ex-view>
+    <ex-header title="添加维修设备">
+      <ex-menu class="text-gray" @click="$router.back();">
+        <i class="icon">&#xe60e;</i>
+      </ex-menu>
+      <ex-title></ex-title>
+    </ex-header>
+
+    <ex-content>
+      <!-- 对发工单 -->
+      <div class="list compact overlap" v-if="type === 2">
+        <div class="item text-sm">
+          <div class="text">
+            <ex-space space="10px 0">
+              <div class="text-justify">
+                <span class="label">可用对发额度</span>
+                <span class="value text-right text-primary">{{balance|currency}}</span>
+              </div>
+              <div class="text-justify">
+                <span class="label">本工单扣除额度</span>
+                <span class="value text-right text-primary">{{amount|currency}}</span>
+              </div>
+            </ex-space>
+          </div>
+        </div>
+      </div>
+
+      <div class="list">
+        <div class="item">
+          <div class="text text-sm">Step1：请选择您需要维修的机器型号和数量</div>
+        </div>
+
+        <div class="item thread">
+          <div class="text">
+            <ex-space space="10px">
+              <router-link
+                class="button plain-primary"
+                :to="{ path: $prelang('repair/choose'), query: { type } }"
+              >
+                <i class="icon">&#xe62c;</i>
+                <span>添加维修设备</span>
+              </router-link>
+            </ex-space>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="text text-sm">
+            <p>设备名称：</p>
+          </div>
+        </div>
+        <div class="item thread" v-if="selected.length === 0">
+          <div class="text">
+            <ex-space space="50px 0">
+              <p class="text-center text-gray text-sm">- 您还没有添加任何设备 -</p>
+            </ex-space>
+          </div>
+        </div>
+        <div class="item thread text-sm" v-for="item in selected" :key="item.id">
+          <div
+            class="tag"
+            :class="{success: item.type === 1,driving: item.type === 2,}"
+          >{{item.type|deviceType}}</div>
+          <div class="text">{{item.name}}</div>
+          <div class="extra">
+            <ex-stepper
+              :value="item.count || 1"
+              :min="1"
+              :max="500"
+              @prompt="prompt($event, item);"
+              @change="change($event, item);"
+            />
+          </div>
+        </div>
+      </div>
+    </ex-content>
+
+    <ex-footer class="btm-fixed">
+      <button class="button primary square" @click="next();">下一步</button>
+    </ex-footer>
+  </ex-view>
+</template>
+<script>
+import axios from 'axios';
+import HOSTS from '../../env.config';
+import { mapState, mapActions } from 'vuex';
+export default {
+  data() {
+    return {
+      // 普通工单:0 配件工单:1 对发工单:2
+      type: Number(this.$route.query.type),
+      balance: 0,
+      submitData: [],
+    };
+  },
+  computed: {
+    ...mapState('repair', ['selected']),
+    // 计算所选商品的授信金额
+    amount() {
+      return this.selected.reduce((total, item) => total + item.count * item.priceOneCredit, 0);
+    },
+  },
+  mounted() {
+    // 获取授信信息
+    if (this.type === 2) {
+      const url = `${HOSTS.REPAIR}/api/repairCredit/getCredit`;
+      axios.get(url).then(({ data }) => {
+        if (data[0] && data[0].ablAmount && data[0].ablPledge) {
+          // 可用对发额度 = 授信可用余额 + 押金可用余额
+          this.balance = data[0].ablAmount + data[0].ablPledge;
+        }
+      });
+    }
+  },
+  filters: {
+    deviceType(type) {
+      const types = ['整机', '配件', '物料'];
+      return types[type];
+    },
+  },
+  methods: {
+    ...mapActions('repair', ['setSelected']),
+    // 移除配件
+    prompt(count, target) {
+      this.$confirm({
+        message: `确认删除设备？`,
+        callback() {
+          const selected = this.selected.filter(item.id !== target.id);
+          this.setSelected({ selected });
+        },
+      });
+    },
+    // 更改数量
+    change(count, target) {
+      if (target.count !== count) {
+        target.count = count;
+        this.setSelected({ selected: this.selected });
+      }
+    },
+    next() {
+      if (this.selected.length === 0) {
+        return this.$alert('请添加维修设备');
+      }
+      // 校验余额是否大于本次需用
+      if (this.type === 2) {
+        if (this.balance < this.amount) {
+          return this.$alert('对发可用余额不足');
+        }
+      }
+      // 选择维修站点
+      this.$router.push({ path: this.$prelang('repair/station') });
+    },
+  },
+};
+</script>
+<style lang="less" scoped>
+@import '../../less/base/fn.less';
+div.item {
+  div.tag {
+    padding: 4px 5px;
+    border-radius: 2px;
+    font-size: 12px;
+    margin-right: 5px;
+    line-height: 1;
+    color: #fff;
+    background-color: @blue;
+
+    &.success {
+      background-color: @green;
+    }
+    &.driving {
+      background-color: @orange;
+    }
+  }
+}
+</style>

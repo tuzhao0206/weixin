@@ -7,8 +7,11 @@
   font-size: @listFontSize;
   line-height: @listLineHeight;
   &.compact {
-    margin-top: -1px;
+    margin-top: 0;
     margin-bottom: 0;
+  }
+  &.overlap {
+    margin-top: -1px;
     & > .item:first-child:before {
       content: none;
     }
@@ -89,7 +92,6 @@
     }
     > .extra {
       text-align: right;
-      color: @listItemExtraColor;
     }
     + .item-divider {
       .borderTop(@listBorderColor);
