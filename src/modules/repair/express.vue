@@ -13,11 +13,9 @@
           <div class="text-sm">Step3：请联系快递商打包物品并填写包裹信息</div>
         </div>
         <div class="item">
-          <div class="text">
-            <ex-space space="10px 0">
-              <div class="notice text-sm">注意：请认真填写您的包裹信息，务必保证运单号与设备信息的准确。</div>
-            </ex-space>
-          </div>
+          <ex-space space="10px 0">
+            <div class="notice text-sm">注意：请认真填写您的包裹信息，务必保证运单号与设备信息的准确。</div>
+          </ex-space>
         </div>
         <div class="item text-sm" @click="openPicker">
           <div class="text">
@@ -83,7 +81,6 @@ export default {
     ...mapState('repair', ['station']),
   },
   mounted() {
-    console.log(this.$store.state.repair.express);
     const url = `${HOSTS.BASE}/api/logistics/getLogistics?flag=repair`;
     axios.get(url, { cache: true }).then(({ data }) => {
       this.logistics = data;
@@ -104,13 +101,13 @@ export default {
     },
     next() {
       if (!this.express) {
-        return this.$alert('请选择发货物流商');
+        return this.$message('请选择发货物流商');
       }
       if (!/^[A-Z0-9]+$/i.test(this.tracking)) {
-        return this.$alert('请输入正确的运单号');
+        return this.$message('请输入正确的运单号');
       }
       if (this.tracking.length < 8 || this.tracking.length > 30) {
-        return this.$alert('运单号8～30位');
+        return this.$message('运单号8～30位');
       }
 
       // 缓存数据
@@ -118,7 +115,7 @@ export default {
         express: this.express,
         tracking: this.tracking,
       });
-      // TODO
+      this.$router.push({ path: this.$prelang('repair/address') });
     },
   },
 };

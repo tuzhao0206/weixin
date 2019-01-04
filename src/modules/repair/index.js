@@ -4,6 +4,11 @@ const Issue = () => import(/* webpackChunkName: 'repair' */ './issue');
 const Choose = () => import(/* webpackChunkName: 'repair' */ './choose');
 const Station = () => import(/* webpackChunkName: 'repair' */ './station');
 const Express = () => import(/* webpackChunkName: 'repair' */ './express');
+const Address = () => import(/* webpackChunkName: 'repair' */ './address');
+const Channel = () => import(/* webpackChunkName: 'repair' */ './channel');
+const Confirm = () => import(/* webpackChunkName: 'repair' */ './confirm');
+const Success = () => import(/* webpackChunkName: 'repair' */ './success');
+const Failure = () => import(/* webpackChunkName: 'repair' */ './failure');
 const Orders = () => import(/* webpackChunkName: 'repair' */ './orders');
 const TicketDetail = () => import(/* webpackChunkName: 'repair' */ './ticketDetail');
 const EquipmentFeedback = () => import(/* webpackChunkName: 'repair' */ './equipmentFeedback');
@@ -20,6 +25,12 @@ const routes = [
       { path: 'choose', component: Choose },
       { path: 'station', component: Station },
       { path: 'express', component: Express },
+      { path: 'address', component: Address },
+      { path: 'channel', component: Channel },
+      { path: 'confirm', component: Confirm },
+      { path: 'success', component: Success },
+      { path: 'failure', component: Failure },
+
       { path: 'orders', component: Orders },
       { path: 'ticketDetail/:ticketId', component: TicketDetail },
       { path: 'equipmentFeedback/:ticketId', component: EquipmentFeedback },

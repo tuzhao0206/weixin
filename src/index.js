@@ -194,7 +194,7 @@ Vue.prototype.$alert = function(options, callback) {
           class: 'text-primary',
           onClick: () => {
             this.$store.dispatch('hideModal');
-            callback && callback();
+            options.callback && options.callback();
           },
         },
       ],
@@ -227,7 +227,7 @@ Vue.prototype.$confirm = function(options, callback) {
           class: 'text-primary',
           onClick: () => {
             this.$store.dispatch('hideModal');
-            callback && callback();
+            options.callback && options.callback();
           },
         },
       ],

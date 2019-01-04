@@ -92,7 +92,7 @@ export default {
     next() {
       // 校验
       if (!this.station) {
-        return this.$alert('请选择维修点');
+        return this.$message('请选择维修点');
       }
       // 缓存数据
       this.setStation({ station: this.station });

@@ -125,8 +125,8 @@ export default {
     prompt(count, target) {
       this.$confirm({
         message: `确认删除设备？`,
-        callback() {
-          const selected = this.selected.filter(item.id !== target.id);
+        callback: () => {
+          const selected = this.selected.filter(item => item.id !== target.id);
           this.setSelected({ selected });
         },
       });
@@ -140,12 +140,12 @@ export default {
     },
     next() {
       if (this.selected.length === 0) {
-        return this.$alert('请添加维修设备');
+        return this.$message('请添加维修设备');
       }
       // 校验余额是否大于本次需用
       if (this.type === 2) {
         if (this.balance < this.amount) {
-          return this.$alert('对发可用余额不足');
+          return this.$message('对发可用余额不足');
         }
       }
       // 选择维修站点

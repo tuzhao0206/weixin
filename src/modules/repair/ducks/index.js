@@ -9,6 +9,8 @@ export default {
     station: null, // 维修站点
     express: null, // 物流信息
     tracking: '', // 运单号码
+    address: null, // 收货地址
+    channel: null, // 回寄地址
   },
   mutations: {
     setSelected(state, { selected }) {
@@ -21,10 +23,18 @@ export default {
       state.express = express;
       state.tracking = tracking;
     },
+    setAddress(state, { address }) {
+      state.address = address;
+    },
+    setChannel(state, { channel }) {
+      state.channel = channel;
+    },
   },
   actions: {
     setSelected: dispatch('setSelected'),
     setStation: dispatch('setStation'),
     setExpress: dispatch('setExpress'),
+    setAddress: dispatch('setAddress'),
+    setChannel: dispatch('setChannel'),
   },
 };

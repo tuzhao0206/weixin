@@ -82,6 +82,7 @@ export default {
       const promise = this.onChange({
         index: e.index,
         group: this.groupsImpl[groupIndex],
+        groupIndex: groupIndex,
       });
       if (promise) {
         if (typeof promise.then === 'function') {
