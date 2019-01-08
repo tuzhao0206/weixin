@@ -37,16 +37,16 @@
         </label>
       </div>
 
-      <div class="list" v-if="station">
+      <!-- <div class="list" v-if="station">
         <div class="item text-sm">
           <div class="text">
             <ex-space space="10px 0">
               <p>请将维修机器寄往以下地址：</p>
-              <div class="details" v-html="$options.filters.rmstyle(station.note)"></div>
+              <div class="details" v-html="$options.filters.rmstyle(station.note) || '暂未放开'"></div>
             </ex-space>
           </div>
         </div>
-      </div>
+      </div>-->
     </ex-content>
 
     <ex-footer class="btm-fixed">

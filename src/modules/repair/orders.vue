@@ -8,59 +8,84 @@
     </ex-header>
 
     <ex-content>
-      <div class="navbar underline primary">
-        <a class="item" :class="{active: index === 0}" @click="listOrders(0)">普通工单</a>
-        <a class="item" :class="{active: index === 1}" @click="listOrders(1)">配件工单</a>
-        <a class="item" :class="{active: index === 2}" @click="listOrders(2)">对发工单</a>
-      </div>
-
-      <ex-loader :url="url" :list="list" :query="query" :callback="callback">
-        <div class="list text-sm" v-for="item in list" :key="item.id">
+      <ex-loader
+        :url="url"
+        :list="list"
+        :transform="transform"
+        :callback="callback"
+        pname="currentPage"
+        sname="pageSize"
+      >
+        <router-link
+          tag="div"
+          class="list text-sm"
+          v-for="item in list"
+          :key="item.repairId"
+          :to="$prelang(`repair/details/${item.repairId}`)"
+        >
           <div class="item">
-            <div class="text text-ellipsis text-darkgray">ID: 03320171122181630429X7KLmm9l069D</div>
+            <div class="text text-ellipsis text-darkgray">{{item.type|type}}</div>
+            <div class="extra">{{item.status|status}}</div>
           </div>
           <div class="item">
             <div class="text">
               <ex-space space="5px 0">
                 <div class="text-justify">
-                  <span class="label">创建时间:</span>
-                  <span class="value">2018/08/08 00:00</span>
+                  <span class="label">运单号:</span>
+                  <span class="value">{{item.waybillNumber || '暂无'}}</span>
                 </div>
                 <div class="text-justify">
-                  <span class="label">运单号:</span>
-                  <span class="value">2018231515432</span>
+                  <span class="label">工单号:</span>
+                  <span class="value">{{item.repairId}}</span>
+                </div>
+                <div class="text-justify">
+                  <span class="label">创建时间:</span>
+                  <span class="value">{{item.date}}</span>
                 </div>
               </ex-space>
             </div>
           </div>
-        </div>
+        </router-link>
       </ex-loader>
     </ex-content>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+import HOSTS from '../../env.config';
+import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
       index: 0,
-      list: [],
     };
   },
   computed: {
+    ...mapState('repair/orders', ['list']),
     url() {
-      return '/api/repair/orders';
+      return `${HOSTS.REPAIR}/api/repairHeader/repairHeaderList`;
     },
-    query() {
-      return { type: this.index };
+  },
+  filters: {
+    // 工单状态
+    // 0:待收货 1:已收货 2:已完成 3:不收货 4:后收货 5:部分收货 6:待审核。
+    status(status) {
+      return ['待收货', '已收货', '已完成', '不收货', '后收货', '部分收货', '待审核'][status] || '其他';
+    },
+    // 工单类型
+    // 0:维修工单 2:配件工单
+    type(type) {
+      return ['维修工单', '', '配件工单'][type] || '其他';
     },
   },
   methods: {
-    listOrders(index) {
-      this.index = index;
+    ...mapActions('repair/orders', ['setOrders']),
+    transform(data) {
+      return data;
     },
     callback({ list }) {
-      this.list = list;
+      this.setOrders({ list });
     },
   },
 };

@@ -1,8 +1,9 @@
 <template>
   <div ref="panel" class="loader">
-    <slot />
+    <slot/>
     <div class="loadmore" v-if="loading">
-      <i class="loading" /> <span class="tips text-gray">{{ $t('tips') }}</span>
+      <i class="loading"/>
+      <span class="tips text-gray">{{ $t('tips') }}</span>
     </div>
     <div class="vspace" ui-mode="15px" v-else-if="list.length === 0">
       <p class="text-sm text-center text-gray text-thin">— {{ $t('blank') }} —</p>
@@ -29,6 +30,7 @@ export default {
     pname: { type: String, default: 'page' },
     sname: { type: String, default: 'size' },
     ends: { type: Boolean, default: false },
+    transform: { type: Function, default: data => data.list },
   },
   data() {
     return {
@@ -131,9 +133,10 @@ export default {
         .then(({ data }) => {
           this.loading = false;
           this.page = this.page + 1;
-          this.items = this.items.concat(data.list);
+          const list = this.transform(data);
+          this.items = this.items.concat(list);
           // 不足一页
-          if (data.list.length < this.size) {
+          if (list.length < this.size) {
             this.release();
           }
 

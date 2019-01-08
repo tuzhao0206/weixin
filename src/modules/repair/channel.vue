@@ -41,7 +41,7 @@
 <script>
 import axios from 'axios';
 import HOSTS from '../../env.config';
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
@@ -49,9 +49,21 @@ export default {
       channel: this.$store.state.repair.channel,
     };
   },
+  computed: {
+    ...mapState('repair', ['station']),
+  },
   mounted() {
-    const url = `${HOSTS.BASE}/api/logistics/getLogistics?flag=repair`;
-    axios.get(url, { cache: true }).then(({ data }) => {
+    if (!this.station) {
+      return this.$alert({
+        message: '数据不完善，请重新输入<br /><span class="text-warning">注意：中途不要刷新或离开</span>',
+        callback: () => {
+          this.$router.push(this.$prelang('repair'));
+        },
+      });
+    }
+    const url = `${HOSTS.REPAIR}/api/repairSite/getSendBackLogistics`;
+    const params = { siteCode: this.station.code };
+    axios.get(url, { params, cache: true }).then(({ data }) => {
       this.list = data;
     });
   },

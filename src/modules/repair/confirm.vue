@@ -18,20 +18,20 @@
       </div>
       <div class="list text-sm">
         <div class="item">
-          <div class="text text-darkgray">包裹信息</div>
+          <div class="text">包裹信息</div>
         </div>
         <div class="item">
           <div class="text">
             <div class="text-justify" v-for="item in selected" :key="item.id">
               <div class="value">{{item.name}}</div>
-              <div class="count">*{{item.count}}</div>
+              <div class="count">x {{item.count}}</div>
             </div>
           </div>
         </div>
       </div>
       <div class="list text-sm">
         <div class="item">
-          <div class="text text-darkgray">包裹物流信息</div>
+          <div class="text">发货物流</div>
         </div>
         <div class="item">
           <div class="text">
@@ -48,17 +48,17 @@
       </div>
       <div class="list text-sm">
         <div class="item">
-          <div class="text text-darkgray">维修点信息</div>
+          <div class="text">维修点信息</div>
         </div>
         <div class="item">
           <div class="text">
-            <div v-html="$options.filters.rmstyle(station.note)"></div>
+            <div v-html="$options.filters.rmstyle(station.note) || '暂未放开'"></div>
           </div>
         </div>
       </div>
       <div class="list text-sm">
         <div class="item">
-          <div class="text text-darkgray">收件人信息</div>
+          <div class="text">收件人信息</div>
         </div>
         <div class="item">
           <div class="text">
@@ -69,7 +69,7 @@
       </div>
       <div class="list text-sm">
         <div class="item">
-          <div class="text text-darkgray">回寄物流</div>
+          <div class="text">回寄物流</div>
         </div>
         <div class="item text-sm">
           <div class="text">{{channel.name}}</div>

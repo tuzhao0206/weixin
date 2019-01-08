@@ -38,8 +38,7 @@
                 class="button plain-primary"
                 :to="{ path: $prelang('repair/choose'), query: { type } }"
               >
-                <i class="icon">&#xe62c;</i>
-                <span>添加维修设备</span>
+                <span>+ 添加维修设备</span>
               </router-link>
             </ex-space>
           </div>
