@@ -46,53 +46,6 @@
 
       <div class="list text-sm">
         <div class="item">
-          <div class="text">发货物流</div>
-        </div>
-        <div class="item">
-          <div class="text" v-if="express">
-            <div class="text-justify">
-              <span class="label">物流公司:</span>
-              <span class="value">{{express.name}}</span>
-            </div>
-            <div class="text-justify">
-              <span class="label">物流单号:</span>
-              <span class="value">{{ticket.billNo}}</span>
-            </div>
-          </div>
-          <div class="text text-gray" v-else>暂无信息</div>
-        </div>
-      </div>
-
-      <div class="list text-sm">
-        <div class="item">
-          <div class="text">维修点信息</div>
-          <div class="extra" v-if="station">{{station.name}}</div>
-        </div>
-        <div class="item">
-          <div class="text">
-            <div v-if="station" v-html="$options.filters.rmstyle(station.note) || '暂未放开'"></div>
-            <div v-else class="text-gray">暂无信息</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="list text-sm">
-        <div class="item">
-          <div class="text">回寄物流</div>
-        </div>
-        <div class="item text-sm">
-          <div class="text" v-if="channel">
-            <div class="text-justify">
-              <span class="label">物流公司:</span>
-              <span class="value">{{channel.name}}</span>
-            </div>
-          </div>
-          <div class="text text-gray" v-else>暂无信息</div>
-        </div>
-      </div>
-
-      <div class="list text-sm">
-        <div class="item">
           <div class="text">收件人信息</div>
         </div>
         <div class="item">
@@ -110,6 +63,53 @@
               <span class="value">{{address.state}}{{address.city}}{{address.street}}</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="list text-sm">
+        <div class="item">
+          <div class="text">维修点信息</div>
+          <div class="extra" v-if="station">{{station.name}}</div>
+        </div>
+        <div class="item">
+          <div class="text">
+            <div v-if="station" v-html="$options.filters.rmstyle(station.note) || '暂未放开'"></div>
+            <div v-else class="text-gray">暂无信息</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 配件工单无需输入发货物流 -->
+      <div class="list text-sm" v-if="express && ticket.billNo">
+        <div class="item">
+          <div class="text">发货物流</div>
+        </div>
+        <div class="item">
+          <div class="text">
+            <div class="text-justify">
+              <span class="label">物流公司:</span>
+              <span class="value">{{express.name}}</span>
+            </div>
+            <div class="text-justify">
+              <span class="label">物流单号:</span>
+              <span class="value">{{ticket.billNo}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="list text-sm">
+        <div class="item">
+          <div class="text">回寄物流</div>
+        </div>
+        <div class="item text-sm">
+          <div class="text" v-if="channel">
+            <div class="text-justify">
+              <span class="label">物流公司:</span>
+              <span class="value">{{channel.name}}</span>
+            </div>
+          </div>
+          <div class="text text-gray" v-else>暂无信息</div>
         </div>
       </div>
     </ex-content>
@@ -189,7 +189,7 @@ export default {
     getTicket() {
       const url = `${HOSTS.REPAIR}/api/repairHeader/workOrderInfo`;
       const params = { repairId: this.$route.params.id };
-      return axios.get(url, { params, cache: true, global: false }).then(({ data }) => {
+      return axios.get(url, { params, global: false }).then(({ data }) => {
         return data[0];
       });
     },
@@ -197,8 +197,16 @@ export default {
     getDevices() {
       const url = `${HOSTS.REPAIR}/api/repairLine/repairLineList`;
       const params = { repairId: this.$route.params.id };
-      return axios.get(url, { params, cache: true }).then(({ data }) => {
+      return axios.get(url, { params }).then(({ data }) => {
         return data;
+      });
+    },
+    // 回寄地址
+    getAdress() {
+      const url = `${HOSTS.REPAIR}/api/repairHeader/clientInfo`;
+      const params = { repairId: this.$route.params.id };
+      return axios.get(url, { params }).then(({ data }) => {
+        return data[0];
       });
     },
     // 物流列表
@@ -214,14 +222,6 @@ export default {
       const params = { countryCode: 'CN' };
       return axios.get(url, { params, cache: true }).then(({ data }) => {
         return data.find(item => item.code === this.ticket.repairSite);
-      });
-    },
-    // 回寄地址
-    getAdress() {
-      const url = `${HOSTS.REPAIR}/api/repairHeader/clientInfo`;
-      const params = { repairId: this.$route.params.id };
-      return axios.get(url, { params, cache: true }).then(({ data }) => {
-        return data[0];
       });
     },
     // 删除工单
@@ -279,7 +279,16 @@ export default {
       this.setChannel({ channel });
       this.setAddress({ address });
 
-      this.$router.push(this.$prelang(`repair/issue?type=${this.ticket.type}`));
+      let type = 0;
+      // 配件工单
+      if (this.ticket.type === 2) {
+        type = 1;
+      }
+      // 对发工单
+      else if (Number(this.ticket.afterCollectFlag) === 1) {
+        type = 2;
+      }
+      this.$router.push(this.$prelang(`repair/issue/${this.ticket.repairId}?type=${type}`));
     },
   },
 };

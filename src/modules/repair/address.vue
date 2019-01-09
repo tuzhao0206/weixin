@@ -10,7 +10,7 @@
     <ex-content>
       <div class="list">
         <div class="item">
-          <div class="text-sm">Step4：请填写您的收货信息</div>
+          <div class="text-sm">请填写您的收货信息</div>
         </div>
         <div class="item">
           <ex-space space="10px 0">
@@ -155,7 +155,7 @@ export default {
         },
       });
       // 下一步
-      this.$router.push(this.$prelang('repair/channel'));
+      this.$router.push(this.$prelang('repair/station'));
     },
   },
 };

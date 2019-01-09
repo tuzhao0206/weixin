@@ -10,7 +10,7 @@
     <ex-content v-if="!loading">
       <div class="list">
         <div class="item">
-          <div class="text-sm">Step3：请联系快递商打包物品并填写包裹信息</div>
+          <div class="text-sm">请联系快递商打包物品并填写包裹信息</div>
         </div>
         <div class="item">
           <ex-space space="10px 0">
@@ -119,7 +119,8 @@ export default {
         express: this.express,
         tracking: this.tracking,
       });
-      this.$router.push({ path: this.$prelang('repair/address') });
+      // 下一步
+      this.$router.push({ path: this.$prelang('repair/channel') });
     },
   },
 };

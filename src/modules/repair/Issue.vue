@@ -28,7 +28,7 @@
 
       <div class="list">
         <div class="item">
-          <div class="text text-sm">Step1：请选择您需要维修的机器型号和数量</div>
+          <div class="text text-sm">请选择您需要维修的机器型号和数量</div>
         </div>
 
         <div class="item thread">
@@ -101,6 +101,9 @@ export default {
     },
   },
   mounted() {
+    // 设置基础信息
+    this.setBasis({ ticketType: this.type, ticketId: this.$route.params.id });
+
     // 获取授信信息
     if (this.type === 2) {
       const url = `${HOSTS.REPAIR}/api/repairCredit/getCredit`;
@@ -119,7 +122,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('repair', ['setSelected']),
+    ...mapActions('repair', ['setSelected', 'setBasis']),
     // 移除配件
     prompt(count, target) {
       this.$confirm({
@@ -147,8 +150,8 @@ export default {
           return this.$message('对发可用余额不足');
         }
       }
-      // 选择维修站点
-      this.$router.push({ path: this.$prelang('repair/station') });
+      // 选择收货地址
+      this.$router.push({ path: this.$prelang('repair/address') });
     },
   },
 };

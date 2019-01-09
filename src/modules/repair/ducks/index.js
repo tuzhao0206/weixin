@@ -7,6 +7,8 @@ export default {
   namespaced: true,
   modules: { orders },
   state: {
+    type: 0, // 工单类型
+    ticketId: null, // 工单编号
     selected: [], // 配件列表
     station: null, // 维修站点
     express: null, // 物流信息
@@ -15,6 +17,10 @@ export default {
     channel: null, // 回寄物流
   },
   mutations: {
+    setBasis(state, { ticketType, ticketId }) {
+      state.type = ticketType;
+      state.ticketId = ticketId;
+    },
     setSelected(state, { selected }) {
       state.selected = selected;
     },
@@ -33,6 +39,7 @@ export default {
     },
   },
   actions: {
+    setBasis: dispatch('setBasis'),
     setSelected: dispatch('setSelected'),
     setStation: dispatch('setStation'),
     setExpress: dispatch('setExpress'),

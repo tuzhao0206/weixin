@@ -10,7 +10,7 @@
     <ex-content>
       <div class="list">
         <div class="item">
-          <div class="text-sm">Step5：请选择回寄物流方式</div>
+          <div class="text-sm">请选择回寄物流方式</div>
         </div>
         <div class="item">
           <ex-space space="10px 0">

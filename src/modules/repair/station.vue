@@ -10,7 +10,7 @@
     <ex-content v-if="!loading">
       <div class="list">
         <div class="item">
-          <div class="text text-sm">Step2: 请选择维修点</div>
+          <div class="text text-sm">请选择维修点</div>
         </div>
         <div class="item">
           <ex-space space="10px 0">
@@ -52,7 +52,7 @@
 <script>
 import axios from 'axios';
 import HOSTS from '../../env.config';
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
@@ -87,6 +87,9 @@ export default {
       this.loading = false;
     });
   },
+  computed: {
+    ...mapState('repair', ['type']),
+  },
   methods: {
     ...mapActions('repair', ['setStation']),
     openPicker() {
@@ -99,8 +102,14 @@ export default {
       }
       // 缓存数据
       this.setStation({ station: this.station });
-      // 填写物流
-      this.$router.push({ path: this.$prelang('repair/express') });
+      // 配件工单不需要填写发货物流
+      if (this.type === 1) {
+        this.$router.push({ path: this.$prelang('repair/channel') });
+      }
+      // 普通工单和对发工单需要填写
+      else {
+        this.$router.push({ path: this.$prelang('repair/express') });
+      }
     },
   },
 };

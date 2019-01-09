@@ -18,7 +18,7 @@
       </div>
       <div class="list text-sm">
         <div class="item">
-          <div class="text">包裹信息</div>
+          <div class="text">维修设备信息</div>
         </div>
         <div class="item">
           <div class="text">
@@ -31,18 +31,12 @@
       </div>
       <div class="list text-sm">
         <div class="item">
-          <div class="text">发货物流</div>
+          <div class="text">收件人信息</div>
         </div>
         <div class="item">
           <div class="text">
-            <div class="text-justify">
-              <span class="label">发货物流商</span>
-              <span class="value">{{express.name}}</span>
-            </div>
-            <div class="text-justify">
-              <span class="label">发货运单号</span>
-              <span class="value">{{tracking}}</span>
-            </div>
+            <h4>{{address.name}} {{address.mobile}}</h4>
+            <div class="brief">{{address.province.name}}{{address.city.name}}{{address.street}}</div>
           </div>
         </div>
       </div>
@@ -56,14 +50,21 @@
           </div>
         </div>
       </div>
-      <div class="list text-sm">
+      <!-- 配件工单没有发货信息 -->
+      <div class="list text-sm" v-if="type !== 1">
         <div class="item">
-          <div class="text">收件人信息</div>
+          <div class="text">发货物流</div>
         </div>
         <div class="item">
           <div class="text">
-            <h4>{{address.name}} {{address.mobile}}</h4>
-            <div class="brief">{{address.province.name}}{{address.city.name}}{{address.street}}</div>
+            <div class="text-justify">
+              <span class="label">发货物流商</span>
+              <span class="value">{{express.name}}</span>
+            </div>
+            <div class="text-justify">
+              <span class="label">发货运单号</span>
+              <span class="value">{{tracking}}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -93,23 +94,90 @@ export default {
     };
   },
   computed: {
-    ...mapState('repair', ['selected', 'station', 'express', 'tracking', 'address', 'channel']),
+    ...mapState('repair', ['type', 'ticketId', 'selected', 'station', 'express', 'tracking', 'address', 'channel']),
   },
   mounted() {
-    if (this.selected.length && this.station && this.express && this.tracking && this.address && this.channel) {
-      this.complete = true;
-    } else {
-      this.$alert({
+    if (!this.selected.length) {
+      return this.$alert({
         message: '数据不完善，请重新输入<br /><span class="text-warning">注意：中途不要刷新或离开</span>',
         callback: () => {
           this.$router.push(this.$prelang('repair'));
         },
       });
     }
+    // 完善
+    this.complete = true;
   },
   methods: {
     confirm() {
-      // TODO
+      // 前台的三个工单 type: 0:普通工单 1:配件工单 2:对发工单
+      // 接口字段太绕了...
+
+      // dtype: "1"
+      // repairId: "03320190109145909176IMh7c37i0671"
+      // repairSite: "GZ"
+      // sendBackBillName: "009"
+      const form = {
+        dtype: this.type !== 1 ? 0 : 1, // 工单类型 0:普通工单 1:配件工单
+        repairSite: this.station.code, // 维修地点
+        sendBackBillName: this.channel.code, // 回寄物流
+      };
+      // 非配件工单
+      if (this.type !== 1) {
+        Object.assign(form, {
+          afterCollectFlag: this.type !== 2 ? 0 : 1, // 是否对发 0:普通工单 1:对发工单
+          billNo: this.tracking, // 物流单号
+          billName: this.express.code, // 物流公司
+          // 以下几个默认参数 M站不存在
+          monoFlag: 0, // 0正常/1挪单
+          packageCount: 1,
+          repairPayInfo: {},
+          remark: '',
+        });
+      }
+
+      // 地址信息
+      const addressInfo = {
+        country: 'CN',
+        countryName: '中国',
+        custom: 0,
+        areaCode: '',
+        serialNumber: '',
+        tax: '',
+        zipCode: '',
+
+        state: this.address.province.name,
+        stateCode: this.address.province.code,
+        city: this.address.city.name,
+        cityCode: this.address.city.code,
+        mobile: this.address.mobile,
+        street: this.address.street,
+        userName: this.address.name,
+      };
+
+      form.addressInfo = addressInfo;
+      if (this.ticketId) {
+        this.update(form);
+      }
+    },
+
+    update(form) {
+      // 编辑工单
+      form.repairId = this.ticketId;
+      const url = `${HOSTS.REPAIR}/api/repairHeader/modifyRepairHeader`;
+      axios.post(url, form).then(
+        ({ data }) => {
+          this.$message({
+            icon: 'success',
+            message: '编辑成功',
+            modal: true,
+          });
+          this.$router.push(this.$prelang(`repair/details/${this.ticketId}`));
+        },
+        ({ message }) => {
+          this.$message(message);
+        }
+      );
     },
   },
 };

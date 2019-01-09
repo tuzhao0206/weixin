@@ -21,7 +21,7 @@ const routes = [
     meta: { loginRequired: true },
     children: [
       { path: '', component: Home },
-      { path: 'issue', component: Issue },
+      { path: 'issue/:id?', component: Issue },
       { path: 'choose', component: Choose },
       { path: 'station', component: Station },
       { path: 'express', component: Express },
