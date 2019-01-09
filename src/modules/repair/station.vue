@@ -46,14 +46,7 @@
       <button class="button primary square" @click="next();">下一步</button>
     </ex-footer>
 
-    <ex-picker
-      :title="'选择维修网点'"
-      :show="picker"
-      :groups="[stations]"
-      :dismiss="onCancel"
-      :onCancel="onCancel"
-      :onConfirm="onConfirm"
-    />
+    <ex-picker v-bind="picker"/>
   </ex-view>
 </template>
 <script>
@@ -65,7 +58,7 @@ export default {
     return {
       station: this.$store.state.repair.station,
       stations: [],
-      picker: false,
+      picker: { show: false },
       loading: true,
     };
   },
@@ -74,20 +67,30 @@ export default {
     const params = { countryCode: 'CN' };
     axios.get(url, { params, cache: true }).then(({ data }) => {
       this.stations = data;
+      this.picker = {
+        title: '选择维修网点',
+        show: false,
+        groups: [this.stations],
+        checked: this.station ? [this.stations.findIndex(item => item.code === this.station.code)] : [-1],
+        dismiss: () => {
+          this.picker.show = false;
+        },
+        onCancel: () => {
+          this.picker.show = false;
+        },
+        onConfirm: ({ list, checked }) => {
+          this.picker.show = false;
+          this.station = list[0];
+          this.picker.checked = checked;
+        },
+      };
       this.loading = false;
     });
   },
   methods: {
     ...mapActions('repair', ['setStation']),
     openPicker() {
-      this.picker = true;
-    },
-    onCancel() {
-      this.picker = false;
-    },
-    onConfirm({ checked }) {
-      this.picker = false;
-      this.station = this.stations[checked[0]];
+      this.picker.show = true;
     },
     next() {
       // 校验

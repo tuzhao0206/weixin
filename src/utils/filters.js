@@ -1,12 +1,12 @@
 export default {
   // 移除脚本
-  rmxss: function(content) {
+  rmxss: function(content = '') {
     const regex = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
     return content.replace(regex, '');
   },
 
   // 移除样式
-  rmstyle: function(content) {
+  rmstyle: function(content = '') {
     const regex = /\bstyle=("|')(.*?)\1/g;
     return content.replace(regex, '');
   },

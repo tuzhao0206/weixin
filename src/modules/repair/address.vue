@@ -63,15 +63,7 @@
       <button class="button primary square" @click="next();">下一步</button>
     </ex-footer>
 
-    <ex-picker
-      :title="'所在地区'"
-      :show="picker"
-      :groups="groups"
-      :dismiss="onCancel"
-      :onCancel="onCancel"
-      :onChange="onChange"
-      :onConfirm="onConfirm"
-    />
+    <ex-picker v-bind="picker"/>
   </ex-view>
 </template>
 <script>
@@ -88,34 +80,41 @@ export default {
       province: province,
       city: city,
       street: street,
-      picker: false,
-      groups: [],
+      picker: { show: false },
     };
   },
-  computed: {},
   mounted() {
     this.listProvince().then(provinces => {
-      this.groups = [provinces];
+      this.picker = {
+        show: false,
+        title: '所在地区',
+        groups: [provinces, []],
+        checked: [-1, -1],
+        dismiss: () => {
+          this.picker.show = false;
+        },
+        onCancel: () => {
+          this.picker.show = false;
+        },
+        onChange: ({ index, group, groupIndex }) => {
+          if (groupIndex !== 0) {
+            return null;
+          }
+          return this.listCity(group[index].code);
+        },
+        onConfirm: ({ list, checked }) => {
+          this.picker.show = false;
+          this.picker.checked = checked;
+          this.province = list[0];
+          this.city = list[1];
+        },
+      };
     });
   },
   methods: {
     ...mapActions('repair', ['setAddress']),
     openPicker() {
-      this.picker = true;
-    },
-    onCancel() {
-      this.picker = false;
-    },
-    onChange({ index, group, groupIndex }) {
-      if (groupIndex !== 0) {
-        return null;
-      }
-      return this.listCity(group[index].code);
-    },
-    onConfirm({ list }) {
-      this.picker = false;
-      this.province = list[0];
-      this.city = list[1];
+      this.picker.show = true;
     },
     listProvince() {
       const url = `${HOSTS.BASE}/api/region/provinceRegionList`;

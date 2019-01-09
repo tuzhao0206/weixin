@@ -53,14 +53,7 @@
       <button class="button primary square" @click="next();">下一步</button>
     </ex-footer>
 
-    <ex-picker
-      :title="'发货物流商'"
-      :show="picker"
-      :groups="[logistics]"
-      :dismiss="onCancel"
-      :onCancel="onCancel"
-      :onConfirm="onConfirm"
-    />
+    <ex-picker v-bind="picker"/>
   </ex-view>
 </template>
 <script>
@@ -74,7 +67,7 @@ export default {
       logistics: [],
       express: this.$store.state.repair.express, // 物流
       tracking: this.$store.state.repair.tracking, // 运单
-      picker: false,
+      picker: { show: false },
     };
   },
   computed: {
@@ -85,19 +78,30 @@ export default {
     axios.get(url, { cache: true }).then(({ data }) => {
       this.logistics = data;
       this.loading = false;
+
+      this.picker = {
+        show: false,
+        title: '发货物流商',
+        groups: [this.logistics],
+        checked: [-1],
+        dismiss: () => {
+          this.picker.show = false;
+        },
+        onCancel: () => {
+          this.picker.show = false;
+        },
+        onConfirm: ({ list, checked }) => {
+          this.picker.show = false;
+          this.express = list[0];
+          this.picker.checked = checked;
+        },
+      };
     });
   },
   methods: {
     ...mapActions('repair', ['setExpress']),
     openPicker() {
-      this.picker = true;
-    },
-    onCancel() {
-      this.picker = false;
-    },
-    onConfirm({ checked }) {
-      this.picker = false;
-      this.express = this.logistics[checked[0]];
+      this.picker.show = true;
     },
     next() {
       if (!this.express) {

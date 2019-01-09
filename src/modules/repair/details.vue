@@ -66,11 +66,12 @@
       <div class="list text-sm">
         <div class="item">
           <div class="text">维修点信息</div>
-          <div class="extra">{{station.name}}</div>
+          <div class="extra" v-if="station">{{station.name}}</div>
         </div>
         <div class="item">
           <div class="text">
-            <div v-html="$options.filters.rmstyle(station.note) || '暂未放开'"></div>
+            <div v-if="station" v-html="$options.filters.rmstyle(station.note) || '暂未放开'"></div>
+            <div v-else class="text-gray">暂无信息</div>
           </div>
         </div>
       </div>
