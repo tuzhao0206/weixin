@@ -9,7 +9,7 @@ const Channel = () => import(/* webpackChunkName: 'repair' */ './channel');
 const Confirm = () => import(/* webpackChunkName: 'repair' */ './confirm');
 const Success = () => import(/* webpackChunkName: 'repair' */ './success');
 const Failure = () => import(/* webpackChunkName: 'repair' */ './failure');
-const Orders = () => import(/* webpackChunkName: 'repair' */ './orders');
+const Tickets = () => import(/* webpackChunkName: 'repair' */ './tickets');
 const Details = () => import(/* webpackChunkName: 'repair' */ './details');
 const EquipmentFeedback = () => import(/* webpackChunkName: 'repair' */ './equipmentFeedback');
 
@@ -30,7 +30,7 @@ const routes = [
       { path: 'confirm', component: Confirm },
       { path: 'success', component: Success },
       { path: 'failure', component: Failure },
-      { path: 'orders', component: Orders },
+      { path: 'tickets', component: Tickets },
       { path: 'details/:id', component: Details },
 
       { path: 'equipmentFeedback/:ticketId', component: EquipmentFeedback },

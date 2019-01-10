@@ -16,7 +16,7 @@
         <div class="describe">请尽快将维修设备寄到维修点，我们将在收到您的包裹后尽快安排检测维修。</div>
       </div>
       <div class="vspace hspace">
-        <router-link class="button plain-success" :to="$prelang('repair')">返回</router-link>
+        <router-link class="button plain-success" :to="$prelang('repair/tickets')">返回</router-link>
       </div>
     </ex-content>
   </ex-view>

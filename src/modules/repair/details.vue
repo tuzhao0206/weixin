@@ -37,7 +37,7 @@
         <div class="item text-sm" v-for="item in devices" :key="item.id">
           <div
             class="tag"
-            :class="{success: item.type === 1,driving: item.type === 2,}"
+            :class="{success: +item.type === 1, driving: +item.type === 2,}"
           >{{item.type|deviceType}}</div>
           <div class="text">{{item.productName}}</div>
           <div class="extra">x {{item.productCount}}</div>
@@ -184,7 +184,7 @@ export default {
   },
   methods: {
     ...mapActions('repair', ['setSelected', 'setStation', 'setExpress', 'setAddress', 'setChannel']),
-    ...mapActions('repair/orders', ['setOrders']),
+    ...mapActions('repair/tickets', ['setTickets']),
     // 工单详情
     getTicket() {
       const url = `${HOSTS.REPAIR}/api/repairHeader/workOrderInfo`;
@@ -233,7 +233,7 @@ export default {
           const params = { repairId: this.$route.params.id };
           axios.get(url, { params }).then(({ message }) => {
             this.$message(message || '删除成功');
-            this.setOrders({ list: [] });
+            this.setTickets({ list: [] });
             this.$router.go(-1);
           });
         },

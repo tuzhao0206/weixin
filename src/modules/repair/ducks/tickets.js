@@ -8,11 +8,11 @@ export default {
     list: [], // 配件列表
   },
   mutations: {
-    setOrders(state, { list }) {
+    setTickets(state, { list }) {
       state.list = list;
     },
   },
   actions: {
-    setOrders: dispatch('setOrders'),
+    setTickets: dispatch('setTickets'),
   },
 };

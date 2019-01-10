@@ -62,7 +62,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('repair/orders', ['list']),
+    ...mapState('repair/tickets', ['list']),
     url() {
       return `${HOSTS.REPAIR}/api/repairHeader/repairHeaderList`;
     },
@@ -80,12 +80,12 @@ export default {
     },
   },
   methods: {
-    ...mapActions('repair/orders', ['setOrders']),
+    ...mapActions('repair/tickets', ['setTickets']),
     transform(data) {
       return data;
     },
     callback({ list }) {
-      this.setOrders({ list });
+      this.setTickets({ list });
     },
   },
 };

@@ -86,7 +86,7 @@
 <script>
 import axios from 'axios';
 import HOSTS from '../../env.config';
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
@@ -109,28 +109,24 @@ export default {
     this.complete = true;
   },
   methods: {
+    ...mapActions('repair/ticket', ['setTickets']),
     confirm() {
       // 前台的三个工单 type: 0:普通工单 1:配件工单 2:对发工单
       // 接口字段太绕了...
-
-      // dtype: "1"
-      // repairId: "03320190109145909176IMh7c37i0671"
-      // repairSite: "GZ"
-      // sendBackBillName: "009"
       const form = {
-        dtype: this.type !== 1 ? 0 : 1, // 工单类型 0:普通工单 1:配件工单
+        dtype: this.type !== 1 ? '0' : '1', // 工单类型 0:普通工单 1:配件工单
         repairSite: this.station.code, // 维修地点
         sendBackBillName: this.channel.code, // 回寄物流
       };
       // 非配件工单
       if (this.type !== 1) {
         Object.assign(form, {
-          afterCollectFlag: this.type !== 2 ? 0 : 1, // 是否对发 0:普通工单 1:对发工单
+          afterCollectFlag: this.type !== 2 ? '0' : '1', // 是否对发 0:普通工单 1:对发工单
           billNo: this.tracking, // 物流单号
           billName: this.express.code, // 物流公司
           // 以下几个默认参数 M站不存在
-          monoFlag: 0, // 0正常/1挪单
-          packageCount: 1,
+          monoFlag: '0', // 0正常/1挪单
+          packageCount: '1',
           repairPayInfo: {},
           remark: '',
         });
@@ -157,25 +153,73 @@ export default {
 
       form.addressInfo = addressInfo;
       if (this.ticketId) {
-        this.update(form);
+        this.updateRepair(form);
+      } else {
+        this.createRepair(form);
       }
     },
 
-    update(form) {
-      // 编辑工单
+    // 清空后台设备记录 (后台接口设计问题，防止M站和PC不同步)
+    clearCache() {
+      const url = `${HOSTS.REPAIR}/api/deviceCart/deviceCartList`;
+      return axios.all([axios.get(url, { params: { dtype: 0 } }), axios.get(url, { params: { dtype: 1 } })]);
+    },
+
+    // 编辑设备
+    updateDevices() {
+      return this.clearCache().then(() => {
+        // 需要更新设备
+        return true;
+      });
+    },
+
+    // 创建工单
+    createRepair(form) {
+      this.clearCache().then(() => {
+        axios
+          .all(
+            // 接口和设计的遗留问题:
+            // 每意见商品都要单发一个请求
+            this.selected.map(item => {
+              const url = `${HOSTS.REPAIR}/api/repairLine/saveRepairLine`;
+              return axios.post(url, {
+                certNo: '',
+                issueInfo: '',
+                type: item.type, // 配件类型
+                dtype: form.dtype, // 工单类型
+                productId: item.productId,
+                productCount: item.count,
+              });
+            })
+          )
+          .then(() => {
+            const url = `${HOSTS.REPAIR}/api/repairHeader/addRepairHeader`;
+            axios.post(url, form).then(
+              ({ data }) => {
+                // 清空工单列表记录
+                this.setTickets({ list: [] });
+                this.$router.push(this.$prelang(`repair/success`));
+              },
+              ({ message }) => {
+                this.$router.push(this.$prelang(`repair/failure`));
+              }
+            );
+          });
+      });
+    },
+
+    // 编辑工单
+    updateRepair(form) {
       form.repairId = this.ticketId;
       const url = `${HOSTS.REPAIR}/api/repairHeader/modifyRepairHeader`;
       axios.post(url, form).then(
         ({ data }) => {
-          this.$message({
-            icon: 'success',
-            message: '编辑成功',
-            modal: true,
-          });
-          this.$router.push(this.$prelang(`repair/details/${this.ticketId}`));
+          // 清空工单列表记录
+          this.setTickets({ list: [] });
+          this.$router.push(this.$prelang(`repair/success`));
         },
         ({ message }) => {
-          this.$message(message);
+          this.$router.push(this.$prelang(`repair/failure`));
         }
       );
     },
