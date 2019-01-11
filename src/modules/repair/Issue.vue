@@ -76,7 +76,8 @@
     </ex-content>
 
     <ex-footer class="btm-fixed">
-      <button class="button primary square" @click="next();">下一步</button>
+      <button class="button primary square" @click="next();" v-if="!ticketId">下一步</button>
+      <button class="button primary square" v-if="ticketId" @click="$router.go(-1)">完成</button>
     </ex-footer>
   </ex-view>
 </template>
@@ -94,7 +95,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('repair', ['selected']),
+    ...mapState('repair', ['ticketId', 'selected']),
     // 计算所选商品的授信金额
     amount() {
       return this.selected.reduce((total, item) => total + item.count * item.priceOneCredit, 0);
@@ -112,6 +113,26 @@ export default {
           // 可用对发额度 = 授信可用余额 + 押金可用余额
           this.balance = data[0].ablAmount + data[0].ablPledge;
         }
+      });
+    }
+    // 编辑工单的设备
+    if (this.ticketId && this.selected.length === 0) {
+      // 设备列表
+      const url = `${HOSTS.REPAIR}/api/repairLine/repairLineList`;
+      const params = { repairId: this.ticketId };
+      axios.get(url, { params }).then(({ data }) => {
+        this.setSelected({
+          selected: data.map(item => {
+            return {
+              id: item.id,
+              count: item.productCount,
+              name: item.productName,
+              priceOneCredit: item.priceOneCredit,
+              productId: item.productId,
+              type: +item.type,
+            };
+          }),
+        });
       });
     }
   },

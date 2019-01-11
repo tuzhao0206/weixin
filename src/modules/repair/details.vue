@@ -116,7 +116,7 @@
     <ex-footer class="btm-fixed" v-if=" isEditable">
       <div class="button-group compact">
         <button class="button square text-warning" @click="delTicket">删除</button>
-        <button class="button square primary" @click="editTicket">编辑</button>
+        <button class="button square primary" @click="editAction">编辑</button>
       </div>
     </ex-footer>
   </ex-view>
@@ -184,6 +184,7 @@ export default {
   },
   methods: {
     ...mapActions('repair', ['setSelected', 'setStation', 'setExpress', 'setAddress', 'setChannel']),
+    ...mapActions('repair', ['setBasis']),
     ...mapActions('repair/tickets', ['setTickets']),
     // 工单详情
     getTicket() {
@@ -239,6 +240,71 @@ export default {
         },
       });
     },
+    // 编辑提醒
+    editAction() {
+      this.$store.dispatch({
+        type: 'showSheet',
+        sheet: {
+          message: '请选择编辑内容',
+          dismiss: () => {
+            this.$store.dispatch('hideSheet');
+          },
+          buttons: [
+            [
+              {
+                text: '编辑维修设备',
+                class: 'text-primary',
+                onClick: () => {
+                  this.$store.dispatch('hideSheet');
+                  this.$message('todo');
+                  this.editDevice();
+                },
+              },
+              {
+                text: '编辑物流信息',
+                class: 'text-driving',
+                onClick: () => {
+                  this.$store.dispatch('hideSheet');
+                  this.editTicket();
+                },
+              },
+            ],
+            [
+              {
+                text: '取消',
+                class: 'text-gray',
+                onClick: () => {
+                  this.$store.dispatch('hideSheet');
+                },
+              },
+            ],
+          ],
+        },
+      });
+    },
+    // 编辑设备
+    editDevice() {
+      const selected = this.devices.map(item => ({
+        id: item.id,
+        count: item.productCount,
+        name: item.productName,
+        priceOneCredit: item.priceOneCredit,
+        productId: item.productId,
+        type: +item.type,
+      }));
+
+      let type = 0;
+      // 配件工单
+      if (this.ticket.type === 2) {
+        type = 1;
+      }
+      // 对发工单
+      else if (Number(this.ticket.afterCollectFlag) === 1) {
+        type = 2;
+      }
+      this.setSelected({ selected });
+      this.$router.push(this.$prelang(`repair/issue/${this.ticket.repairId}?type=${type}`));
+    },
     // 编辑工单
     editTicket() {
       // 设备列表
@@ -248,7 +314,7 @@ export default {
         name: item.productName,
         priceOneCredit: item.priceOneCredit,
         productId: item.productId,
-        type: item.type,
+        type: +item.type,
       }));
       // 收货地址
       const station = this.station;
@@ -288,7 +354,8 @@ export default {
       else if (Number(this.ticket.afterCollectFlag) === 1) {
         type = 2;
       }
-      this.$router.push(this.$prelang(`repair/issue/${this.ticket.repairId}?type=${type}`));
+      this.setBasis({ ticketType: type, ticketId: this.ticket.repairId });
+      this.$router.push(this.$prelang('repair/address'));
     },
   },
 };

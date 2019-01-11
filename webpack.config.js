@@ -51,7 +51,7 @@ module.exports = function(env, args) {
   shell.cp(`./config/hosts/${hosts}.js`, './src/env.config.js');
 
   const HOSTS = require('./src/env.config');
-  const publicPath = args.mode === 'production' ? HOSTS.CDN + '/mobile/' : '/';
+  const publicPath = args.mode === 'production' ? HOSTS.CDN + '/repair/' : '/';
   return {
     mode: args.mode || 'development',
     devtool: args.mode === 'production' ? false : 'source-map',

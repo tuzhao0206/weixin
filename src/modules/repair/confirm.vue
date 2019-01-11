@@ -109,7 +109,7 @@ export default {
     this.complete = true;
   },
   methods: {
-    ...mapActions('repair/ticket', ['setTickets']),
+    ...mapActions('repair/tickets', ['setTickets']),
     confirm() {
       // 前台的三个工单 type: 0:普通工单 1:配件工单 2:对发工单
       // 接口字段太绕了...
