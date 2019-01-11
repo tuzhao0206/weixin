@@ -1,69 +1,46 @@
 <template>
   <ex-view>
     <ex-header title="填写收货信息">
-      <ex-menu class="text-gray" @click="$router.back();">
-        <i class="icon">&#xe60e;</i>
-      </ex-menu>
-      <ex-title/>
+      <ex-menu class="text-gray" @click="$router.back();"> <i class="icon">&#xe60e;</i> </ex-menu>
+      <ex-title />
     </ex-header>
 
     <ex-content>
       <div class="list">
-        <div class="item">
-          <div class="text-sm">请填写您的收货信息</div>
-        </div>
+        <div class="item"><div class="text-sm">请填写您的收货信息</div></div>
         <div class="item">
           <ex-space space="10px 0">
-            <div class="notice text-sm">注意：产品维修好之后，会将良品返还给您所填写的地址，为不影响您的正常收货，请务必保证信息填写正确。</div>
+            <div class="notice text-sm">
+              注意：产品维修好之后，会将良品返还给您所填写的地址，为不影响您的正常收货，请务必保证信息填写正确。
+            </div>
           </ex-space>
         </div>
         <label class="item text-sm" ui-mode="input">
-          <div class="label" ui-mode="64px">
-            <i class="text-warning">*</i>
-            <span>收件人</span>
-          </div>
-          <input class="input" type="text" v-model="name" maxlength="30" placeholder="收件人">
+          <div class="label" ui-mode="64px"><i class="text-warning">*</i> <span>收件人</span></div>
+          <input class="input" type="text" v-model="name" maxlength="30" placeholder="收件人" />
         </label>
         <label class="item text-sm" ui-mode="input">
-          <div class="label">
-            <i class="text-warning">*</i>
-            <span>联系手机</span>
-          </div>
-          <input
-            class="input"
-            type="tel"
-            pattern="[0-9]*"
-            v-model="mobile"
-            maxlength="11"
-            placeholder="联系手机"
-          >
+          <div class="label"><i class="text-warning">*</i> <span>联系手机</span></div>
+          <input class="input" type="tel" pattern="[0-9]*" v-model="mobile" maxlength="11" placeholder="联系手机" />
         </label>
         <div class="item text-sm" @click="openPicker">
-          <div class="label">
-            <i class="text-warning">*</i>
-            <span>所在地区</span>
-          </div>
+          <div class="label"><i class="text-warning">*</i> <span>所在地区</span></div>
           <div class="text">
-            <span v-if="province && city">{{province.name}} {{city.name}}</span>
+            <span v-if="province && city">{{ province.name }} {{ city.name }}</span>
             <span class="text-gray" v-else>所在地区</span>
           </div>
           <i class="icon text-gray">&#xe61a;</i>
         </div>
         <label class="item text-sm" ui-mode="input">
-          <div class="label">
-            <i class="text-warning">*</i>
-            <span>详细地址</span>
-          </div>
-          <input class="input" type="text" v-model="street" maxlength="50" placeholder="详细地址">
+          <div class="label"><i class="text-warning">*</i> <span>详细地址</span></div>
+          <input class="input" type="text" v-model="street" maxlength="50" placeholder="详细地址" />
         </label>
       </div>
     </ex-content>
 
-    <ex-footer class="btm-fixed">
-      <button class="button primary square" @click="next();">下一步</button>
-    </ex-footer>
+    <ex-footer class="btm-fixed"> <button class="button primary square" @click="next();">下一步</button> </ex-footer>
 
-    <ex-picker v-bind="picker"/>
+    <ex-picker v-bind="picker" />
   </ex-view>
 </template>
 <script>

@@ -1,31 +1,27 @@
 <template>
   <ex-view>
     <ex-header title="添加维修设备">
-      <ex-menu class="text-gray" @click="$router.back();">
-        <i class="icon">&#xe60e;</i>
-      </ex-menu>
-      <ex-title/>
+      <ex-menu class="text-gray" @click="$router.back();"> <i class="icon">&#xe60e;</i> </ex-menu>
+      <ex-title />
     </ex-header>
 
     <ex-content>
       <!-- 配件工单不需要显示整机和物料 -->
       <div class="navbar underline primary" v-if="type !== 1">
-        <a class="item" :class="{active: index === 0}" @click="listDevice(0)">整机列表</a>
-        <a class="item" :class="{active: index === 1}" @click="listDevice(1)">配件列表</a>
-        <a class="item" :class="{active: index === 2}" @click="listDevice(2)">物料列表</a>
+        <a class="item" :class="{ active: index === 0 }" @click="listDevice(0);">整机列表</a>
+        <a class="item" :class="{ active: index === 1 }" @click="listDevice(1);">配件列表</a>
+        <a class="item" :class="{ active: index === 2 }" @click="listDevice(2);">物料列表</a>
       </div>
 
       <div class="list compact text-md">
-        <label class="item tapable" v-for="item in list" :key="item.id" @change="toggleEquip(item)">
-          <input class="checkbox primary" type="checkbox" :checked="isSelected(item)">
-          <div class="text">{{item.name}}</div>
+        <label class="item tapable" v-for="item in list" :key="item.id" @change="toggleEquip(item);">
+          <input class="checkbox primary" type="checkbox" :checked="isSelected(item)" />
+          <div class="text">{{ item.name }}</div>
         </label>
       </div>
     </ex-content>
 
-    <ex-footer class="btm-fixed">
-      <button class="button primary square" @click="confirm();">确定</button>
-    </ex-footer>
+    <ex-footer class="btm-fixed"> <button class="button primary square" @click="confirm();">确定</button> </ex-footer>
   </ex-view>
 </template>
 <script>

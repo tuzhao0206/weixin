@@ -3,12 +3,10 @@
     <button :class="{ disabled: currentValue === min || disabled }" @click="decrease();">
       <i class="icon">&#xe62d;</i>
     </button>
-    
-    <input :disabled="disabled" type="number" @input="onInput" :value="currentValue">
-    
-    <button :disabled="currentValue === max || disabled" @click="increase();">
-      <i class="icon">&#xe62c;</i>
-    </button>
+
+    <input :disabled="disabled" type="number" @input="onInput" :value="currentValue" />
+
+    <button :disabled="currentValue === max || disabled" @click="increase();"><i class="icon">&#xe62c;</i></button>
   </div>
 </template>
 <script>

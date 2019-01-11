@@ -1,9 +1,8 @@
 <template>
   <div ref="panel" class="loader">
-    <slot/>
+    <slot />
     <div class="loadmore" v-if="loading">
-      <i class="loading"/>
-      <span class="tips text-gray">{{ $t('tips') }}</span>
+      <i class="loading" /> <span class="tips text-gray">{{ $t('tips') }}</span>
     </div>
     <div class="vspace" ui-mode="15px" v-else-if="list.length === 0">
       <p class="text-sm text-center text-gray text-thin">— {{ $t('blank') }} —</p>

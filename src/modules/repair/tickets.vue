@@ -1,10 +1,8 @@
 <template>
   <div class="ticket-list">
     <ex-header title="工单列表">
-      <ex-menu class="text-gray" @click="$router.back();">
-        <i class="icon">&#xe60e;</i>
-      </ex-menu>
-      <ex-title/>
+      <ex-menu class="text-gray" @click="$router.back();"> <i class="icon">&#xe60e;</i> </ex-menu>
+      <ex-title />
     </ex-header>
 
     <ex-content>
@@ -24,23 +22,20 @@
           :to="$prelang(`repair/details/${item.repairId}`)"
         >
           <div class="item">
-            <div class="text text-ellipsis text-darkgray">{{item.type|type}}</div>
-            <div class="extra">{{item.status|status}}</div>
+            <div class="text text-ellipsis text-darkgray">{{ item.type | type }}</div>
+            <div class="extra">{{ item.status | status }}</div>
           </div>
           <div class="item">
             <div class="text">
               <ex-space space="5px 0">
                 <div class="text-justify">
-                  <span class="label">运单号:</span>
-                  <span class="value">{{item.waybillNumber || '暂无'}}</span>
+                  <span class="label">运单号:</span> <span class="value">{{ item.waybillNumber || '暂无' }}</span>
                 </div>
                 <div class="text-justify">
-                  <span class="label">工单号:</span>
-                  <span class="value">{{item.repairId}}</span>
+                  <span class="label">工单号:</span> <span class="value">{{ item.repairId }}</span>
                 </div>
                 <div class="text-justify">
-                  <span class="label">创建时间:</span>
-                  <span class="value">{{item.date}}</span>
+                  <span class="label">创建时间:</span> <span class="value">{{ item.date }}</span>
                 </div>
               </ex-space>
             </div>

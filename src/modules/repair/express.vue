@@ -1,59 +1,48 @@
 <template>
   <ex-view>
     <ex-header title="填写发货单号">
-      <ex-menu class="text-gray" @click="$router.back();">
-        <i class="icon">&#xe60e;</i>
-      </ex-menu>
-      <ex-title/>
+      <ex-menu class="text-gray" @click="$router.back();"> <i class="icon">&#xe60e;</i> </ex-menu>
+      <ex-title />
     </ex-header>
 
     <ex-content v-if="!loading">
       <div class="list">
-        <div class="item">
-          <div class="text-sm">请联系快递商打包物品并填写包裹信息</div>
-        </div>
+        <div class="item"><div class="text-sm">请联系快递商打包物品并填写包裹信息</div></div>
         <div class="item">
           <ex-space space="10px 0">
             <div class="notice text-sm">注意：请认真填写您的包裹信息，务必保证运单号与设备信息的准确。</div>
           </ex-space>
         </div>
         <div class="item text-sm" @click="openPicker">
-          <div class="text">
-            <i class="text-warning">*</i>
-            <span>发货物流商</span>
-          </div>
+          <div class="text"><i class="text-warning">*</i> <span>发货物流商</span></div>
           <div class="extra">
-            <span v-if="express">{{express.name}}</span>
-            <span v-else class="text-gray">选择</span>
+            <span v-if="express">{{ express.name }}</span> <span v-else class="text-gray">选择</span>
           </div>
           <i class="icon text-gray">&#xe61a;</i>
         </div>
         <label class="item text-sm" ui-mode="input">
-          <div class="label">
-            <i class="text-warning">*</i>
-            <span>发货运单号</span>
-          </div>
-          <input class="input text-right" v-model="tracking" maxlength="30" placeholder="发货运单号">
+          <div class="label"><i class="text-warning">*</i> <span>发货运单号</span></div>
+          <input class="input text-right" v-model="tracking" maxlength="30" placeholder="发货运单号" />
         </label>
       </div>
 
-      <!-- <div class="list" v-if="station">
-        <div class="item text-sm">
-          <div class="text">
-            <ex-space space="10px 0">
-              <p>请将维修机器寄往以下地址：</p>
-              <div class="details" v-html="$options.filters.rmstyle(station.note) || '暂未放开'"></div>
-            </ex-space>
+      <!--
+        <div class="list" v-if="station">
+          <div class="item text-sm">
+            <div class="text">
+              <ex-space space="10px 0">
+                <p>请将维修机器寄往以下地址：</p>
+                <div class="details" v-html="$options.filters.rmstyle(station.note) || '暂未放开'"></div>
+              </ex-space>
+            </div>
           </div>
         </div>
-      </div>-->
+      -->
     </ex-content>
 
-    <ex-footer class="btm-fixed">
-      <button class="button primary square" @click="next();">下一步</button>
-    </ex-footer>
+    <ex-footer class="btm-fixed"> <button class="button primary square" @click="next();">下一步</button> </ex-footer>
 
-    <ex-picker v-bind="picker"/>
+    <ex-picker v-bind="picker" />
   </ex-view>
 </template>
 <script>

@@ -1,10 +1,8 @@
 <template>
   <ex-view>
     <ex-header title="添加维修设备">
-      <ex-menu class="text-gray" @click="$router.back();">
-        <i class="icon">&#xe60e;</i>
-      </ex-menu>
-      <ex-title/>
+      <ex-menu class="text-gray" @click="$router.back();"> <i class="icon">&#xe60e;</i> </ex-menu>
+      <ex-title />
     </ex-header>
 
     <ex-content>
@@ -15,11 +13,11 @@
             <ex-space space="10px 0">
               <div class="text-justify">
                 <span class="label">可用对发额度</span>
-                <span class="value text-right text-primary">{{balance|currency}}</span>
+                <span class="value text-right text-primary">{{ balance | currency }}</span>
               </div>
               <div class="text-justify">
                 <span class="label">本工单扣除额度</span>
-                <span class="value text-right text-primary">{{amount|currency}}</span>
+                <span class="value text-right text-primary">{{ amount | currency }}</span>
               </div>
             </ex-space>
           </div>
@@ -27,17 +25,12 @@
       </div>
 
       <div class="list">
-        <div class="item">
-          <div class="text text-sm">请选择您需要维修的机器型号和数量</div>
-        </div>
+        <div class="item"><div class="text text-sm">请选择您需要维修的机器型号和数量</div></div>
 
         <div class="item thread">
           <div class="text">
             <ex-space space="10px">
-              <router-link
-                class="button plain-primary"
-                :to="{ path: $prelang('repair/choose'), query: { type } }"
-              >
+              <router-link class="button plain-primary" :to="{ path: $prelang('repair/choose'), query: { type } }">
                 <span>+ 添加维修设备</span>
               </router-link>
             </ex-space>
@@ -45,23 +38,18 @@
         </div>
 
         <div class="item">
-          <div class="text text-sm">
-            <p>设备名称：</p>
-          </div>
+          <div class="text text-sm"><p>设备名称：</p></div>
         </div>
         <div class="item thread" v-if="selected.length === 0">
           <div class="text">
-            <ex-space space="50px 0">
-              <p class="text-center text-gray text-sm">- 您还没有添加任何设备 -</p>
-            </ex-space>
+            <ex-space space="50px 0"> <p class="text-center text-gray text-sm">- 您还没有添加任何设备 -</p> </ex-space>
           </div>
         </div>
         <div class="item thread text-sm" v-for="item in selected" :key="item.id">
-          <div
-            class="tag"
-            :class="{success: item.type === 1,driving: item.type === 2,}"
-          >{{item.type|deviceType}}</div>
-          <div class="text">{{item.name}}</div>
+          <div class="tag" :class="{ success: item.type === 1, driving: item.type === 2 }">
+            {{ item.type | deviceType }}
+          </div>
+          <div class="text">{{ item.name }}</div>
           <div class="extra">
             <ex-stepper
               :value="item.count || 1"
@@ -77,7 +65,7 @@
 
     <ex-footer class="btm-fixed">
       <button class="button primary square" @click="next();" v-if="!ticketId">下一步</button>
-      <button class="button primary square" v-if="ticketId" @click="$router.go(-1)">完成</button>
+      <button class="button primary square" v-if="ticketId" @click="$router.go(-1);">完成</button>
     </ex-footer>
   </ex-view>
 </template>

@@ -1,66 +1,52 @@
 <template>
   <ex-view>
     <ex-header title="工单详情">
-      <ex-menu class="text-gray" @click="$router.back();">
-        <i class="icon">&#xe60e;</i>
-      </ex-menu>
-      <ex-title/>
+      <ex-menu class="text-gray" @click="$router.back();"> <i class="icon">&#xe60e;</i> </ex-menu>
+      <ex-title />
     </ex-header>
 
     <ex-content v-if="loaded">
       <div class="list text-sm">
-        <div class="item">
-          <div class="text">基本信息</div>
-        </div>
+        <div class="item"><div class="text">基本信息</div></div>
         <div class="item">
           <div class="text">
             <div class="text-justify">
-              <span class="label">状态:</span>
-              <span class="value">{{ticket.status|status}}</span>
+              <span class="label">状态:</span> <span class="value">{{ ticket.status | status }}</span>
             </div>
             <div class="text-justify">
-              <span class="label">工单类型:</span>
-              <span class="value">{{ticket.type|type}}</span>
+              <span class="label">工单类型:</span> <span class="value">{{ ticket.type | type }}</span>
             </div>
             <div class="text-justify">
-              <span class="label">工单号:</span>
-              <span class="value">{{ticket.repairId}}</span>
+              <span class="label">工单号:</span> <span class="value">{{ ticket.repairId }}</span>
             </div>
           </div>
         </div>
       </div>
 
       <div class="list text-sm">
-        <div class="item">
-          <div class="text">维修设备信息</div>
-        </div>
+        <div class="item"><div class="text">维修设备信息</div></div>
         <div class="item text-sm" v-for="item in devices" :key="item.id">
-          <div
-            class="tag"
-            :class="{success: +item.type === 1, driving: +item.type === 2,}"
-          >{{item.type|deviceType}}</div>
-          <div class="text">{{item.productName}}</div>
-          <div class="extra">x {{item.productCount}}</div>
+          <div class="tag" :class="{ success: +item.type === 1, driving: +item.type === 2 }">
+            {{ item.type | deviceType }}
+          </div>
+          <div class="text">{{ item.productName }}</div>
+          <div class="extra">x {{ item.productCount }}</div>
         </div>
       </div>
 
       <div class="list text-sm">
-        <div class="item">
-          <div class="text">收件人信息</div>
-        </div>
+        <div class="item"><div class="text">收件人信息</div></div>
         <div class="item">
           <div class="text">
             <div class="text-justify">
-              <span class="label">收件人:</span>
-              <span class="value">{{address.userName}}</span>
+              <span class="label">收件人:</span> <span class="value">{{ address.userName }}</span>
             </div>
             <div class="text-justify">
-              <span class="label">电话号码:</span>
-              <span class="value">{{address.mobile}}</span>
+              <span class="label">电话号码:</span> <span class="value">{{ address.mobile }}</span>
             </div>
             <div class="text-justify">
               <span class="label">收货地址:</span>
-              <span class="value">{{address.state}}{{address.city}}{{address.street}}</span>
+              <span class="value">{{ address.state }}{{ address.city }}{{ address.street }}</span>
             </div>
           </div>
         </div>
@@ -69,7 +55,7 @@
       <div class="list text-sm">
         <div class="item">
           <div class="text">维修点信息</div>
-          <div class="extra" v-if="station">{{station.name}}</div>
+          <div class="extra" v-if="station">{{ station.name }}</div>
         </div>
         <div class="item">
           <div class="text">
@@ -81,39 +67,32 @@
 
       <!-- 配件工单无需输入发货物流 -->
       <div class="list text-sm" v-if="express && ticket.billNo">
-        <div class="item">
-          <div class="text">发货物流</div>
-        </div>
+        <div class="item"><div class="text">发货物流</div></div>
         <div class="item">
           <div class="text">
             <div class="text-justify">
-              <span class="label">物流公司:</span>
-              <span class="value">{{express.name}}</span>
+              <span class="label">物流公司:</span> <span class="value">{{ express.name }}</span>
             </div>
             <div class="text-justify">
-              <span class="label">物流单号:</span>
-              <span class="value">{{ticket.billNo}}</span>
+              <span class="label">物流单号:</span> <span class="value">{{ ticket.billNo }}</span>
             </div>
           </div>
         </div>
       </div>
 
       <div class="list text-sm">
-        <div class="item">
-          <div class="text">回寄物流</div>
-        </div>
+        <div class="item"><div class="text">回寄物流</div></div>
         <div class="item text-sm">
           <div class="text" v-if="channel">
             <div class="text-justify">
-              <span class="label">物流公司:</span>
-              <span class="value">{{channel.name}}</span>
+              <span class="label">物流公司:</span> <span class="value">{{ channel.name }}</span>
             </div>
           </div>
           <div class="text text-gray" v-else>暂无信息</div>
         </div>
       </div>
     </ex-content>
-    <ex-footer class="btm-fixed" v-if=" isEditable">
+    <ex-footer class="btm-fixed" v-if="isEditable">
       <div class="button-group compact">
         <button class="button square text-warning" @click="delTicket">删除</button>
         <button class="button square primary" @click="editAction">编辑</button>

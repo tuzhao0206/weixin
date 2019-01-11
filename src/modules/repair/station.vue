@@ -1,30 +1,22 @@
 <template>
   <ex-view>
     <ex-header title="选择维修点">
-      <ex-menu class="text-gray" @click="$router.back();">
-        <i class="icon">&#xe60e;</i>
-      </ex-menu>
-      <ex-title/>
+      <ex-menu class="text-gray" @click="$router.back();"> <i class="icon">&#xe60e;</i> </ex-menu>
+      <ex-title />
     </ex-header>
 
     <ex-content v-if="!loading">
       <div class="list">
-        <div class="item">
-          <div class="text text-sm">请选择维修点</div>
-        </div>
+        <div class="item"><div class="text text-sm">请选择维修点</div></div>
         <div class="item">
           <ex-space space="10px 0">
             <div class="notice text-sm">注意：维修产品需寄往对应网点地址进行维修，请勿寄往其他维修点。</div>
           </ex-space>
         </div>
         <div class="item text-sm" @click="openPicker">
-          <div class="text">
-            <i class="text-warning">*</i>
-            <span>维修网点</span>
-          </div>
+          <div class="text"><i class="text-warning">*</i> <span>维修网点</span></div>
           <div class="extra">
-            <span v-if="station">{{station.name}}</span>
-            <span v-else class="text-gray">选择</span>
+            <span v-if="station">{{ station.name }}</span> <span v-else class="text-gray">选择</span>
           </div>
           <i class="icon text-gray">&#xe61a;</i>
         </div>
@@ -42,11 +34,9 @@
       </div>
     </ex-content>
 
-    <ex-footer class="btm-fixed">
-      <button class="button primary square" @click="next();">下一步</button>
-    </ex-footer>
+    <ex-footer class="btm-fixed"> <button class="button primary square" @click="next();">下一步</button> </ex-footer>
 
-    <ex-picker v-bind="picker"/>
+    <ex-picker v-bind="picker" />
   </ex-view>
 </template>
 <script>

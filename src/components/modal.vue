@@ -7,7 +7,13 @@
           <div class="content" v-html="message" />
           <footer class="footer" v-if="buttons.length > 0">
             <div class="button-group compact nesting">
-              <button class="button" v-for="(item, idx) in buttons" :key="idx" v-bind="buttonConfig(item)" @click="item.onClick(item);">
+              <button
+                class="button"
+                v-for="(item, idx) in buttons"
+                :key="idx"
+                v-bind="buttonConfig(item)"
+                @click="item.onClick(item);"
+              >
                 {{ item.text }}
               </button>
             </div>

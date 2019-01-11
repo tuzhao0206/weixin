@@ -1,85 +1,65 @@
 <template>
   <ex-view>
     <ex-header title="提交确认">
-      <ex-menu class="text-gray" @click="$router.back();">
-        <i class="icon">&#xe60e;</i>
-      </ex-menu>
-      <ex-title/>
+      <ex-menu class="text-gray" @click="$router.back();"> <i class="icon">&#xe60e;</i> </ex-menu>
+      <ex-title />
     </ex-header>
 
     <ex-content v-if="complete">
-      <div class="message">
-        <i class="text-driving">*</i> 请确认工单信息是否填写正确
-      </div>
+      <div class="message"><i class="text-driving">*</i> 请确认工单信息是否填写正确</div>
       <div class="list compact">
-        <div class="item">
-          <div class="text text-strong text-center">维修工单申请单</div>
-        </div>
+        <div class="item"><div class="text text-strong text-center">维修工单申请单</div></div>
       </div>
       <div class="list text-sm">
-        <div class="item">
-          <div class="text">维修设备信息</div>
-        </div>
+        <div class="item"><div class="text">维修设备信息</div></div>
         <div class="item">
           <div class="text">
             <div class="text-justify" v-for="item in selected" :key="item.id">
-              <div class="value">{{item.name}}</div>
-              <div class="count">x {{item.count}}</div>
+              <div class="value">{{ item.name }}</div>
+              <div class="count">x {{ item.count }}</div>
             </div>
           </div>
         </div>
       </div>
       <div class="list text-sm">
-        <div class="item">
-          <div class="text">收件人信息</div>
-        </div>
+        <div class="item"><div class="text">收件人信息</div></div>
         <div class="item">
           <div class="text">
-            <h4>{{address.name}} {{address.mobile}}</h4>
-            <div class="brief">{{address.province.name}}{{address.city.name}}{{address.street}}</div>
+            <h4>{{ address.name }} {{ address.mobile }}</h4>
+            <div class="brief">{{ address.province.name }}{{ address.city.name }}{{ address.street }}</div>
           </div>
         </div>
       </div>
       <div class="list text-sm">
+        <div class="item"><div class="text">维修点信息</div></div>
         <div class="item">
-          <div class="text">维修点信息</div>
-        </div>
-        <div class="item">
-          <div class="text">
-            <div v-html="$options.filters.rmstyle(station.note) || '暂未放开'"></div>
-          </div>
+          <div class="text"><div v-html="$options.filters.rmstyle(station.note) || '暂未放开'"></div></div>
         </div>
       </div>
       <!-- 配件工单没有发货信息 -->
       <div class="list text-sm" v-if="type !== 1">
-        <div class="item">
-          <div class="text">发货物流</div>
-        </div>
+        <div class="item"><div class="text">发货物流</div></div>
         <div class="item">
           <div class="text">
             <div class="text-justify">
-              <span class="label">发货物流商</span>
-              <span class="value">{{express.name}}</span>
+              <span class="label">发货物流商</span> <span class="value">{{ express.name }}</span>
             </div>
             <div class="text-justify">
-              <span class="label">发货运单号</span>
-              <span class="value">{{tracking}}</span>
+              <span class="label">发货运单号</span> <span class="value">{{ tracking }}</span>
             </div>
           </div>
         </div>
       </div>
       <div class="list text-sm">
-        <div class="item">
-          <div class="text">回寄物流</div>
-        </div>
+        <div class="item"><div class="text">回寄物流</div></div>
         <div class="item text-sm">
-          <div class="text">{{channel.name}}</div>
+          <div class="text">{{ channel.name }}</div>
         </div>
       </div>
     </ex-content>
 
     <ex-footer class="btm-fixed">
-      <button class="button primary square" @click="confirm()">确认提交</button>
+      <button class="button primary square" @click="confirm();">确认提交</button>
     </ex-footer>
   </ex-view>
 </template>
