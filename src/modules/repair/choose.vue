@@ -62,24 +62,24 @@ export default {
     // 列举设备
     listDevice(index) {
       this.index = index;
-      // deviceType: 0-整机 1-配件 2-物料
+      // deviceType: 0:整机 1:配件 2:物料
       const url = `${HOSTS.REPAIR}/api/productRepair/getByDeviceType`;
       const params = { deviceType: index, uncollectFlag: this.type === 1 ? 1 : 0 };
       axios.get(url, { params, cache: true }).then(({ data }) => {
         this.list = data.map(item => {
-          item.type = index;
           item.count = 1;
+          item.type = index;
           return item;
         });
       });
     },
     // 选择/取消产品
-    toggleEquip(item) {
-      const index = this.selected.indexOf(item);
+    toggleEquip(target) {
+      const index = this.selected.findIndex(item => item.productId === target.productId);
       if (index !== -1) {
         this.selected.splice(index, 1);
       } else {
-        this.selected.push(item);
+        this.selected.push({ ...target });
       }
     },
     // 确定
