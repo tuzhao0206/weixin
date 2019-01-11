@@ -4,7 +4,7 @@
       <ex-menu class="text-gray" @click="$router.back();">
         <i class="icon">&#xe60e;</i>
       </ex-menu>
-      <ex-title></ex-title>
+      <ex-title/>
     </ex-header>
 
     <ex-content>
