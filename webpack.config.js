@@ -61,7 +61,7 @@ module.exports = function(env, args) {
     output: {
       filename: SCRIPT_FORMAT,
       chunkFilename: SCRIPT_CHUNK,
-      path: path.resolve(__dirname, 'dist/mobile/'),
+      path: path.resolve(__dirname, 'dist/weixin/'),
       publicPath: publicPath,
     },
     // https://github.com/webpack/webpack/issues/3486
