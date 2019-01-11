@@ -1,8 +1,10 @@
 <template>
   <ex-view>
     <ex-header title="添加维修设备">
-      <ex-menu class="text-gray" @click="$router.back();"> <i class="icon">&#xe60e;</i> </ex-menu>
-      <ex-title />
+      <ex-menu class="text-gray" @click="$router.back();">
+        <i class="icon">&#xe60e;</i>
+      </ex-menu>
+      <ex-title/>
     </ex-header>
 
     <ex-content>
@@ -14,14 +16,21 @@
       </div>
 
       <div class="list compact text-md">
-        <label class="item tapable" v-for="item in list" :key="item.id" @change="toggleEquip(item);">
-          <input class="checkbox primary" type="checkbox" :checked="isSelected(item)" />
+        <label
+          class="item tapable"
+          v-for="item in list"
+          :key="item.id"
+          @change="toggleEquip(item);"
+        >
+          <input class="checkbox primary" type="checkbox" :checked="isSelected(item)">
           <div class="text">{{ item.name }}</div>
         </label>
       </div>
     </ex-content>
 
-    <ex-footer class="btm-fixed"> <button class="button primary square" @click="confirm();">确定</button> </ex-footer>
+    <ex-footer class="btm-fixed">
+      <button class="button primary square" @click="confirm();">确定</button>
+    </ex-footer>
   </ex-view>
 </template>
 <script>
@@ -48,7 +57,7 @@ export default {
     ...mapActions('repair', ['setSelected']),
     // 是否选中
     isSelected(target) {
-      return this.selected.findIndex(item => item.id === target.id) !== -1;
+      return this.selected.findIndex(item => item.productId === target.productId) !== -1;
     },
     // 列举设备
     listDevice(index) {
