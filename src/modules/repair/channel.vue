@@ -1,19 +1,23 @@
 <template>
   <ex-view>
     <ex-header title="请选择回寄物流方式">
-      <ex-menu class="text-gray" @click="$router.back();"> <i class="icon">&#xe60e;</i> </ex-menu>
-      <ex-title />
+      <ex-menu class="text-gray" @click="$router.back();">
+        <i class="icon">&#xe60e;</i>
+      </ex-menu>
+      <ex-title/>
     </ex-header>
 
     <ex-content>
       <div class="list">
-        <div class="item"><div class="text-sm">请选择回寄物流方式</div></div>
+        <div class="item">
+          <div class="text-sm">请选择回寄物流方式</div>
+        </div>
         <div class="item">
           <ex-space space="10px 0">
             <div class="notice text-sm">
-              请选择您的维修包裹回寄物流方式，我们将优先按照您选择的物流方式将设备 寄回给您。
-              <br />如果确认您的工单地址不能创建该物流订单或该物流不能到达时，
-              蚂蚁售后将另行安排合理的物流商，并不会发出有关此替代安排的任何通知， 请知悉。
+              请选择您的维修包裹回寄物流方式，我们将优先按照您选择的物流方式将设备寄回给您。
+              <br>如果确认您的工单地址不能创建该物流订单或该物流不能到达时，
+              蚂蚁售后将另行安排合理的物流商，并不会发出有关此替代安排的任何通知，请知悉。
             </div>
           </ex-space>
         </div>

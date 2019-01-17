@@ -1,8 +1,10 @@
 <template>
   <ex-view>
-    <ex-header title="添加维修设备">
-      <ex-menu class="text-gray" @click="$router.back();"> <i class="icon">&#xe60e;</i> </ex-menu>
-      <ex-title />
+    <ex-header :title="title">
+      <ex-menu class="text-gray" @click="$router.back();">
+        <i class="icon">&#xe60e;</i>
+      </ex-menu>
+      <ex-title/>
     </ex-header>
 
     <ex-content>
@@ -25,12 +27,17 @@
       </div>
 
       <div class="list">
-        <div class="item"><div class="text text-sm">请选择您需要维修的机器型号和数量</div></div>
+        <div class="item">
+          <div class="text text-sm">请选择您需要维修的机器型号和数量</div>
+        </div>
 
         <div class="item thread">
           <div class="text">
             <ex-space space="10px">
-              <router-link class="button plain-primary" :to="{ path: $prelang('repair/choose'), query: { type } }">
+              <router-link
+                class="button plain-primary"
+                :to="{ path: $prelang('repair/choose'), query: { type } }"
+              >
                 <span>+ 添加维修设备</span>
               </router-link>
             </ex-space>
@@ -38,17 +45,22 @@
         </div>
 
         <div class="item">
-          <div class="text text-sm"><p>设备名称：</p></div>
+          <div class="text text-sm">
+            <p>设备名称：</p>
+          </div>
         </div>
         <div class="item thread" v-if="selected.length === 0">
           <div class="text">
-            <ex-space space="50px 0"> <p class="text-center text-gray text-sm">- 您还没有添加任何设备 -</p> </ex-space>
+            <ex-space space="50px 0">
+              <p class="text-center text-gray text-sm">- 您还没有添加任何设备 -</p>
+            </ex-space>
           </div>
         </div>
         <div class="item thread text-sm" v-for="item in selected" :key="item.id">
-          <div class="tag" :class="{ success: item.type === 1, driving: item.type === 2 }">
-            {{ item.type | deviceType }}
-          </div>
+          <div
+            class="tag"
+            :class="{ success: item.type === 1, driving: item.type === 2 }"
+          >{{ item.type | deviceType }}</div>
           <div class="text">{{ item.name }}</div>
           <div class="extra">
             <ex-stepper
@@ -65,7 +77,7 @@
 
     <ex-footer class="btm-fixed">
       <button class="button primary square" @click="next();" v-if="!ticketId">下一步</button>
-      <button class="button primary square" v-if="ticketId" @click="$router.go(-1);">完成</button>
+      <button class="button primary square" v-if="ticketId" @click="updateRepair">完成</button>
     </ex-footer>
   </ex-view>
 </template>
@@ -88,6 +100,9 @@ export default {
     amount() {
       return this.selected.reduce((total, item) => total + item.count * item.priceOneCredit, 0);
     },
+    title() {
+      return this.ticketId ? '编辑维修设备' : '添加维修设备';
+    },
   },
   mounted() {
     // 设置基础信息
@@ -96,7 +111,7 @@ export default {
     // 获取授信信息
     if (this.type === 2) {
       const url = `${HOSTS.REPAIR}/api/repairCredit/getCredit`;
-      axios.get(url).then(({ data }) => {
+      axios.get(url, { cache: true }).then(({ data }) => {
         if (data[0] && data[0].ablAmount && data[0].ablPledge) {
           // 可用对发额度 = 授信可用余额 + 押金可用余额
           this.balance = data[0].ablAmount + data[0].ablPledge;
@@ -132,6 +147,7 @@ export default {
   },
   methods: {
     ...mapActions('repair', ['setSelected', 'setBasis']),
+    ...mapActions('repair/tickets', ['setTickets']),
     // 移除配件
     prompt(count, target) {
       this.$confirm({
@@ -159,8 +175,26 @@ export default {
           return this.$message('对发可用余额不足');
         }
       }
-      // 选择收货地址
       this.$router.push({ path: this.$prelang('repair/address') });
+    },
+
+    // 更新设备 - 编辑工单
+    updateRepair() {
+      const url = `${HOSTS.REPAIR}/api/repairLine/batchSaveRepairLine`;
+      return axios
+        .post(url, {
+          dtype: this.type !== 1 ? '0' : '1', // 工单类型 0:普通工单 1:配件工单
+          repairId: this.ticketId,
+          repairLine: this.selected.map(item => ({
+            productId: item.productId,
+            productCount: item.count,
+          })),
+        })
+        .then(() => {
+          // 清空工单列表记录
+          this.setTickets({ list: [] });
+          this.$router.push(this.$prelang(`repair/success`));
+        });
     },
   },
 };

@@ -167,46 +167,34 @@ export default {
       return axios.all([axios.get(url, { params: { dtype: 0 } }), axios.get(url, { params: { dtype: 1 } })]);
     },
 
-    // 编辑设备
-    updateDevices() {
+    // 新增设备
+    createDevices(form) {
       return this.clearCache().then(() => {
-        // 需要更新设备
-        return true;
+        const url = `${HOSTS.REPAIR}/api/repairLine/batchSaveRepairLine`;
+        return axios.post(url, {
+          dtype: form.dtype, // 工单类型
+          repairLine: this.selected.map(item => ({
+            productId: item.productId,
+            productCount: item.count,
+          })),
+        });
       });
     },
 
     // 创建工单
     createRepair(form) {
-      this.clearCache().then(() => {
-        axios
-          .all(
-            // 接口和设计的遗留问题:
-            // 每意见商品都要单发一个请求
-            this.selected.map(item => {
-              const url = `${HOSTS.REPAIR}/api/repairLine/saveRepairLine`;
-              return axios.post(url, {
-                certNo: '',
-                issueInfo: '',
-                type: item.type, // 配件类型
-                dtype: form.dtype, // 工单类型
-                productId: item.productId,
-                productCount: item.count,
-              });
-            })
-          )
-          .then(() => {
-            const url = `${HOSTS.REPAIR}/api/repairHeader/addRepairHeader`;
-            axios.post(url, form).then(
-              ({ data }) => {
-                // 清空工单列表记录
-                this.setTickets({ list: [] });
-                this.$router.push(this.$prelang(`repair/success`));
-              },
-              ({ message }) => {
-                this.$router.push(this.$prelang(`repair/failure`));
-              }
-            );
-          });
+      this.createDevices(form).then(() => {
+        const url = `${HOSTS.REPAIR}/api/repairHeader/addRepairHeader`;
+        axios.post(url, form).then(
+          ({ data }) => {
+            // 清空工单列表记录
+            this.setTickets({ list: [] });
+            this.$router.push(this.$prelang(`repair/success`));
+          },
+          ({ message }) => {
+            this.$router.push(this.$prelang(`repair/failure`));
+          }
+        );
       });
     },
 
