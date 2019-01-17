@@ -11,6 +11,7 @@ const Success = () => import(/* webpackChunkName: 'repair' */ './success');
 const Failure = () => import(/* webpackChunkName: 'repair' */ './failure');
 const Tickets = () => import(/* webpackChunkName: 'repair' */ './tickets');
 const Details = () => import(/* webpackChunkName: 'repair' */ './details');
+const Inventory = () => import(/* webpackChunkName: 'repair' */ './inventory');
 
 const routes = [
   { path: '', redirect: 'repair' },
@@ -31,6 +32,7 @@ const routes = [
       { path: 'failure', component: Failure },
       { path: 'tickets', component: Tickets },
       { path: 'details/:id', component: Details },
+      { path: 'inventory/:repairId/:id', component: Inventory },
     ],
   },
 ];

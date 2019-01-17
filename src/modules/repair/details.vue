@@ -16,15 +16,15 @@
           <div class="text">
             <div class="text-justify">
               <span class="label">状态:</span>
-              <span class="value">{{ ticket.status | status }}</span>
+              <span class="value">{{ ticket.status|status }}</span>
             </div>
             <div class="text-justify">
               <span class="label">工单类型:</span>
-              <span class="value">{{ ticket.type | type }}</span>
+              <span class="value">{{ ticket.type|type }}</span>
             </div>
             <div class="text-justify">
               <span class="label">工单ID:</span>
-              <span class="value">{{ ticket.repairId }}</span>
+              <span class="value">{{ticket.repairId}}</span>
             </div>
           </div>
         </div>
@@ -34,14 +34,20 @@
         <div class="item">
           <div class="text">维修设备信息</div>
         </div>
-        <div class="item text-sm" v-for="item in devices" :key="item.id">
+        <router-link
+          tag="div"
+          class="item text-sm"
+          v-for="item in devices"
+          :key="item.id"
+          :to="$prelang(`repair/inventory/${ticket.repairId}/${item.id}`)"
+        >
           <div
             class="tag"
             :class="{ success: +item.type === 1, driving: +item.type === 2 }"
           >{{ item.type | deviceType }}</div>
           <div class="text">{{ item.productName }}</div>
           <div class="extra">x {{ item.productCount }}</div>
-        </div>
+        </router-link>
       </div>
 
       <div class="list text-sm">
@@ -52,15 +58,15 @@
           <div class="text">
             <div class="text-justify">
               <span class="label">收件人:</span>
-              <span class="value">{{ address.userName }}</span>
+              <span class="value">{{address.userName}}</span>
             </div>
             <div class="text-justify">
               <span class="label">电话号码:</span>
-              <span class="value">{{ address.mobile }}</span>
+              <span class="value">{{address.mobile}}</span>
             </div>
             <div class="text-justify">
               <span class="label">收货地址:</span>
-              <span class="value">{{ address.state }}{{ address.city }}{{ address.street }}</span>
+              <span class="value">{{address.state}}{{address.city}}{{address.street}}</span>
             </div>
           </div>
         </div>
