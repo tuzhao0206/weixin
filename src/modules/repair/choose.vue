@@ -82,9 +82,20 @@ export default {
         this.selected.push({ ...target });
       }
     },
+    // 还原数量
+    prevCount(product) {
+      const target = this.$store.state.repair.selected.find(item => item.productId === product.productId);
+      return target ? target.count : 1;
+    },
     // 确定
     confirm() {
-      this.setSelected({ selected: this.selected.sort((a, b) => a.type - b.type) });
+      const selected = this.selected
+        .sort((a, b) => a.type - b.type)
+        .map(item => {
+          item.count = this.prevCount(item);
+          return item;
+        });
+      this.setSelected({ selected });
       this.$router.go(-1);
     },
   },

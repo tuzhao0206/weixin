@@ -16,11 +16,20 @@
         <div class="describe">请重新编辑或联系售后客服处理。</div>
       </div>
       <div class="vspace hspace">
-        <router-link class="button plain-warning" :to="$prelang('repair/')">返回</router-link>
+        <router-link class="button plain-warning" :to="$prelang(`repair/issue?type=${type}`)">返回</router-link>
       </div>
     </ex-content>
   </ex-view>
 </template>
+<script>
+import { mapState } from 'vuex';
+export default {
+  computed: {
+    ...mapState('repair', ['type']),
+  },
+};
+</script>
+
 <style lang="less" scoped>
 @import '../../less/base/fn.less';
 .view {

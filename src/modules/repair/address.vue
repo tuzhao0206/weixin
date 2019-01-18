@@ -22,7 +22,7 @@
             <i class="text-warning">*</i>
             <span>收件人</span>
           </div>
-          <input class="input" type="text" v-model="name" maxlength="30" placeholder="收件人">
+          <input class="input" type="text" v-model="name" maxlength="20" placeholder="收件人">
         </label>
         <label class="item text-sm" ui-mode="input">
           <div class="label">
