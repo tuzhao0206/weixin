@@ -220,6 +220,9 @@ Vue.prototype.$confirm = function(options, callback) {
           class: 'text-darkgray',
           onClick: () => {
             this.$store.dispatch('hideModal');
+            if (options.trigger === 'all') {
+              options.callback && options.callback(false);
+            }
           },
         },
         {
@@ -227,7 +230,7 @@ Vue.prototype.$confirm = function(options, callback) {
           class: 'text-primary',
           onClick: () => {
             this.$store.dispatch('hideModal');
-            options.callback && options.callback();
+            options.callback && options.callback(true);
           },
         },
       ],

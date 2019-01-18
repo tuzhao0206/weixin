@@ -7,7 +7,7 @@
       <ex-title/>
     </ex-header>
 
-    <ex-content v-if="complete">
+    <ex-content class="content" v-if="complete">
       <div class="message">
         <i class="text-driving">*</i> 请确认工单信息是否填写正确
       </div>
@@ -81,7 +81,20 @@
     </ex-content>
 
     <ex-footer class="btm-fixed">
-      <button class="button primary square" @click="confirm();">确认提交</button>
+      <div class="protocol">
+        <div class="agree">
+          <label class="center">
+            <input class="checkbox primary" type="checkbox" v-model="agree">
+            <span>
+              请阅读并同意:
+              <a class="text-primary" @click="promptProtocol">《BITMAIN售后维修服务条款》</a>
+              <a class="text-primary" @click="promptPrice">《售后维修报价标准》</a>
+              <a class="text-primary" @click="promptCredit" v-if="type === 2">《对发服务条款》</a>
+            </span>
+          </label>
+        </div>
+        <button class="button primary square" @click="confirm()" :disabled="!agree">确认提交</button>
+      </div>
     </ex-footer>
   </ex-view>
 </template>
@@ -92,6 +105,7 @@ import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
+      agree: false,
       complete: false,
     };
   },
@@ -213,6 +227,77 @@ export default {
         }
       );
     },
+    // 维修条款
+    promptProtocol() {
+      const url = `${HOSTS.BASE}/api/sysinit/getSysInit`;
+      const params = { flag: 'ticket' };
+      axios.get(url, { params, cache: true }).then(({ data }) => {
+        this.$confirm({
+          message: `
+          <div style="max-height:300px;max-height:50vh;overflow-y:scroll;font-size:14px;text-align:left;">
+            ${this.$options.filters.rmstyle(data[0].moreInfo)}
+          </div>`,
+          trigger: 'all', // 取消也触发
+          callback: action => {
+            this.agree = action;
+          },
+        });
+      });
+    },
+    // 报价标准
+    promptPrice() {
+      this.$confirm({
+        message: `
+          <div style="max-height:300px;max-height:50vh;overflow-y:scroll;font-size:14px;text-align:left;">
+            <p><strong>一、报价规则</strong></p>
+            <p>1.维修报价（含混板、报废报价）不高于整机价格。</p>
+            <p>2.治具</p>
+            <p>
+              ①若能提供订单号证明维修工单是在发货30天内创建，可联系在线客服申请不收费(注：若同一设备连续两次申请二返，且二返测试结果皆为无故障良品，则连续第三次走二返将予以报价)；
+            </p>
+            <p>
+              ②若无相关免收费证明，则不良治具报价100RMB/15USD、报废治具报价同官网售价。
+            </p>
+            <p><strong>二、具体参考报价如下：</strong></p>
+            <p><strong>1.整机返修</strong></p>
+            <p>
+              <img style="max-width:100%" src="https://dn-bitmain.qbox.me/o_1cv2d01mi1s496gnio84uk17svf.png" />
+            </p>
+            <p>
+              <img style="max-width:100%" src="https://dn-bitmain.qbox.me/o_1cv2d5dctuf5bnrmbf1murd40u.png" />
+            </p>
+            <p><strong>2.单独返修</strong></p>
+            <p>
+              <img style="max-width:100%" src="https://dn-bitmain.qbox.me/o_1cv2d13hqsjgjc41li9ouvdh3p.png" />
+            </p>
+            <p>
+              <strong
+                >温馨提示：以上报价可能会根据市价和实际情况进行调整，以最新公布维修价格为准</strong
+              >
+            </p>
+          </div>`,
+        trigger: 'all', // 取消也触发
+        callback: action => {
+          this.agree = action;
+        },
+      });
+    },
+    // 对发协议
+    promptCredit() {
+      const url = `https://file11.bitmain.com/shop-product/clause/workOrderService.html`;
+      axios.get(url, { cache: true, withCredentials: false }).then(policy => {
+        this.$confirm({
+          message: `
+          <div style="max-height:300px;max-height:50vh;overflow-y:scroll;font-size:14px;text-align:left;">
+            ${this.$options.filters.rmstyle(policy)}
+          </div>`,
+          trigger: 'all', // 取消也触发
+          callback: action => {
+            this.agree = action;
+          },
+        });
+      });
+    },
   },
 };
 </script>
@@ -225,5 +310,14 @@ export default {
   color: @orange;
   line-height: 44px;
   padding: 0 15px;
+}
+.content {
+  margin-bottom: 122px;
+}
+.protocol {
+  flex: 1;
+  .agree {
+    font-size: 14px;
+  }
 }
 </style>

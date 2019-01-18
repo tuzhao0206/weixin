@@ -79,6 +79,16 @@ axios.interceptors.request.use(
 // Add response interceptor
 axios.interceptors.response.use(
   ({ config, data = { code: 500 } }) => {
+    // 非JSON处理
+    if (typeof data !== 'object') {
+      if (config.global !== false) {
+        count = count - 1;
+        if (count === 0) {
+          store.dispatch('hideToast');
+        }
+      }
+      return data;
+    }
     // 没有code标志
     if (typeof data.code === 'undefined') {
       data.code = data.isError ? 500 : 0;
