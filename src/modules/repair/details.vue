@@ -44,9 +44,10 @@
           <div
             class="tag"
             :class="{ success: +item.type === 1, driving: +item.type === 2 }"
-          >{{ item.type | deviceType }}</div>
+          >{{ item.type|deviceType }}</div>
           <div class="text">{{ item.productName }}</div>
-          <div class="extra">x {{ item.productCount }}</div>
+          <div class="extra">x {{item.productCount}}</div>
+          <i class="icon text-gray">&#xe61a;</i>
         </router-link>
       </div>
 
