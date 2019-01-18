@@ -8,7 +8,7 @@
     </ex-header>
 
     <ex-content>
-      <div class="item" v-if="meta && list.length === 0">
+      <div class="item" v-if="list.length === 0">
         <div class="text">
           <ex-space space="20px 0">
             <div class="text-sm text-center text-gray">- 工单未收货，暂无设备信息 -</div>
@@ -19,26 +19,54 @@
       <!-- 维修订单号 发货运单号 -->
       <div class="list text-sm" v-for="item in list" :key="item.id">
         <div class="item">
+          <div class="text">SN: {{item.certSn}}</div>
+        </div>
+        <div class="item">
           <div class="text">
             <div class="text-justify">
-              <span class="label text-gray">收货SN号</span>
-              <span>{{item.receiptSN}}</span>
-            </div>
-            <div class="text-justify">
-              <span class="label text-gray">发货SN号</span>
-              <span>{{item.shipSN}}</span>
+              <span class="label text-gray">收货时间</span>
+              <span>{{item.collectTime|date('yyyy-MM-dd hh:mm:ss')}}</span>
             </div>
             <div class="text-justify">
               <span class="label text-gray">质保</span>
-              <span>{{item.inWarrantyPeriod|warranty}}</span>
+              <span>{{item.warrantyStatus|warranty}}</span>
             </div>
             <div class="text-justify">
+              <span class="label text-gray">问题检测结果</span>
+              <span>{{item.faultName || '暂无'}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="text">
+            <div class="text-justify">
               <span class="label text-gray">维修价格</span>
-              <span>{{item.repairMoney|currency}}</span>
+              <span v-if="item.expend>=0">{{item.expend|currency}}</span>
+              <span v-else>待报价</span>
+            </div>
+            <div class="text-justify">
+              <span class="label text-gray">付款状态</span>
+              <span>{{item.payStatus|payStatus}}</span>
             </div>
             <div class="text-justify">
               <span class="label text-gray">发货状态</span>
-              <span>{{item.productStatus|status}}</span>
+              <span>{{item.sendStatus|sendStatus}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="item" v-if="+item.sendStatus === 2">
+          <div class="text">
+            <div class="text-justify">
+              <span class="label text-gray">发货物流</span>
+              <span>{{item.sendBillName|billName}}</span>
+            </div>
+            <div class="text-justify">
+              <span class="label text-gray">发货运单号</span>
+              <span>{{item.sendBillNo}}</span>
+            </div>
+            <div class="text-justify">
+              <span class="label text-gray">发货SN</span>
+              <span>{{item.repairSn}}</span>
             </div>
           </div>
         </div>
@@ -49,35 +77,48 @@
 <script>
 import axios from 'axios';
 import HOSTS from '../../env.config';
+let logistics = [];
 export default {
   data() {
     return {
-      meta: null,
+      title: this.$route.query.title || '工单设备明细',
       list: [],
     };
-  },
-  computed: {
-    title() {
-      return this.meta ? this.meta.productName : '...';
-    },
   },
   filters: {
     // inWarrantyPeriod: 保内保外，0:保外；1:保内
     warranty(type) {
       return ['保外', '保内'][type];
     },
-    status(type) {
-      const map = ['未收货', '已收货', '后收货', '不收货', '未收款', '已收款', '已发货'];
+    payStatus(type) {
+      const map = ['未付款', '已付款'];
       return map[type];
+    },
+    sendStatus(type) {
+      const map = ['未发货', '可发货', '已发货'];
+      return map[type];
+    },
+    billName(code) {
+      const target = logistics.find(item => item.code === code);
+      return target ? target.name : code;
     },
   },
   mounted() {
-    const url = `${HOSTS.REPAIR}/api/repairLine/repairLineList`;
-    const params = { repairId: this.$route.params.repairId };
+    this.getLogistics();
+
+    const url = `${HOSTS.REPAIR}/api/repairDetail/getRepairDetails`;
+    const params = { lineId: this.$route.params.id };
     axios.get(url, { params }).then(({ data }) => {
-      this.meta = data.find(item => item.id === this.$route.params.id);
-      this.list = this.meta ? this.meta.equipmentDetailList : [];
+      this.list = data;
     });
+  },
+  methods: {
+    getLogistics() {
+      const url = `${HOSTS.BASE}/api/logistics/getLogistics?flag=repair`;
+      axios.get(url, { cache: true }).then(({ data }) => {
+        logistics = data;
+      });
+    },
   },
 };
 </script>

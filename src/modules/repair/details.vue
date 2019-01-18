@@ -39,7 +39,7 @@
           class="item text-sm"
           v-for="item in devices"
           :key="item.id"
-          :to="$prelang(`repair/inventory/${ticket.repairId}/${item.id}`)"
+          :to="{path:$prelang(`repair/inventory/${item.id}`), query: {title: item.productName}}"
         >
           <div
             class="tag"
@@ -160,7 +160,7 @@ export default {
     // 工单类型
     // 0:维修工单 2:配件工单
     type(type) {
-      return ['维修工单', '', '配件工单'][type] || '其他';
+      return ['维修工单', '', '配件工单', '', '', '对发工单', '退运工单', '矿场工单'][type] || '其他';
     },
     // 设备类型
     deviceType(type) {
