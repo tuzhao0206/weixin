@@ -151,7 +151,7 @@ export default {
     // 移除配件
     prompt(count, target) {
       this.$confirm({
-        message: `确认删除设备？`,
+        message: `设备数量小于 1 将被删除，请确认是否删除？`,
         callback: () => {
           const selected = this.selected.filter(item => item.id !== target.id);
           this.setSelected({ selected });

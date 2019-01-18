@@ -220,7 +220,6 @@ export default {
 <style lang="less" scoped>
 @import '../../less/base/fn.less';
 .message {
-  text-align: center;
   font-size: 13px;
   background: #fff5e5;
   color: @orange;
