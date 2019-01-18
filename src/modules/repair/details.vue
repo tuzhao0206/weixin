@@ -10,7 +10,7 @@
     <ex-content v-if="loaded">
       <div class="list text-sm">
         <div class="item">
-          <div class="text">基本信息</div>
+          <div class="text text-strong text-darkgray">基本信息</div>
         </div>
         <div class="item">
           <div class="text">
@@ -32,7 +32,7 @@
 
       <div class="list text-sm">
         <div class="item">
-          <div class="text">维修设备信息</div>
+          <div class="text text-strong text-darkgray">维修设备信息</div>
         </div>
         <router-link
           tag="div"
@@ -53,7 +53,7 @@
 
       <div class="list text-sm">
         <div class="item">
-          <div class="text">收件人信息</div>
+          <div class="text text-strong text-darkgray">收件人信息</div>
         </div>
         <div class="item">
           <div class="text">
@@ -75,7 +75,7 @@
 
       <div class="list text-sm">
         <div class="item">
-          <div class="text">维修点信息</div>
+          <div class="text text-strong text-darkgray">维修点信息</div>
           <div class="extra" v-if="station">{{ station.name }}</div>
         </div>
         <div class="item">
@@ -89,7 +89,7 @@
       <!-- 配件工单无需输入发货物流 -->
       <div class="list text-sm" v-if="express && ticket.billNo">
         <div class="item">
-          <div class="text">发货物流</div>
+          <div class="text text-strong text-darkgray">发货物流</div>
         </div>
         <div class="item">
           <div class="text">
@@ -106,7 +106,7 @@
       </div>
 
       <div class="list text-sm">
-        <div class="item">
+        <div class="item text-strong text-darkgray">
           <div class="text">回寄物流</div>
         </div>
         <div class="item text-sm">
