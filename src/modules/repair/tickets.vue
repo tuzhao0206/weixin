@@ -25,7 +25,10 @@
         >
           <div class="item">
             <div class="text text-ellipsis text-darkgray">{{ item.type | type }}</div>
-            <div class="extra">{{ item.status | status }}</div>
+            <div
+              class="extra"
+              :class="{'text-primary': item.status != 2}"
+            >{{ item.status | status }}</div>
           </div>
           <div class="item">
             <div class="text">

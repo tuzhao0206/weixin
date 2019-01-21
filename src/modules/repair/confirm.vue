@@ -82,7 +82,7 @@
 
     <ex-footer class="btm-fixed">
       <div class="protocol">
-        <div class="agree">
+        <div class="agree" v-if="!ticketId">
           <label class="center">
             <input class="checkbox primary" type="checkbox" v-model="agree">
             <span>
@@ -120,6 +120,10 @@ export default {
           this.$router.push(this.$prelang('repair/'));
         },
       });
+    }
+    // 编辑工单 不需要展示协议
+    if (this.ticketId) {
+      this.agree = true;
     }
     // 完善
     this.complete = true;
@@ -310,9 +314,6 @@ export default {
   color: @orange;
   line-height: 44px;
   padding: 0 15px;
-}
-.content {
-  margin-bottom: 122px;
 }
 .protocol {
   flex: 1;

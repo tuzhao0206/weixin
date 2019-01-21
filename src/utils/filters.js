@@ -13,7 +13,7 @@ export default {
 
   // 添加默认值
   defaults: function(x, y) {
-    return typeof x !== 'undefined' ? x : y;
+    return x || y;
   },
 
   // 截取字符串

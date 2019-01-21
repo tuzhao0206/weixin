@@ -147,6 +147,11 @@ export default {
 <style lang="less" scoped>
 @import '../../less/base/fn.less';
 .item {
+  > .icon {
+    transform: rotate(90deg);
+    transition-property: transform;
+    transition-duration: 0.3s;
+  }
   & + .list {
     display: none;
   }
@@ -156,9 +161,7 @@ export default {
       display: block;
     }
     & > .icon {
-      transform: rotate(90deg);
-      transition-property: transform;
-      transition-duration: 0.3s;
+      transform: rotate(-90deg);
     }
   }
 }

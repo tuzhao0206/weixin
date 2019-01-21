@@ -10,8 +10,8 @@
     <ex-content>
       <div class="item" v-if="list.length === 0">
         <div class="text">
-          <ex-space space="20px 0">
-            <div class="text-sm text-center text-gray">- 工单未收货，暂无设备信息 -</div>
+          <ex-space space="30px 0">
+            <div class="text-sm text-center text-gray">- 暂无设备信息 -</div>
           </ex-space>
         </div>
       </div>
@@ -25,7 +25,7 @@
           <div class="text">
             <div class="text-justify">
               <span class="label text-gray">收货时间</span>
-              <span>{{item.collectTime|date('yyyy-MM-dd hh:mm:ss')}}</span>
+              <span>{{item.collectTime|date('yyyy-MM-dd hh:mm:ss')|defaults('暂无')}}</span>
             </div>
             <div class="text-justify">
               <span class="label text-gray">质保</span>
@@ -41,16 +41,17 @@
           <div class="text">
             <div class="text-justify">
               <span class="label text-gray">维修价格</span>
-              <span v-if="item.expend>=0">{{item.expend|currency}}</span>
-              <span v-else>待报价</span>
+              <!-- quotedpriceStatus 1/2 -->
+              <span v-if="[1,2].indexOf(+item.quotedpriceStatus) !== -1">{{item.expend|currency}}</span>
+              <span class="text-primary" v-else>待报价</span>
             </div>
             <div class="text-justify">
               <span class="label text-gray">付款状态</span>
-              <span>{{item.payStatus|payStatus}}</span>
+              <span :class="{'text-primary': +item.payStatus !== 1}">{{item.payStatus|payStatus}}</span>
             </div>
             <div class="text-justify">
               <span class="label text-gray">发货状态</span>
-              <span>{{item.sendStatus|sendStatus}}</span>
+              <span :class="{'text-primary': +item.sendStatus !== 2}">{{item.sendStatus|sendStatus}}</span>
             </div>
           </div>
         </div>
@@ -95,7 +96,7 @@ export default {
       return map[type];
     },
     sendStatus(type) {
-      const map = ['未发货', '可发货', '已发货'];
+      const map = ['未发货', '待发货', '已发货'];
       return map[type];
     },
     billName(code) {
@@ -109,7 +110,7 @@ export default {
     const url = `${HOSTS.REPAIR}/api/repairDetail/getRepairDetails`;
     const params = { lineId: this.$route.params.id };
     axios.get(url, { params }).then(({ data }) => {
-      this.list = data;
+      this.list = data.filter(item => Object.keys(item).length !== 0);
     });
   },
   methods: {

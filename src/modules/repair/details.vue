@@ -16,7 +16,10 @@
           <div class="text">
             <div class="text-justify">
               <span class="label">状态:</span>
-              <span class="value">{{ ticket.status|status }}</span>
+              <span
+                class="value"
+                :class="{'text-primary': ticket.status != 2}"
+              >{{ ticket.status|status }}</span>
             </div>
             <div class="text-justify">
               <span class="label">工单类型:</span>
