@@ -15,7 +15,28 @@
         <a class="item" :class="{ active: index === 2 }" @click="listDevice(2);">物料列表</a>
       </div>
 
-      <div class="list compact text-md">
+      <!-- 矿机 -->
+      <template v-if="index === 0">
+        <div class="list compact" v-for="(group, name) in categories" :key="name">
+          <div class="item" :class="{active: active === name}" @click="toggleCategory(name)">
+            <div class="text text-sm text-strong text-darkgray">{{name}}</div>
+            <i class="icon text-gray">&#xe61a;</i>
+          </div>
+          <div class="list compact text-md">
+            <label
+              class="item tapable"
+              v-for="item in group"
+              :key="item.id"
+              @change="toggleEquip(item);"
+            >
+              <input class="checkbox primary" type="checkbox" :checked="isSelected(item)">
+              <div class="text">{{ item.name }}</div>
+            </label>
+          </div>
+        </div>
+      </template>
+      <!-- 配件&物料 -->
+      <div class="list compact text-md" v-else>
         <label
           class="item tapable"
           v-for="item in list"
@@ -44,12 +65,30 @@ export default {
     return {
       index: 0,
       list: [],
+      active: '',
       type: type,
       // 创建副本
       selected: [...this.$store.state.repair.selected],
     };
   },
+  computed: {
+    categories() {
+      const groups = {};
+      this.list.forEach(item => {
+        const key = item.productCategory || '其他分类';
+        groups[key] = groups[key] || [];
+        groups[key].push(item);
+      });
 
+      const ordered = {};
+      Object.keys(groups)
+        .sort()
+        .forEach(key => {
+          ordered[key] = groups[key];
+        });
+      return ordered;
+    },
+  },
   mounted() {
     this.listDevice(this.type === 1 ? 1 : 0);
   },
@@ -58,6 +97,10 @@ export default {
     // 是否选中
     isSelected(target) {
       return this.selected.findIndex(item => item.productId === target.productId) !== -1;
+    },
+    // 切换分组
+    toggleCategory(name) {
+      this.active = this.active === name ? '' : name;
     },
     // 列举设备
     listDevice(index) {
@@ -103,26 +146,19 @@ export default {
 </script>
 <style lang="less" scoped>
 @import '../../less/base/fn.less';
-div.list.productList {
-  margin: 0;
-  &.hide {
+.item {
+  & + .list {
     display: none;
   }
-  div.item.productItem {
-    padding: 0;
-    > div {
-      margin: 0 auto;
-      height: 50px;
-      p {
-        display: inline-block;
-        width: 100px;
-
-        line-height: 50px;
-        text-align: center;
-      }
-      p.active {
-        box-shadow: inset 0 -3px 0 @blue;
-      }
+  &.active {
+    background: #f2f2f2;
+    & + .list {
+      display: block;
+    }
+    & > .icon {
+      transform: rotate(90deg);
+      transition-property: transform;
+      transition-duration: 0.3s;
     }
   }
 }
