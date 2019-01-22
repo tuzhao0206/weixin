@@ -18,7 +18,7 @@
       </div>
       <div class="list text-sm">
         <div class="item">
-          <div class="text">维修设备信息</div>
+          <div class="text text-strong text-darkgray">维修设备信息</div>
         </div>
         <div class="item">
           <div class="text">
@@ -31,7 +31,7 @@
       </div>
       <div class="list text-sm">
         <div class="item">
-          <div class="text">收件人信息</div>
+          <div class="text text-strong text-darkgray">收件人信息</div>
         </div>
         <div class="item">
           <div class="text">
@@ -44,7 +44,7 @@
       </div>
       <div class="list text-sm">
         <div class="item">
-          <div class="text">维修点信息</div>
+          <div class="text text-strong text-darkgray">维修点信息</div>
         </div>
         <div class="item">
           <div class="text">
@@ -55,7 +55,7 @@
       <!-- 配件工单没有发货信息 -->
       <div class="list text-sm" v-if="type !== 1">
         <div class="item">
-          <div class="text">发货物流</div>
+          <div class="text text-strong text-darkgray">发货物流</div>
         </div>
         <div class="item">
           <div class="text">
@@ -72,7 +72,7 @@
       </div>
       <div class="list text-sm">
         <div class="item">
-          <div class="text">回寄物流</div>
+          <div class="text text-strong text-darkgray">回寄物流</div>
         </div>
         <div class="item text-sm">
           <div class="text">{{ channel.name }}</div>
