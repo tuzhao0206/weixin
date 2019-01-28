@@ -55,6 +55,7 @@
 <script>
 import axios from 'axios';
 import HOSTS from '../../env.config';
+import { mapActions } from 'vuex';
 export default {
   data() {
     return {
@@ -62,6 +63,9 @@ export default {
     };
   },
   mounted() {
+    // 重置数据
+    this.setSelected({ selected: [] });
+    // 对发权限
     const url = `${HOSTS.REPAIR}/api/repairCredit/getCredit`;
     axios.get(url, { cache: true, global: false }).then(({ data }) => {
       if (data[0] && data[0].ablAmount && data[0].ablPledge) {
@@ -69,6 +73,9 @@ export default {
         this.balance = data[0].ablAmount + data[0].ablPledge;
       }
     });
+  },
+  methods: {
+    ...mapActions('repair', ['setSelected']),
   },
 };
 </script>

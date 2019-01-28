@@ -8,6 +8,12 @@
     </ex-header>
 
     <ex-content>
+      <!-- 配件工单 -->
+      <div class="list compact overlap" v-if="type === 1">
+        <div class="item text-sm">
+          <div class="text text-warning">此工单为特殊工单需审核，审核通过后，我们将根据以下设备信息发货。创建工单后请将工单ID通过微信公众号发送给我们审核。</div>
+        </div>
+      </div>
       <!-- 对发工单 -->
       <div class="list compact overlap" v-if="type === 2">
         <div class="item text-sm">
