@@ -8,6 +8,12 @@
     </ex-header>
 
     <ex-content>
+      <!-- 普通工单 -->
+      <div class="list compact overlap" v-if="type === 0">
+        <div class="item text-sm">
+          <div class="text text-warning">此工单需要您返回待维修设备，我们会在收到包裹后第一时间根据以下信息发货。</div>
+        </div>
+      </div>
       <!-- 配件工单 -->
       <div class="list compact overlap" v-if="type === 1">
         <div class="item text-sm">
