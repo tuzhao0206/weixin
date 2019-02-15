@@ -52,7 +52,7 @@
           </div>
         </div>
       </div>
-      <!-- 配件工单没有发货信息 -->
+      <!-- 特殊工单没有发货信息 -->
       <div class="list text-sm" v-if="type !== 1">
         <div class="item">
           <div class="text text-strong text-darkgray">发货物流</div>
@@ -131,14 +131,14 @@ export default {
   methods: {
     ...mapActions('repair/tickets', ['setTickets']),
     confirm() {
-      // 前台的三个工单 type: 0:普通工单 1:配件工单 2:对发工单
+      // 前台的三个工单 type: 0:普通工单 1:特殊工单 2:对发工单
       // 接口字段太绕了...
       const form = {
-        dtype: this.type !== 1 ? '0' : '1', // 工单类型 0:普通工单 1:配件工单
+        dtype: this.type !== 1 ? '0' : '1', // 工单类型 0:普通工单 1:特殊工单
         repairSite: this.station.code, // 维修地点
         sendBackBillName: this.channel.code, // 回寄物流
       };
-      // 非配件工单
+      // 非特殊工单
       if (this.type !== 1) {
         Object.assign(form, {
           afterCollectFlag: this.type !== 2 ? '0' : '1', // 是否对发 0:普通工单 1:对发工单

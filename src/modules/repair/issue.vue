@@ -14,7 +14,7 @@
           <div class="text text-warning">此工单需要您返回待维修设备，我们会在收到包裹后第一时间根据以下信息发货。</div>
         </div>
       </div>
-      <!-- 配件工单 -->
+      <!-- 特殊工单 -->
       <div class="list compact overlap" v-if="type === 1">
         <div class="item text-sm">
           <div class="text text-warning">此工单为特殊工单需审核，审核通过后，我们将根据以下设备信息发货。创建工单后请将工单ID通过微信公众号发送给我们审核。</div>
@@ -100,7 +100,7 @@ import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
-      // 普通工单:0 配件工单:1 对发工单:2
+      // 普通工单:0 特殊工单:1 对发工单:2
       type: Number(this.$route.query.type),
       balance: 0,
       submitData: [],
@@ -195,7 +195,7 @@ export default {
       const url = `${HOSTS.REPAIR}/api/repairLine/batchSaveRepairLine`;
       return axios
         .post(url, {
-          dtype: this.type !== 1 ? '0' : '1', // 工单类型 0:普通工单 1:配件工单
+          dtype: this.type !== 1 ? '0' : '1', // 工单类型 0:普通工单 1:特殊工单
           repairId: this.ticketId,
           repairLine: this.selected.map(item => ({
             productId: item.productId,

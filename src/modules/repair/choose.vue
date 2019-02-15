@@ -8,7 +8,7 @@
     </ex-header>
 
     <ex-content>
-      <!-- 配件工单不需要显示整机和物料 -->
+      <!-- 特殊工单不需要显示整机和物料 -->
       <div class="navbar underline primary" v-if="type !== 1">
         <a class="item" :class="{ active: index === 0 }" @click="listDevice(0);">整机列表</a>
         <a class="item" :class="{ active: index === 1 }" @click="listDevice(1);">配件列表</a>
@@ -60,7 +60,7 @@ import HOSTS from '../../env.config';
 import { mapActions } from 'vuex';
 export default {
   data() {
-    // type: 0-普通工单 1-配件工单 2-对发工单
+    // type: 0-普通工单 1-特殊工单 2-对发工单
     const type = Number(this.$route.query.type);
     return {
       index: 0,

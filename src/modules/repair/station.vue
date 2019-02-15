@@ -102,7 +102,7 @@ export default {
       }
       // 缓存数据
       this.setStation({ station: this.station });
-      // 配件工单不需要填写发货物流
+      // 特殊工单不需要填写发货物流
       if (this.type === 1) {
         this.$router.push({ path: this.$prelang('repair/channel') });
       }

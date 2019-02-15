@@ -29,7 +29,7 @@
               <img width="24" src="../../assets/images/image-02.png">
             </div>
             <div class="text">
-              <ex-space space="15px 0">配件工单</ex-space>
+              <ex-space space="15px 0">特殊工单</ex-space>
             </div>
             <i class="icon text-gray">&#xe61a;</i>
           </router-link>

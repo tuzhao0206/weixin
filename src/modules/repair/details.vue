@@ -89,7 +89,7 @@
         </div>
       </div>
 
-      <!-- 配件工单无需输入发货物流 -->
+      <!-- 特殊工单无需输入发货物流 -->
       <div class="list text-sm" v-if="express && ticket.billNo">
         <div class="item">
           <div class="text text-strong text-darkgray">发货物流</div>
@@ -161,9 +161,9 @@ export default {
       return ['待收货', '已收货', '已完成', '不收货', '后收货', '部分收货', '待审核'][status] || '其他';
     },
     // 工单类型
-    // 0:维修工单 2:配件工单
+    // 0:维修工单 2:特殊工单
     type(type) {
-      return ['维修工单', '', '配件工单', '', '', '对发工单', '退运工单', '矿场工单'][type] || '其他';
+      return ['维修工单', '', '特殊工单', '', '', '对发工单', '退运工单', '矿场工单'][type] || '其他';
     },
     // 设备类型
     deviceType(type) {
@@ -303,7 +303,7 @@ export default {
       }));
 
       let type = 0;
-      // 配件工单
+      // 特殊工单
       if (this.ticket.type === 2) {
         type = 1;
       }
@@ -355,7 +355,7 @@ export default {
       this.setAddress({ address });
 
       let type = 0;
-      // 配件工单
+      // 特殊工单
       if (this.ticket.type === 2) {
         type = 1;
       }
