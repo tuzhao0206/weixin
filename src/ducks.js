@@ -12,6 +12,7 @@ const store = new Vuex.Store({
     title: 'BITMAIN',
     lang: 'en',
     site: 'en',
+    appid: 'wxe71d595d38cabbea', // 更改公众号 这个ID要更换
     ready: false,
     token: null,
     user: null,

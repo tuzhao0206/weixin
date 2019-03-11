@@ -85,6 +85,17 @@ router.beforeEach((to, from, next) => {
       if (Env.is('app')) {
         JSBridge.login();
       }
+      // 微信
+      else if (Env.is('wx')) {
+        // 公众号ID
+        // 回调地址
+        const redirect = encodeURIComponent(
+          `http://bitmain.legend.life/weixin?next=${encodeURIComponent(to.fullPath)}`
+        );
+        location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${
+          store.state.appid
+        }&redirect_uri=${redirect}&response_type=code&scope=snsapi_userinfo#wechat_redirect`;
+      }
       // 网页登录
       else {
         const locale = i18n.locale;
@@ -244,7 +255,8 @@ Vue.prototype.$lang = lang;
 Vue.prototype.$prelang = prelang;
 
 // 调试工具
-if (process.env.NODE_ENV === 'development' && Env.is('app')) {
+// if (process.env.NODE_ENV === 'development' && Env.is('app')) {
+if (true) {
   const VConsole = require('vconsole');
   const vConsole = new VConsole();
 }
@@ -307,8 +319,10 @@ if (process.env.NODE_ENV === 'development' && Env.is('app')) {
         });
       }
     });
-  } else {
-    // 网页授权
+  }
+  // 网页授权
+  // 微信内部其实不需要 后期优化
+  else {
     const { ticket } = parseQuery(location.search);
     // 登录回调: TICKET
     if (ticket) {

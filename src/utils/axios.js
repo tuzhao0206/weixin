@@ -61,8 +61,8 @@ axios.interceptors.request.use(
         });
       }
     }
-    // APP追加TOKEN
-    if (Env.is('app') && store.state.token) {
+    // APP和WX追加TOKEN
+    if ((Env.is('app') || Env.is('wx')) && store.state.token) {
       const { token, site, lang } = store.state;
       config.headers.token = token;
       config.headers.country = site;
@@ -132,6 +132,17 @@ axios.interceptors.response.use(
         // APP登录
         if (Env.is('app')) {
           JSBridge.login();
+        }
+        // 微信
+        else if (Env.is('wx')) {
+          // 公众号ID
+          // 回调地址
+          const redirect = encodeURIComponent(
+            `http://bitmain.legend.life/weixin?next=${encodeURIComponent(to.fullPath)}`
+          );
+          location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${
+            store.state.appid
+          }&redirect_uri=${redirect}&response_type=code&scope=snsapi_userinfo#wechat_redirect`;
         }
         // 网页登录
         else {
